@@ -43,7 +43,7 @@ export default function Index() {
           <Text style={styles.privacyText}>
             Please visit{" "}
             <Text style={styles.privacyLink} onPress={openWebBrowser}>
-              HosteLink Privacy Statement
+              HostelLink Privacy Statement
             </Text>{" "}
             to learn about personal data processing at HostelLink.
           </Text>
