@@ -4,6 +4,7 @@ import AuthButton from "../../components/auth/AuthButton";
 
 export default function Index() {
   const openWebBrowser = () => {
+    //change to privacy link
     Linking.openURL("https://google.com");
   };
   return (
