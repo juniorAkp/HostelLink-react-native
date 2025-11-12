@@ -1,5 +1,6 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Pressable, StyleSheet, Text, ViewStyle } from "react-native";
+import { Colors } from "../../constants/theme";
 
 interface AuthButtonProps {
   title: string;
@@ -7,23 +8,30 @@ interface AuthButtonProps {
   color: string;
   icon: keyof typeof Ionicons.glyphMap;
   buttonColor: string;
+  style?: ViewStyle;
 }
-const AuthButton = ({ title, onPress, color, icon }: AuthButtonProps) => {
+const AuthButton = ({
+  title,
+  onPress,
+  color,
+  icon,
+  style,
+}: AuthButtonProps) => {
   return (
-    <TouchableOpacity style={styles.authButton} onPress={onPress}>
+    <Pressable style={[styles.authButton, style]} onPress={onPress}>
       <Ionicons
         name={icon as keyof typeof Ionicons.glyphMap}
         size={18}
         color={color}
       />
       <Text style={styles.authButtonText}>{title}</Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 const styles = StyleSheet.create({
   authButton: {
     flexDirection: "row",
-    backgroundColor: "#4285F4",
+    backgroundColor: Colors.primary,
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 17,

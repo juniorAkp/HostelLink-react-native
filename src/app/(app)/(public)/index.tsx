@@ -1,7 +1,9 @@
-import { Linking, StyleSheet, Text, View } from "react-native";
+import { Link } from "expo-router";
+import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
 import AuthButton from "../../components/auth/AuthButton";
-import { Fonts } from "../../constants/theme";
+import { Colors, Fonts } from "../../constants/theme";
 
 export default function Index() {
   const openWebBrowser = () => {
@@ -9,13 +11,19 @@ export default function Index() {
     Linking.openURL("https://google.com");
   };
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      {/* skip button */}
+      <Pressable style={styles.skip}>
+        <Text style={styles.skipText}>Skip</Text>
+      </Pressable>
       {/* image view section*/}
       <View style={styles.imageView}></View>
       {/* text view section*/}
       <View style={styles.contentView}>
-        <Text style={styles.text}>Welcome to HostelLink</Text>
         <Animated.Text style={styles.tagline} entering={FadeInDown}>
+          HostelLink
+        </Animated.Text>
+        <Animated.Text style={styles.text} entering={FadeInDown}>
           Find Hostels near you
         </Animated.Text>
         <View style={styles.buttonContainer}>
@@ -37,7 +45,19 @@ export default function Index() {
               buttonColor="#000"
             />
           </Animated.View>
+          <Animated.View entering={FadeInDown.delay(300)}>
+            <Link href="/other-options" asChild>
+              <AuthButton
+                title="Continue with Email"
+                onPress={() => {}}
+                color="#fff"
+                icon="mail"
+                buttonColor="#4285F4"
+              />
+            </Link>
+          </Animated.View>
         </View>
+
         <Animated.View
           style={styles.privacyContainer}
           entering={FadeInDown.delay(400)}
@@ -51,13 +71,24 @@ export default function Index() {
           </Text>
         </Animated.View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  skip: {
+    position: "absolute",
+    top: 40,
+    right: 20,
+    zIndex: 10,
+  },
+  skipText: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: Colors.primary,
   },
   imageView: {
     flex: 0.8,
@@ -66,17 +97,20 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 30,
+    paddingVertical: 20,
   },
   text: {
-    fontSize: 24,
+    fontSize: 20,
     color: "#000",
-    fontFamily: Fonts.brandBlack,
+    fontFamily: Fonts.brandBold,
+    marginBottom: 30,
+    lineHeight: 36,
   },
   tagline: {
     fontSize: 32,
     fontFamily: Fonts.brandBlack,
     textAlign: "center",
-    marginBottom: 50,
     lineHeight: 36,
   },
   buttonContainer: {
