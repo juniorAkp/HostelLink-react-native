@@ -1,7 +1,11 @@
-import { Slot, SplashScreen } from "expo-router";
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Slot } from "expo-router";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-SplashScreen.preventAutoHideAsync()
+// SplashScreen.preventAutoHideAsync()
 export default function RootLayout() {
-  return <GestureHandlerRootView style={{flex: 1}}><Slot /></GestureHandlerRootView>;
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Slot />
+    </GestureHandlerRootView>
+  );
 }
