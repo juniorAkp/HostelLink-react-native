@@ -15,32 +15,42 @@ const AuthButton = ({
   onPress,
   color,
   icon,
+  buttonColor,
   style,
 }: AuthButtonProps) => {
   return (
-    <Pressable style={[styles.authButton, style]} onPress={onPress}>
+    <Pressable 
+      style={[styles.authButton, { backgroundColor: buttonColor }, style]} 
+      onPress={onPress}
+    >
       <Ionicons
         name={icon as keyof typeof Ionicons.glyphMap}
-        size={18}
+        size={20}
         color={color}
       />
-      <Text style={styles.authButtonText}>{title}</Text>
+      <Text style={[styles.authButtonText, { color }]}>{title}</Text>
     </Pressable>
   );
 };
 const styles = StyleSheet.create({
   authButton: {
     flexDirection: "row",
-    backgroundColor: Colors.primary,
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 17,
+    paddingVertical: 16,
     borderRadius: 12,
-    gap: 4,
+    gap: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
   },
   authButtonText: {
-    fontSize: 18,
-    color: "#fff",
+    fontSize: 16,
     fontWeight: "600",
   },
 });

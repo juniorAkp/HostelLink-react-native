@@ -1,7 +1,14 @@
+import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
-import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Linking,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import { SafeAreaView } from "react-native-safe-area-context";
 import AuthButton from "../../components/auth/AuthButton";
 import { Colors, Fonts } from "../../constants/theme";
 
@@ -11,21 +18,34 @@ export default function Index() {
     Linking.openURL("https://google.com");
   };
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {/* skip button */}
       <Pressable style={styles.skip}>
         <Text style={styles.skipText}>Skip</Text>
       </Pressable>
+
       {/* image view section*/}
-      <View style={styles.imageView}></View>
+      <View style={styles.imageContainer}>
+        <Image
+          source={require("@/assets/images/homepage_image.jpeg")}
+          style={styles.image}
+          resizeMode="cover"
+        />
+        <LinearGradient
+          colors={["transparent", "rgba(255,255,255,0.7)", "#fff"]}
+          style={styles.gradient}
+        />
+      </View>
+
       {/* text view section*/}
       <View style={styles.contentView}>
         <Animated.Text style={styles.tagline} entering={FadeInDown}>
           HostelLink
         </Animated.Text>
-        <Animated.Text style={styles.text} entering={FadeInDown}>
+        <Animated.Text style={styles.text} entering={FadeInDown.delay(50)}>
           Find Hostels near you
         </Animated.Text>
+
         <View style={styles.buttonContainer}>
           <Animated.View entering={FadeInDown.delay(100)}>
             <AuthButton
@@ -71,55 +91,77 @@ export default function Index() {
           </Text>
         </Animated.View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#fff",
   },
   skip: {
     position: "absolute",
-    top: 40,
+    top: 50,
     right: 20,
     zIndex: 10,
+    padding: 8,
   },
   skipText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "600",
     color: Colors.primary,
   },
-  imageView: {
-    flex: 0.8,
+  imageContainer: {
+    width: "100%",
+    height: "45%",
+    position: "relative",
+    overflow: "hidden",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+  },
+  gradient: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 150,
   },
   contentView: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 30,
-    paddingVertical: 20,
-  },
-  text: {
-    fontSize: 20,
-    color: "#000",
-    fontFamily: Fonts.brandBold,
-    marginBottom: 30,
-    lineHeight: 36,
+    justifyContent: "flex-start",
+    paddingTop: 30,
+    paddingHorizontal: 24,
+    paddingBottom: 20,
   },
   tagline: {
-    fontSize: 32,
+    fontSize: 36,
     fontFamily: Fonts.brandBlack,
     textAlign: "center",
-    lineHeight: 36,
+    color: Colors.primary,
+    marginBottom: 8,
+    letterSpacing: -0.5,
+  },
+  text: {
+    fontSize: 18,
+    color: Colors.muted,
+    fontFamily: Fonts.brandBold,
+    marginBottom: 40,
+    textAlign: "center",
+    lineHeight: 24,
   },
   buttonContainer: {
-    gap: 12,
+    gap: 14,
     width: "100%",
+    marginBottom: 20,
   },
   privacyContainer: {
-    marginTop: 30,
-    paddingHorizontal: 20,
+    marginTop: 20,
+    paddingHorizontal: 10,
+    width: "100%",
   },
   privacyText: {
     fontSize: 12,
@@ -130,5 +172,6 @@ const styles = StyleSheet.create({
   privacyLink: {
     color: "#4285F4",
     textDecorationLine: "underline",
+    fontWeight: "500",
   },
 });
