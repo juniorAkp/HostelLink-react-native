@@ -1,6 +1,7 @@
 import { Linking, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import AuthButton from "../../components/auth/AuthButton";
+import { Fonts } from "../../constants/theme";
 
 export default function Index() {
   const openWebBrowser = () => {
@@ -14,7 +15,7 @@ export default function Index() {
       {/* text view section*/}
       <View style={styles.contentView}>
         <Text style={styles.text}>Welcome to HostelLink</Text>
-        <Animated.Text entering={FadeInDown}>
+        <Animated.Text style={styles.tagline} entering={FadeInDown}>
           Find Hostels near you
         </Animated.Text>
         <View style={styles.buttonContainer}>
@@ -68,8 +69,15 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 24,
-    fontWeight: "bold",
     color: "#000",
+    fontFamily: Fonts.brandBlack,
+  },
+  tagline: {
+    fontSize: 32,
+    fontFamily: Fonts.brandBlack,
+    textAlign: "center",
+    marginBottom: 50,
+    lineHeight: 36,
   },
   buttonContainer: {
     gap: 12,
