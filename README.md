@@ -1,50 +1,48 @@
-# Welcome to your Expo app 👋
+# HostelLink
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+HostelLink is a mobile application built with React Native and Expo that allows users to find hostels near them easily.
 
-## Get started
+## Features
 
-1. Install dependencies
+- **Browse Hostels:** View a list of available hostels.
+- **Search:** Find hostels by name or amenities.
+- **Authentication:** Sign in with Google, Apple, or Email.
 
-   ```bash
+## Getting Started
+
+1. **Clone the repository**
+
+   ```
+   git clone https://github.com/your-username/hostellink.git
+   cd hostellink
+   ```
+
+2. **Install dependencies**
+
+   ```
    npm install
    ```
 
-2. Start the app
+3. **Start the Expo development server**
 
-   ```bash
+   ```
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+4. **Run on your device**
+   - Use the Expo Go app on your phone or an emulator.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Project Structure
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- `src/app/` - Main application code
+- `src/app/services/` - API and data fetching logic
+- `src/app/hooks/` - React hooks for data fetching
 
-## Get a fresh project
+## Notes
 
-When you're ready, run:
+- Backend is powered by Supabase.
+- Ensure you have your Supabase credentials configured in the `.env` file.
 
-```bash
-npm run reset-project
-```
+## License
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+MIT
