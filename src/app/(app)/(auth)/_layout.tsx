@@ -58,6 +58,32 @@ const AuthLayout = () => {
           ),
         }}
       />
+      <Stack.Screen
+        name="(modal)/edit-profile"
+        options={{
+          presentation: "formSheet",
+          sheetAllowedDetents: [0.8],
+          title: "",
+          headerShadowVisible: false,
+          sheetCornerRadius: 16,
+          sheetGrabberVisible: true,
+          contentStyle: {
+            backgroundColor: Colors.background,
+          },
+          headerRight: () => (
+            <Pressable
+              style={{
+                padding: 4,
+                borderRadius: 20,
+                backgroundColor: Colors.light,
+              }}
+              onPress={() => router.dismiss()}
+            >
+              <Ionicons name="close-sharp" size={28} />
+            </Pressable>
+          ),
+        }}
+      />
     </Stack>
   );
 };

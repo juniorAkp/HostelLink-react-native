@@ -1,6 +1,6 @@
 import RestaurantHeader from "@/src/app/components/home/header";
 import { Fonts } from "@/src/app/constants/theme";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -18,13 +18,29 @@ const RestaurantListPage = () => {
   });
   return (
     <View style={styles.container}>
-      <RestaurantHeader title="Restaurants" scrollOffset={scrollOffset} />
+      <RestaurantHeader title="Hostels" scrollOffset={scrollOffset} />
       <Animated.ScrollView
         onScroll={scrollHandler}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingTop: insets.top + HEADER_HEIGHT }}
-      ></Animated.ScrollView>
+      >
+        <Text style={styles.pageTitle}>Hostels</Text>
+        {[...Array(30)].map((_, i) => (
+          <View
+            key={i}
+            style={{
+              backgroundColor: i % 2 === 0 ? "#f0f0f0" : "#e0e0e0",
+              padding: 20,
+              marginHorizontal: 16,
+              marginBottom: 12,
+              borderRadius: 8,
+            }}
+          >
+            <Text>Test Row #{i + 1}</Text>
+          </View>
+        ))}
+      </Animated.ScrollView>
     </View>
   );
 };

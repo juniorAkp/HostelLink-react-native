@@ -12,6 +12,7 @@ interface UserStore {
   login: (email: string, password: string) => void;
   register: (email: string, username: string, password: string) => void;
   logout: () => void;
+  deleteAccount: (userId: string) => Promise<void>;
 }
 
 const useUserStore = create<UserStore>()(
@@ -65,6 +66,20 @@ const useUserStore = create<UserStore>()(
           }
           set({ user: null, isGuest: false });
         } catch (err) {
+          throw err;
+        }
+      },
+      deleteAccount: async (userId: string) => {
+        try {
+          // Note: Actual account deletion should be handled by backend
+          // This is a placeholder that clears local data
+          // In production, you would call a backend API endpoint
+          await supabase.auth.signOut();
+          supabase.from("profiles").delete().eq("id", userId);
+          set({ user: null, isGuest: false });
+        } catch (err) {
+          // Clear local state even if signOut fails
+          set({ user: null, isGuest: false });
           throw err;
         }
       },
