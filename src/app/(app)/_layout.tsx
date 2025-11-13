@@ -4,6 +4,8 @@ import useUserStore from "../hooks/use-userStore";
 
 const RootLayout = () => {
   const { isGuest, user } = useUserStore();
+  console.log("🚀 ~ RootNav ~ isGuest:", isGuest);
+  console.log("🚀 ~ RootNav ~ user:", user);
   return (
     <Stack>
       <Stack.Protected guard={isGuest || !!user}>

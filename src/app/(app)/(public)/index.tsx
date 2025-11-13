@@ -11,8 +11,14 @@ import {
 import Animated, { FadeInDown } from "react-native-reanimated";
 import AuthButton from "../../components/auth/AuthButton";
 import { Colors, Fonts } from "../../constants/theme";
+import useUserStore from "../../hooks/use-userStore";
 
 export default function Index() {
+  const { setIsGuest } = useUserStore();
+
+  const skip = () => {
+    setIsGuest(true);
+  };
   const openWebBrowser = () => {
     //change to privacy link
     Linking.openURL("https://google.com");
@@ -20,7 +26,7 @@ export default function Index() {
   return (
     <View style={styles.container}>
       {/* skip button */}
-      <Pressable style={styles.skip}>
+      <Pressable style={styles.skip} onPress={skip}>
         <Text style={styles.skipText}>Skip</Text>
       </Pressable>
 
@@ -110,7 +116,7 @@ const styles = StyleSheet.create({
   skipText: {
     fontSize: 16,
     fontWeight: "600",
-    color: Colors.primary,
+    color: Colors.light,
   },
   imageContainer: {
     width: "100%",
