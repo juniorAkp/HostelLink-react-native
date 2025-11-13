@@ -2,7 +2,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createClient } from "@supabase/supabase-js";
 import * as aesjs from "aes-js";
 import * as SecureStore from "expo-secure-store";
-import Config from "react-native-config";
 import "react-native-get-random-values";
 
 // As Expo's SecureStore does not support values larger than 2048
@@ -62,8 +61,9 @@ class LargeSecureStore {
   }
 }
 
-const supabaseUrl = Config.SUPABASE_URL as string;
-const supabasePublishableKey = Config.SUPABASE_PUBLISHABLE_KEY as string;
+const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL as string;
+const supabasePublishableKey = process.env
+  .EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY as string;
 
 export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
   auth: {

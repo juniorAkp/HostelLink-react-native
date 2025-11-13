@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import type { profile as Profile } from "../data/profile";
 import { supabase } from "../lib/supabase";
-import zustandStorage from "../utils/zutstandStorage";
+import { asyncZustandStorage } from "../utils/zutstandStorage";
 
 interface UserStore {
   user: Profile | null;
@@ -72,7 +72,7 @@ const useUserStore = create<UserStore>()(
 
     {
       name: "user",
-      storage: createJSONStorage(() => zustandStorage),
+      storage: createJSONStorage(() => asyncZustandStorage),
     }
   )
 );
