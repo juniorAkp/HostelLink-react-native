@@ -76,3 +76,5 @@ const useUserStore = create<UserStore>()(
     }
   )
 );
+
+export default useUserStore;
