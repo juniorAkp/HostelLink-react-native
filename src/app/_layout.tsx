@@ -3,12 +3,21 @@ import {
   Nunito_700Bold,
   Nunito_900Black,
 } from "@expo-google-fonts/nunito";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import { Slot, SplashScreen } from "expo-router";
 import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 SplashScreen.preventAutoHideAsync();
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 10, // 10 minutes
+      retry: 1,
+    },
+  },
+});
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
     Nunito_400Regular,
@@ -31,7 +40,9 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Slot />
+      <QueryClientProvider client={queryClient}>
+        <Slot />
+      </QueryClientProvider>
     </GestureHandlerRootView>
   );
 }
