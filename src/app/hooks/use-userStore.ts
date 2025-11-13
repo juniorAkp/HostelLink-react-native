@@ -11,6 +11,7 @@ interface UserStore {
   setIsGuest: (isGuest: boolean) => void;
   login: (email: string, password: string) => void;
   register: (email: string, username: string, password: string) => void;
+  logout: () => void;
 }
 
 const useUserStore = create<UserStore>()(
@@ -56,7 +57,19 @@ const useUserStore = create<UserStore>()(
           throw err;
         }
       },
+      logout: async () => {
+        try {
+          const { error } = await supabase.auth.signOut();
+          if (error) {
+            throw error;
+          }
+          set({ user: null, isGuest: false });
+        } catch (err) {
+          throw err;
+        }
+      },
     }),
+
     {
       name: "user",
       storage: createJSONStorage(() => zustandStorage),
