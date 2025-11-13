@@ -1,15 +1,10 @@
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
-import {
-  Image,
-  Linking,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import AuthButton from "../../components/auth/AuthButton";
+import { blurhash } from "../../constants/blurhash";
 import { Colors, Fonts } from "../../constants/theme";
 import useUserStore from "../../hooks/use-userStore";
 
@@ -35,7 +30,7 @@ export default function Index() {
         <Image
           source={require("@/assets/images/homepage_image.jpeg")}
           style={styles.image}
-          resizeMode="cover"
+          placeholder={{ blurhash: blurhash }}
         />
         <LinearGradient
           colors={["transparent", "rgba(255,255,255,0.7)", "#fff"]}

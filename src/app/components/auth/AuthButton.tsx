@@ -16,9 +16,11 @@ interface AuthButtonProps {
   buttonColor: string;
   style?: ViewStyle;
   isLoading?: boolean;
+  isDisabled?: boolean;
 }
 const AuthButton = ({
   title,
+  isDisabled,
   isLoading,
   onPress,
   color,
@@ -30,6 +32,7 @@ const AuthButton = ({
     <Pressable
       style={[styles.authButton, { backgroundColor: buttonColor }, style]}
       onPress={onPress}
+      disabled={isDisabled}
     >
       <Ionicons
         name={icon as keyof typeof Ionicons.glyphMap}
@@ -37,7 +40,7 @@ const AuthButton = ({
         color={color}
       />
       <Text style={[styles.authButtonText, { color }]}>
-        {isLoading ? title : <ActivityIndicator color={Colors.primary} />}
+        {isLoading ? <ActivityIndicator color={Colors.primary} /> : title}
       </Text>
     </Pressable>
   );
