@@ -1,5 +1,11 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Pressable, StyleSheet, Text, ViewStyle } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Text,
+  ViewStyle,
+} from "react-native";
 import { Colors } from "../../constants/theme";
 
 interface AuthButtonProps {
@@ -9,9 +15,11 @@ interface AuthButtonProps {
   icon: keyof typeof Ionicons.glyphMap;
   buttonColor: string;
   style?: ViewStyle;
+  isLoading?: boolean;
 }
 const AuthButton = ({
   title,
+  isLoading,
   onPress,
   color,
   icon,
@@ -19,8 +27,8 @@ const AuthButton = ({
   style,
 }: AuthButtonProps) => {
   return (
-    <Pressable 
-      style={[styles.authButton, { backgroundColor: buttonColor }, style]} 
+    <Pressable
+      style={[styles.authButton, { backgroundColor: buttonColor }, style]}
       onPress={onPress}
     >
       <Ionicons
@@ -28,7 +36,9 @@ const AuthButton = ({
         size={20}
         color={color}
       />
-      <Text style={[styles.authButtonText, { color }]}>{title}</Text>
+      <Text style={[styles.authButtonText, { color }]}>
+        {isLoading ? title : <ActivityIndicator color={Colors.primary} />}
+      </Text>
     </Pressable>
   );
 };

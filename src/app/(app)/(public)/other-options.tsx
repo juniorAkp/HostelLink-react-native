@@ -1,20 +1,44 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import AuthButton from "../../components/auth/AuthButton";
 import { Colors, Fonts } from "../../constants/theme";
+import useUserStore from "../../hooks/use-userStore";
 
 const Page = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [isLoginState, setIsLoginState] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { login, register } = useUserStore();
   const router = useRouter();
 
   const handleState = () => {
     setIsLoginState(!isLoginState);
+  };
+
+  const handleLogin = () => {
+    try {
+      setIsLoading(true);
+      login(email, password);
+    } catch (error) {
+      Alert.alert("Error Logging In User", error as string);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const handleRegister = () => {
+    try {
+      setIsLoading(true);
+      register(email, username, password);
+    } catch (error) {
+      Alert.alert("Error Logging In User", error as string);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (!isLoginState) {
@@ -49,8 +73,9 @@ const Page = () => {
             style={styles.textInput}
           />
           <AuthButton
+            isLoading={isLoading}
             title="Register"
-            onPress={() => {}}
+            onPress={handleRegister}
             color="#fff"
             icon="bulb"
             buttonColor="#4285F4"
@@ -90,8 +115,9 @@ const Page = () => {
             style={styles.textInput}
           />
           <AuthButton
+            isLoading={isLoading}
             title="Login"
-            onPress={() => {}}
+            onPress={handleLogin}
             color="#fff"
             icon="bulb"
             buttonColor="#4285F4"
