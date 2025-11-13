@@ -9,3 +9,19 @@ export const useHostels = () => {
     },
   });
 };
+
+export const useHostel = (hostelId: string) => {
+  return useQuery({
+    queryKey: ["hostel", hostelId],
+    queryFn: () => hostelService.getById(hostelId),
+    enabled: !!hostelId,
+  });
+};
+
+export const useSearch = (searchTerm: string) => {
+  return useQuery({
+    queryKey: ["hostels", "search", searchTerm],
+    queryFn: () => hostelService.search(searchTerm),
+    enabled: typeof searchTerm === "string",
+  });
+};
