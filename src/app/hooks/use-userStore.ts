@@ -57,18 +57,25 @@ const useUserStore = create<UserStore>()(
             password,
           });
 
+          const { data: userData, error: profileError } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", data.user?.id)
+            .single();
+
+          if (profileError) throw profileError;
           if (error) throw error;
           if (!data.user) throw new Error("No user returned");
 
           set({
-            user: data.user as unknown as Profile,
+            user: userData as Profile,
             isGuest: false,
             errorMessage: null,
           });
         } catch (err: any) {
           const msg = err instanceof AuthError ? err.message : "Login failed";
           set({ errorMessage: msg });
-          throw err; // optional – lets component react if it wants
+          throw err;
         } finally {
           set({ isLoading: false });
         }
@@ -110,9 +117,16 @@ const useUserStore = create<UserStore>()(
             );
 
           if (profileError) throw profileError;
+          const { data: userData, error: fetchError } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", data.user.id)
+            .single();
+
+          if (fetchError) throw fetchError;
 
           set({
-            user: data.user as unknown as Profile,
+            user: userData as Profile,
             isGuest: false,
             errorMessage: null,
           });
