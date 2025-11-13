@@ -1,10 +1,10 @@
+import AuthButton from "@/src/app/components/auth/AuthButton";
+import { Colors, Fonts } from "@/src/app/constants/theme";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import AuthButton from "../../../components/auth/AuthButton";
-import { Colors, Fonts } from "../../../constants/theme";
 
 const Page = () => {
   const [password, setPassword] = useState<string>("");
