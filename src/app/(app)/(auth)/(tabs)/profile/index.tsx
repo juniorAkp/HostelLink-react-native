@@ -2,6 +2,7 @@ import { Colors, Fonts } from "@/src/app/constants/theme";
 import useUserStore from "@/src/app/hooks/use-userStore";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import { Link } from "expo-router";
 import { useState } from "react";
 import {
   Alert,
@@ -197,12 +198,14 @@ const Page = () => {
           </View>
           <Text style={styles.userName}>{user?.username || "User"}</Text>
           <Text style={styles.userEmail}>{user?.email || ""}</Text>
-          <TouchableOpacity
-            style={styles.editProfileButton}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.editProfileButtonText}>Edit Profile</Text>
-          </TouchableOpacity>
+          <Link href="/edit-profile" asChild>
+            <TouchableOpacity
+              style={styles.editProfileButton}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.editProfileButtonText}>Edit Profile</Text>
+            </TouchableOpacity>
+          </Link>
         </View>
 
         {/* Account Management Section */}

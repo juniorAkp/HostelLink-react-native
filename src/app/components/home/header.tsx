@@ -1,3 +1,4 @@
+import { FontAwesome6 } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
 import { useState } from "react";
@@ -129,9 +130,7 @@ const RestaurantHeader = ({ title, scrollOffset }: RestaurantHeaderProps) => {
       >
         <Link href="/location" asChild>
           <Pressable style={styles.locationButton}>
-            <View style={styles.locationButtonIcon}>
-              <Ionicons name="business-outline" size={16} />
-            </View>
+            <FontAwesome6 name="map-pin" size={20} color={"red"} />
             <Text style={styles.locationText}>Münster</Text>
             <Ionicons name="chevron-down" size={16} />
           </Pressable>

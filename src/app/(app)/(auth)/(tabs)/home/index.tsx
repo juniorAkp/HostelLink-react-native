@@ -26,6 +26,7 @@ const RestaurantListPage = () => {
         contentContainerStyle={{ paddingTop: insets.top + HEADER_HEIGHT }}
       >
         <Text style={styles.pageTitle}>Hostels</Text>
+        {/* <PopularCard /> */}
         {[...Array(30)].map((_, i) => (
           <View
             key={i}

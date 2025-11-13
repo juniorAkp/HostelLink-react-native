@@ -64,7 +64,11 @@ const TabLayout = () => {
     //     }}
     //   />
     // </Tabs>
-    <NativeTabs minimizeBehavior="onScrollDown">
+    <NativeTabs
+      minimizeBehavior="onScrollDown"
+      backgroundColor={"white"}
+      blurEffect="prominent"
+    >
       <NativeTabs.Trigger name="home">
         <Label>Home</Label>
         {Platform.select({

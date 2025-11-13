@@ -62,7 +62,7 @@ const AuthLayout = () => {
         name="(modal)/edit-profile"
         options={{
           presentation: "formSheet",
-          sheetAllowedDetents: [0.8],
+          sheetAllowedDetents: [0.45],
           title: "",
           headerShadowVisible: false,
           sheetCornerRadius: 16,
