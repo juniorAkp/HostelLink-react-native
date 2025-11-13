@@ -4,12 +4,12 @@ export interface Hostels {
   description: string;
   amenities: string[];
   phoneNumbers: string[];
-  location: {
-    longitude: number;
-    latittude: number;
+  exact_location: {
+    lng: number;
+    lat: number;
   };
   address: string;
-  image_urls: string[];
+  images: string[];
   type: string;
   country: string;
 }
