@@ -1,9 +1,9 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createClient } from "@supabase/supabase-js";
 import * as aesjs from "aes-js";
 import * as SecureStore from "expo-secure-store";
 import Config from "react-native-config";
 import "react-native-get-random-values";
+import zustandStorage from "../utils/zutstandStorage";
 
 // As Expo's SecureStore does not support values larger than 2048
 // bytes, an AES-256 key is generated and stored in SecureStore, while
@@ -42,7 +42,7 @@ class LargeSecureStore {
   }
 
   async getItem(key: string) {
-    const encrypted = await AsyncStorage.getItem(key);
+    const encrypted = await zustandStorage.getItem(key);
     if (!encrypted) {
       return encrypted;
     }
@@ -51,14 +51,14 @@ class LargeSecureStore {
   }
 
   async removeItem(key: string) {
-    await AsyncStorage.removeItem(key);
+    await zustandStorage.removeItem(key);
     await SecureStore.deleteItemAsync(key);
   }
 
   async setItem(key: string, value: string) {
     const encrypted = await this._encrypt(key, value);
 
-    await AsyncStorage.setItem(key, encrypted);
+    await zustandStorage.setItem(key, encrypted);
   }
 }
 
