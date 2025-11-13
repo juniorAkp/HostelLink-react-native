@@ -1,7 +1,6 @@
 import { Fonts } from "@/src/app/constants/theme";
 import { Stack } from "expo-router";
 import React from "react";
-import { Platform } from "react-native";
 
 const Layout = () => {
   return (
@@ -9,9 +8,8 @@ const Layout = () => {
       <Stack.Screen
         name="index"
         options={{
-          headerLargeTitle: Platform.OS === "ios" ? true : false,
           headerTitle: "Profile",
-          headerShown: Platform.OS === "ios" ? true : false,
+          headerShown: false,
           headerTransparent: true,
           headerLargeTitleStyle: {
             fontFamily: Fonts.brandBold,

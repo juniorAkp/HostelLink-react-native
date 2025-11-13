@@ -1,4 +1,5 @@
 import RestaurantHeader from "@/src/app/components/home/header";
+import HorizontalCard from "@/src/app/components/home/smallCard";
 import { Fonts } from "@/src/app/constants/theme";
 import { StyleSheet, Text, View } from "react-native";
 import Animated, {
@@ -27,6 +28,7 @@ const RestaurantListPage = () => {
       >
         <Text style={styles.pageTitle}>Hostels</Text>
         {/* <PopularCard /> */}
+        <HorizontalCard />
         {[...Array(30)].map((_, i) => (
           <View
             key={i}

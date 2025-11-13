@@ -1,9 +1,8 @@
 import AuthButton from "@/src/app/components/auth/AuthButton";
 import { Colors, Fonts } from "@/src/app/constants/theme";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 
 const Page = () => {
@@ -13,9 +12,6 @@ const Page = () => {
 
   return (
     <View style={styles.container}>
-      <Pressable style={styles.closeBtn} onPress={() => router.dismiss()}>
-        <Ionicons name="close" size={24} />
-      </Pressable>
       <Text style={styles.title}>Update Profile</Text>
       <View style={styles.buttonContainer}>
         <TextInput
@@ -31,7 +27,6 @@ const Page = () => {
           placeholderTextColor={"black"}
           onChangeText={setPassword}
           value={password}
-          secureTextEntry
           style={styles.textInput}
         />
         <AuthButton

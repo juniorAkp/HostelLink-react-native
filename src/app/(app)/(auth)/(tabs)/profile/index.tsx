@@ -6,7 +6,6 @@ import { Link } from "expo-router";
 import { useState } from "react";
 import {
   Alert,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -158,13 +157,6 @@ const Page = () => {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      {Platform.OS === "android" ? (
-        <View style={[styles.header, { paddingTop: insets.top }]}>
-          <Text style={styles.headerTitle}>Profile</Text>
-        </View>
-      ) : null}
-
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={[
@@ -173,6 +165,11 @@ const Page = () => {
         ]}
         showsVerticalScrollIndicator={false}
       >
+        {/* Header */}
+
+        <View style={[styles.header, { paddingTop: insets.top }]}>
+          <Text style={styles.headerTitle}>Profile</Text>
+        </View>
         {/* User Details Section */}
         <View style={styles.userSection}>
           <View style={styles.avatarContainer}>

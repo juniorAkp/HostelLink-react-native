@@ -79,7 +79,7 @@ const TabLayout = () => {
         })}
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="explore">
-        <Label>Settings</Label>
+        <Label>Explore</Label>
         {Platform.select({
           ios: <Icon sf="map" />,
           android: (
