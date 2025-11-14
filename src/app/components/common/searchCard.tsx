@@ -23,7 +23,7 @@ const SearchCard = ({
       <View style={styles.imageContainer}>
         <Image
           source={{
-            uri: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400",
+            uri: hostel?.images[0],
           }}
           contentFit="cover"
           transition={200}

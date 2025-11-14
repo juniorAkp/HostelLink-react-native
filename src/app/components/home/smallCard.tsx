@@ -1,11 +1,13 @@
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { blurhash } from "../../constants/blurhash";
 import { Colors, Fonts } from "../../constants/theme";
+import type { Hostels } from "../../data/hostel";
 
 interface HorizontalCardProps {
+  hostel?: Hostels;
   onPress?: () => void;
   onLike?: () => void;
   isLiked?: boolean;
@@ -17,8 +19,7 @@ const HorizontalCard = ({
   onPress,
   onLike,
   isLiked = false,
-  price = "$50",
-  rating = 4.5,
+  hostel,
 }: HorizontalCardProps) => {
   // Get first few amenities for display
   // const displayedAmenities = hostel.amenities?.slice(0, 3) || [];
@@ -33,7 +34,7 @@ const HorizontalCard = ({
       <View style={styles.imageContainer}>
         <Image
           source={{
-            uri: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400",
+            uri: hostel?.images[0],
           }}
           contentFit="cover"
           transition={200}
@@ -42,19 +43,17 @@ const HorizontalCard = ({
         />
 
         {/* Like Button */}
-        {onLike && (
-          <TouchableOpacity
-            style={styles.likeButton}
-            onPress={onLike}
-            activeOpacity={0.7}
-          >
-            <Ionicons
-              name={isLiked ? "heart" : "heart-outline"}
-              size={18}
-              color={isLiked ? "#FF3B30" : "#fff"}
-            />
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity
+          style={styles.likeButton}
+          onPress={onLike}
+          activeOpacity={0.7}
+        >
+          <Ionicons
+            name={isLiked ? "heart" : "heart-outline"}
+            size={18}
+            color={isLiked ? "#FF3B30" : "#fff"}
+          />
+        </TouchableOpacity>
       </View>
 
       {/* Content Section */}
@@ -63,40 +62,21 @@ const HorizontalCard = ({
         <View style={styles.header}>
           <View style={styles.titleContainer}>
             <Text style={styles.title} numberOfLines={1}>
-              {"hostel 1"}
+              {hostel?.name}
             </Text>
             <View style={styles.locationContainer}>
-              <Ionicons
-                name="location-outline"
-                size={14}
-                color={Colors.muted}
-              />
+              <FontAwesome6 name="map-pin" size={10} color={"red"} />
               <Text style={styles.location} numberOfLines={1}>
-                {"hostel 1"}
+                {hostel?.address}
               </Text>
             </View>
           </View>
         </View>
 
         {/* Description */}
-        {true && (
-          <Text style={styles.description} numberOfLines={2}>
-            {"hostel 1"}
-          </Text>
-        )}
-
-        {/* Footer with Price */}
-        <View style={styles.footer}>
-          <View style={styles.priceContainer}>
-            <Text style={styles.priceLabel}>From</Text>
-            <Text style={styles.price}>{price}</Text>
-            <Text style={styles.priceUnit}>/night</Text>
-          </View>
-          <View style={styles.countryBadge}>
-            <Ionicons name="flag-outline" size={12} color={Colors.primary} />
-            <Text style={styles.countryText}>hello</Text>
-          </View>
-        </View>
+        <Text style={styles.description} numberOfLines={2}>
+          {hostel?.description}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -107,7 +87,7 @@ export default HorizontalCard;
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    minHeight: 140,
+    minHeight: 120,
     flexDirection: "row",
     backgroundColor: "#fff",
     borderRadius: 12,
@@ -126,8 +106,8 @@ const styles = StyleSheet.create({
     borderColor: Colors.light,
   },
   imageContainer: {
-    width: 140,
-    height: 140,
+    width: 150,
+    height: 120,
     position: "relative",
     backgroundColor: Colors.light,
     borderRadius: 16,
@@ -158,15 +138,19 @@ const styles = StyleSheet.create({
   },
   likeButton: {
     position: "absolute",
-    top: 8,
-    right: 8,
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    top: 5,
+    right: 5,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: "transparent",
     alignItems: "center",
     justifyContent: "center",
-    backdropFilter: "blur(10px)",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
   },
   contentContainer: {
     flex: 1,

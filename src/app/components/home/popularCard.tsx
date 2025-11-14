@@ -1,13 +1,15 @@
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { blurhash } from "../../constants/blurhash";
 import { Fonts } from "../../constants/theme";
 import { Hostels } from "../../data/hostel";
 
 interface PopularCardProps {
   hostel: Hostels;
+  isFetching?: boolean;
   onPress?: () => void;
   onLike?: () => void;
   isLiked?: boolean;
@@ -17,6 +19,7 @@ const PopularCard = ({
   hostel,
   onPress,
   onLike,
+  isFetching,
   isLiked = false,
 }: PopularCardProps) => {
   return (
@@ -32,6 +35,7 @@ const PopularCard = ({
           style={styles.image}
           contentFit="cover"
           transition={200}
+          placeholder={{ blurhash: blurhash }}
         />
         {/* Gradient Overlay for better text readability */}
         <LinearGradient
@@ -44,7 +48,7 @@ const PopularCard = ({
             {hostel.name}
           </Text>
           <View style={styles.ratingContainer}>
-            <Ionicons name="star" size={14} color="#FFD700" />
+            <FontAwesome6 name="map-pin" size={10} color={"red"} />
             <Text style={styles.ratingText}>{hostel.address}</Text>
             <Text style={styles.locationText}> • {hostel.country}</Text>
           </View>

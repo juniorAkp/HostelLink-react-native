@@ -31,7 +31,10 @@ const HostelPage = () => {
         onScroll={scrollHandler}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingTop: insets.top + HEADER_HEIGHT }}
+        contentContainerStyle={{
+          paddingTop: insets.top + HEADER_HEIGHT,
+          paddingBottom: insets.bottom + HEADER_HEIGHT,
+        }}
       >
         <Text style={styles.pageTitle}>Hostels</Text>
         {/* <PopularCard /> */}
@@ -55,21 +58,15 @@ const HostelPage = () => {
           renderItem={({ item }) => <SearchCard hostel={item} />}
         />
         <Text style={styles.textHeading}>Recommended Hostels</Text>
-        <HorizontalCard />
-        {[...Array(30)].map((_, i) => (
-          <View
-            key={i}
-            style={{
-              backgroundColor: i % 2 === 0 ? "#f0f0f0" : "#e0e0e0",
-              padding: 20,
-              marginHorizontal: 16,
-              marginBottom: 12,
-              borderRadius: 8,
-            }}
-          >
-            <Text>Test Row #{i + 1}</Text>
-          </View>
-        ))}
+        <FlatList
+          maxToRenderPerBatch={5}
+          initialNumToRender={5}
+          scrollEnabled={false}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          data={data}
+          renderItem={({ item }) => <HorizontalCard hostel={item} />}
+        />
       </Animated.ScrollView>
     </View>
   );
@@ -86,7 +83,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   textHeading: {
-    fontFamily: Fonts.brand,
+    fontFamily: Fonts.brandBold,
     fontSize: 26,
     marginTop: 15,
     marginBottom: 15,
