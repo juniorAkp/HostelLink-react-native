@@ -4,15 +4,27 @@ import { supabase } from "../lib/supabase";
 export const hostelService = {
   //get all hostels available
   getAll: async (): Promise<Hostels[]> => {
-    return (await supabase.from("listings").select()) as unknown as Hostels[];
+    const { data, error } = await supabase.from("listings").select("*");
+
+    if (error) {
+      console.log(error); //debug error
+      return [];
+    }
+    return data as Hostels[];
   },
 
-  getById: async (hostelId: string): Promise<Hostels | undefined> => {
+  getById: async (hostelId: string): Promise<Hostels | null> => {
     //find hostel by id
-    return (await supabase
+    const { data, error } = await supabase
       .from("listings")
-      .select()
-      .eq("id", hostelId)) as unknown as Hostels;
+      .select("*")
+      .eq("id", hostelId)
+      .single();
+    if (error) {
+      console.log(error); //debug error
+      return null;
+    }
+    return data as Hostels;
   },
 
   search: async (searchTerm: string): Promise<Hostels[]> => {
@@ -20,13 +32,19 @@ export const hostelService = {
     // Returns an array of Hostels that match either field.
     // If searchTerm is empty, return all hostels.
     if (!searchTerm.trim()) {
-      return (await supabase.from("listings").select()) as unknown as Hostels[];
+      const { data, error } = await supabase.from("listings").select("*");
+      if (error) {
+        console.log(error); //debug error
+        return [];
+      }
+
+      return data as Hostels[];
     }
 
     // Perform a single query matching either the 'name' or 'amenities' fields.
     const { data, error } = await supabase
       .from("listings")
-      .select()
+      .select("*")
       .or(`name.ilike.%${searchTerm}%,amenities.ilike.%${searchTerm}%`);
 
     if (error) {
