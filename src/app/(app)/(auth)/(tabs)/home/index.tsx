@@ -110,7 +110,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.brandBlack,
     fontSize: 30,
     marginBottom: 16,
-    paddingHorizontal: 16,
   },
   textHeading: {
     fontFamily: Fonts.brandBold,
