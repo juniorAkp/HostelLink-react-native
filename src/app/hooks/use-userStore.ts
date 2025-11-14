@@ -4,7 +4,11 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import type { profile as Profile } from "../data/profile";
 import { supabase } from "../lib/supabase";
-import { loginSchema, registerSchema } from "../utils/zodValidation";
+import {
+  loginSchema,
+  registerSchema,
+  updateProfileSchema,
+} from "../utils/zodValidation";
 import { asyncZustandStorage } from "../utils/zutstandStorage";
 
 interface UserStore {
@@ -26,11 +30,16 @@ interface UserStore {
   ) => Promise<void>;
   logout: () => Promise<void>;
   deleteAccount: (userId: string) => Promise<void>;
+  updateProfile: (
+    userId: string,
+    username: string,
+    phone: string
+  ) => Promise<void>;
 }
 
 const useUserStore = create<UserStore>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       user: null,
       isGuest: false,
       isLoading: false,
@@ -82,6 +91,7 @@ const useUserStore = create<UserStore>()(
       },
 
       register: async (email, username, password) => {
+        set({ isLoading: true, errorMessage: null });
         const result = registerSchema.safeParse({
           email: email.trim(),
           username: username.trim(),
@@ -98,7 +108,6 @@ const useUserStore = create<UserStore>()(
           return;
         }
 
-        set({ isLoading: true, errorMessage: null });
         try {
           const { data, error } = await supabase.auth.signUp({
             email,
@@ -159,6 +168,46 @@ const useUserStore = create<UserStore>()(
           set({ user: null, isGuest: false, errorMessage: null });
         } catch (err: any) {
           set({ errorMessage: err.message ?? "Failed to delete account" });
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
+      updateProfile: async (
+        userId: string,
+        username: string,
+        phone: string
+      ) => {
+        set({ isLoading: true, errorMessage: null });
+        const result = updateProfileSchema.safeParse({
+          phone: phone.trim(),
+          username: username.trim(),
+          userId,
+        });
+        if (!result.success) {
+          const tree = z.treeifyError(result.error);
+          const msg = tree.properties?.phone?.errors ||
+            tree.properties?.username?.errors ||
+            tree.properties?.userId?.errors || [
+              "Invalid update details provided",
+            ];
+          set({ zodErrors: msg, isLoading: false });
+          return;
+        }
+        try {
+          const { error } = await supabase
+            .from("profiles")
+            .update({
+              username: username,
+              phone_number: phone,
+            })
+            .eq("id", userId);
+          if (error) throw error;
+        } catch (error: any) {
+          const msg =
+            error instanceof AuthError ? error.message : "Update failed";
+          set({ errorMessage: msg });
+          throw error;
         } finally {
           set({ isLoading: false });
         }

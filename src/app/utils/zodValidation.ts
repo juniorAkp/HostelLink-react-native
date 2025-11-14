@@ -28,4 +28,5 @@ export const updateProfileSchema = z.object({
     .min(3, "Username must be at least 3 characters")
     .regex(/^[a-zA-Z0-9_]+$/, "Only letters, numbers, and underscores"),
   phone: z.string().min(10, "Phone number must be 10 characters long").max(10),
+  userId: z.uuid(),
 });
