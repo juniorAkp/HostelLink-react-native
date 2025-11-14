@@ -1,14 +1,24 @@
 import AuthButton from "@/src/app/components/auth/AuthButton";
 import { Colors, Fonts } from "@/src/app/constants/theme";
+import useUserStore from "@/src/app/hooks/use-userStore";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 
 const Page = () => {
-  const [password, setPassword] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
+  const { user } = useUserStore();
+  ("");
+  const [phone, setPhone] = useState("");
+  const [username, setUsername] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      setUsername(user.username ?? "");
+      setPhone(user.phone_number ?? "");
+    }
+  }, [user]);
 
   return (
     <View style={styles.container}>
@@ -25,8 +35,8 @@ const Page = () => {
           placeholder="Phone Number"
           keyboardType="phone-pad"
           placeholderTextColor={"black"}
-          onChangeText={setPassword}
-          value={password}
+          onChangeText={setPhone}
+          value={phone}
           style={styles.textInput}
         />
         <AuthButton
