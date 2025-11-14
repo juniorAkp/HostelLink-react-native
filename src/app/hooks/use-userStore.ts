@@ -35,11 +35,12 @@ interface UserStore {
     username: string,
     phone: string
   ) => Promise<void>;
+  getUser: (userId: string) => Promise<void>;
 }
 
 const useUserStore = create<UserStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       isGuest: false,
       isLoading: false,
@@ -49,6 +50,29 @@ const useUserStore = create<UserStore>()(
 
       setUser: (user) => set({ user }),
       setIsGuest: (isGuest) => set({ isGuest }),
+      getUser: async (userId: string) => {
+        set({ isLoading: true, errorMessage: null });
+        try {
+          const { data: userData, error: profileError } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", userId)
+            .single();
+          if (profileError) throw profileError;
+          set({
+            user: userData as Profile,
+            isGuest: false,
+            errorMessage: null,
+          });
+        } catch (err: any) {
+          const msg =
+            err instanceof AuthError ? err.message : "Failed to fetch user";
+          set({ errorMessage: msg });
+          throw err;
+        } finally {
+          set({ isLoading: false });
+        }
+      },
 
       login: async (email, password) => {
         set({ isLoading: true, errorMessage: null });
@@ -65,22 +89,8 @@ const useUserStore = create<UserStore>()(
             email,
             password,
           });
-
-          const { data: userData, error: profileError } = await supabase
-            .from("profiles")
-            .select("*")
-            .eq("id", data.user?.id)
-            .single();
-
-          if (profileError) throw profileError;
+          get().getUser(data.user?.id!);
           if (error) throw error;
-          if (!data.user) throw new Error("No user returned");
-
-          set({
-            user: userData as Profile,
-            isGuest: false,
-            errorMessage: null,
-          });
         } catch (err: any) {
           const msg = err instanceof AuthError ? err.message : "Login failed";
           set({ errorMessage: msg });
@@ -112,33 +122,13 @@ const useUserStore = create<UserStore>()(
           const { data, error } = await supabase.auth.signUp({
             email,
             password,
-            options: { data: { username } },
+            options: {
+              data: { full_name: username },
+            },
           });
 
           if (error) throw error;
-          if (!data.user) throw new Error("No user returned after signup");
-
-          const { error: profileError } = await supabase
-            .from("profiles")
-            .upsert(
-              { id: data.user.id, username, email },
-              { onConflict: "id" }
-            );
-
-          if (profileError) throw profileError;
-          const { data: userData, error: fetchError } = await supabase
-            .from("profiles")
-            .select("*")
-            .eq("id", data.user.id)
-            .single();
-
-          if (fetchError) throw fetchError;
-
-          set({
-            user: userData as Profile,
-            isGuest: false,
-            errorMessage: null,
-          });
+          get().getUser(data.user?.id!);
         } catch (err: any) {
           const msg =
             err instanceof AuthError ? err.message : "Registration failed";
