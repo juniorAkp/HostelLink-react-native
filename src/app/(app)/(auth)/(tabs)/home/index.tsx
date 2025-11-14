@@ -2,9 +2,15 @@ import SearchCard from "@/src/app/components/common/searchCard";
 import RestaurantHeader from "@/src/app/components/home/header";
 import PopularCard from "@/src/app/components/home/popularCard";
 import HorizontalCard from "@/src/app/components/home/smallCard";
-import { Fonts } from "@/src/app/constants/theme";
+import { Colors, Fonts } from "@/src/app/constants/theme";
 import { useHostels } from "@/src/app/hooks/useHostels";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -22,11 +28,34 @@ const HostelPage = () => {
     },
   });
 
-  const { data } = useHostels();
+  const { isFetching, isError, error, data: hostels } = useHostels();
+
+  // Loading State
+  if (isFetching) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
+
+  // Error State
+  if (isError || !hostels) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>
+          {error?.message || "Failed to load hostel details"}
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
-      <RestaurantHeader title="Hostels" scrollOffset={scrollOffset} />
+      <RestaurantHeader
+        title="Discover Great Hostels"
+        scrollOffset={scrollOffset}
+      />
       <Animated.ScrollView
         onScroll={scrollHandler}
         scrollEventThrottle={16}
@@ -36,7 +65,7 @@ const HostelPage = () => {
           paddingBottom: insets.bottom + HEADER_HEIGHT,
         }}
       >
-        <Text style={styles.pageTitle}>Hostels</Text>
+        <Text style={styles.pageTitle}>Discover Great Hostels</Text>
         {/* <PopularCard /> */}
         <Text style={styles.textHeading}>Popular Hostels</Text>
         <FlatList
@@ -44,7 +73,7 @@ const HostelPage = () => {
           initialNumToRender={5}
           horizontal
           showsHorizontalScrollIndicator={false}
-          data={data}
+          data={hostels}
           renderItem={({ item }) => <PopularCard hostel={item} />}
         />
         {/* <PopularCard hostel={}/> */}
@@ -54,17 +83,17 @@ const HostelPage = () => {
           initialNumToRender={5}
           horizontal
           showsHorizontalScrollIndicator={false}
-          data={data}
+          data={hostels}
           renderItem={({ item }) => <SearchCard hostel={item} />}
         />
-        <Text style={styles.textHeading}>Recommended Hostels</Text>
+        <Text style={styles.textHeading}>Recommended Hostels For You</Text>
         <FlatList
           maxToRenderPerBatch={5}
           initialNumToRender={5}
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          data={data}
+          data={hostels}
           renderItem={({ item }) => <HorizontalCard hostel={item} />}
         />
       </Animated.ScrollView>
@@ -75,6 +104,7 @@ const HostelPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 10,
   },
   pageTitle: {
     fontFamily: Fonts.brandBlack,
@@ -84,7 +114,7 @@ const styles = StyleSheet.create({
   },
   textHeading: {
     fontFamily: Fonts.brandBold,
-    fontSize: 26,
+    fontSize: 20,
     marginTop: 15,
     marginBottom: 15,
   },
@@ -93,6 +123,22 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 16,
     paddingHorizontal: 16,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  errorText: {
+    fontSize: 16,
+    color: "#d32f2f",
+    textAlign: "center",
   },
 });
 export default HostelPage;

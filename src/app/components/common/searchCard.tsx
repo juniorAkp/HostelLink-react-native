@@ -1,5 +1,6 @@
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import { Link } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { blurhash } from "../../constants/blurhash";
@@ -7,7 +8,7 @@ import { Colors, Fonts } from "../../constants/theme";
 import type { Hostels } from "../../data/hostel";
 
 interface SearchCardProps {
-  hostel?: Hostels;
+  hostel: Hostels;
   onPress?: () => void;
   onLike?: () => void;
   isLiked?: boolean;
@@ -19,41 +20,43 @@ const SearchCard = ({
   isLiked = false,
 }: SearchCardProps) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image
-          source={{
-            uri: hostel?.images[0],
-          }}
-          contentFit="cover"
-          transition={200}
-          style={styles.image}
-          placeholder={{ blurhash: blurhash }}
-        />
-
-        {/* Like Button */}
-        <TouchableOpacity
-          style={styles.likeButton}
-          onPress={onLike}
-          activeOpacity={0.7}
-        >
-          <Ionicons
-            name={isLiked ? "heart" : "heart-outline"}
-            size={20}
-            color={isLiked ? "#FF3B30" : "#fff"}
+    <Link href={`/hostel/${hostel.id}`} asChild>
+      <TouchableOpacity style={styles.container} activeOpacity={0.9}>
+        <View style={styles.imageContainer}>
+          <Image
+            source={{
+              uri: hostel?.images[0],
+            }}
+            contentFit="cover"
+            transition={200}
+            style={styles.image}
+            placeholder={{ blurhash: blurhash }}
           />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.info}>
-        <Text style={styles.text}>{hostel?.name}</Text>
-        <View style={{ flexDirection: "row", gap: 4 }}>
-          <FontAwesome6 name="map-pin" size={10} color={"red"} />
-          <Text numberOfLines={1}>{hostel?.address}</Text>
-        </View>
 
-        <Text numberOfLines={1}>{hostel?.description}</Text>
-      </View>
-    </View>
+          {/* Like Button */}
+          <TouchableOpacity
+            style={styles.likeButton}
+            onPress={onLike}
+            activeOpacity={0.7}
+          >
+            <Ionicons
+              name={isLiked ? "heart" : "heart-outline"}
+              size={20}
+              color={isLiked ? "#FF3B30" : "#fff"}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.info}>
+          <Text style={styles.text}>{hostel?.name}</Text>
+          <View style={{ flexDirection: "row", gap: 4 }}>
+            <FontAwesome6 name="map-pin" size={10} color={"red"} />
+            <Text numberOfLines={1}>{hostel?.address}</Text>
+          </View>
+
+          <Text numberOfLines={1}>{hostel?.description}</Text>
+        </View>
+      </TouchableOpacity>
+    </Link>
   );
 };
 

@@ -1,6 +1,7 @@
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
+import { Link } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { blurhash } from "../../constants/blurhash";
@@ -23,50 +24,52 @@ const PopularCard = ({
   isLiked = false,
 }: PopularCardProps) => {
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={onPress}
-      activeOpacity={0.9}
-    >
-      {/* Image Section with Overlay Text */}
-      <View style={styles.imageContainer}>
-        <Image
-          source={{ uri: hostel.images[0] }}
-          style={styles.image}
-          contentFit="cover"
-          transition={200}
-          placeholder={{ blurhash: blurhash }}
-        />
-        {/* Gradient Overlay for better text readability */}
-        <LinearGradient
-          colors={["transparent", "rgba(0,0,0,0.6)"]}
-          style={styles.gradientOverlay}
-        />
-        {/* Text Overlay */}
-        <View style={styles.textOverlay}>
-          <Text style={styles.titleText} numberOfLines={2}>
-            {hostel.name}
-          </Text>
-          <View style={styles.ratingContainer}>
-            <FontAwesome6 name="map-pin" size={10} color={"red"} />
-            <Text style={styles.ratingText}>{hostel.address}</Text>
-            <Text style={styles.locationText}> • {hostel.country}</Text>
-          </View>
-        </View>
-        {/* Like Button */}
-        <TouchableOpacity
-          style={styles.likeButton}
-          onPress={onLike}
-          activeOpacity={0.7}
-        >
-          <Ionicons
-            name={isLiked ? "heart" : "heart-outline"}
-            size={20}
-            color={isLiked ? "#FF3B30" : "#fff"}
+    <Link href={`/hostel/${hostel.id}`} asChild>
+      <TouchableOpacity
+        style={styles.container}
+        onPress={onPress}
+        activeOpacity={0.9}
+      >
+        {/* Image Section with Overlay Text */}
+        <View style={styles.imageContainer}>
+          <Image
+            source={{ uri: hostel.images[0] }}
+            style={styles.image}
+            contentFit="cover"
+            transition={200}
+            placeholder={{ blurhash: blurhash }}
           />
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
+          {/* Gradient Overlay for better text readability */}
+          <LinearGradient
+            colors={["transparent", "rgba(0,0,0,0.6)"]}
+            style={styles.gradientOverlay}
+          />
+          {/* Text Overlay */}
+          <View style={styles.textOverlay}>
+            <Text style={styles.titleText} numberOfLines={2}>
+              {hostel.name}
+            </Text>
+            <View style={styles.ratingContainer}>
+              <FontAwesome6 name="map-pin" size={10} color={"red"} />
+              <Text style={styles.ratingText}>{hostel.address}</Text>
+              <Text style={styles.locationText}> • {hostel.country}</Text>
+            </View>
+          </View>
+          {/* Like Button */}
+          <TouchableOpacity
+            style={styles.likeButton}
+            onPress={onLike}
+            activeOpacity={0.7}
+          >
+            <Ionicons
+              name={isLiked ? "heart" : "heart-outline"}
+              size={20}
+              color={isLiked ? "#FF3B30" : "#fff"}
+            />
+          </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
+    </Link>
   );
 };
 

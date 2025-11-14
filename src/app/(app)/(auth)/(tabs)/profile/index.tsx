@@ -15,7 +15,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Page = () => {
-  const { user, logout, deleteAccount, setIsGuest } = useUserStore();
+  const { user, logout, deleteAccount, setIsGuest, isGuest } = useUserStore();
   const insets = useSafeAreaInsets();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -27,8 +27,8 @@ const Page = () => {
       .join("")
       .toUpperCase()
       .slice(0, 2) ||
-    user?.email?.[0]?.toUpperCase() ||
-    "U";
+    user?.username?.[0]?.toUpperCase() ||
+    "G";
 
   const handleLogout = () => {
     Alert.alert(
@@ -161,7 +161,7 @@ const Page = () => {
         style={styles.scrollView}
         contentContainerStyle={[
           styles.content,
-          { paddingBottom: insets.bottom + 20 },
+          { paddingBottom: insets.bottom + 60 },
         ]}
         showsVerticalScrollIndicator={false}
       >
@@ -193,21 +193,26 @@ const Page = () => {
               <Ionicons name="camera" size={16} color="#fff" />
             </TouchableOpacity>
           </View>
-          <Text style={styles.userName}>{user?.username || "User"}</Text>
-          <Text style={styles.userEmail}>{user?.email || ""}</Text>
-          <Link href="/edit-profile" asChild>
-            <TouchableOpacity
-              style={styles.editProfileButton}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.editProfileButtonText}>Edit Profile</Text>
-            </TouchableOpacity>
-          </Link>
+          <Text style={styles.userName}>{user?.username || "Guest"}</Text>
+          <Text style={styles.userEmail}>
+            {user?.email || "guest@gmail.com"}
+          </Text>
+          {!isGuest ? (
+            <Link href="/edit-profile" asChild>
+              <TouchableOpacity
+                style={styles.editProfileButton}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.editProfileButtonText}>Edit Profile</Text>
+              </TouchableOpacity>
+            </Link>
+          ) : null}
         </View>
 
         {/* Account Management Section */}
         <MenuSection title="Account">
           <MenuItem
+            disabled={isGuest}
             icon="person-outline"
             title="Personal Information"
             subtitle="Name, email, phone number"
@@ -215,6 +220,7 @@ const Page = () => {
           />
           <View style={styles.separator} />
           <MenuItem
+            disabled={isGuest}
             icon="lock-closed-outline"
             title="Password & Security"
             subtitle="Change password, two-factor authentication"
@@ -222,6 +228,7 @@ const Page = () => {
           />
           <View style={styles.separator} />
           <MenuItem
+            disabled={isGuest}
             icon="notifications-outline"
             title="Notifications"
             subtitle="Manage notification preferences"
@@ -278,7 +285,7 @@ const Page = () => {
             onPress={handleDeleteAccount}
             showChevron={false}
             danger={true}
-            disabled={isDeleting}
+            disabled={isDeleting || isGuest}
           />
         </MenuSection>
       </ScrollView>

@@ -1,5 +1,6 @@
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import { Link } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { blurhash } from "../../constants/blurhash";
@@ -7,7 +8,7 @@ import { Colors, Fonts } from "../../constants/theme";
 import type { Hostels } from "../../data/hostel";
 
 interface HorizontalCardProps {
-  hostel?: Hostels;
+  hostel: Hostels;
   onPress?: () => void;
   onLike?: () => void;
   isLiked?: boolean;
@@ -25,60 +26,62 @@ const HorizontalCard = ({
   // const displayedAmenities = hostel.amenities?.slice(0, 3) || [];
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={onPress}
-      activeOpacity={0.95}
-    >
-      {/* Image Section */}
-      <View style={styles.imageContainer}>
-        <Image
-          source={{
-            uri: hostel?.images[0],
-          }}
-          contentFit="cover"
-          transition={200}
-          style={styles.image}
-          placeholder={{ blurhash: blurhash }}
-        />
-
-        {/* Like Button */}
-        <TouchableOpacity
-          style={styles.likeButton}
-          onPress={onLike}
-          activeOpacity={0.7}
-        >
-          <Ionicons
-            name={isLiked ? "heart" : "heart-outline"}
-            size={18}
-            color={isLiked ? "#FF3B30" : "#fff"}
+    <Link href={`/hostel/${hostel.id}`} asChild>
+      <TouchableOpacity
+        style={styles.container}
+        onPress={onPress}
+        activeOpacity={0.9}
+      >
+        {/* Image Section */}
+        <View style={styles.imageContainer}>
+          <Image
+            source={{
+              uri: hostel?.images[0],
+            }}
+            contentFit="cover"
+            transition={200}
+            style={styles.image}
+            placeholder={{ blurhash: blurhash }}
           />
-        </TouchableOpacity>
-      </View>
 
-      {/* Content Section */}
-      <View style={styles.contentContainer}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.title} numberOfLines={1}>
-              {hostel?.name}
-            </Text>
-            <View style={styles.locationContainer}>
-              <FontAwesome6 name="map-pin" size={10} color={"red"} />
-              <Text style={styles.location} numberOfLines={1}>
-                {hostel?.address}
-              </Text>
-            </View>
-          </View>
+          {/* Like Button */}
+          <TouchableOpacity
+            style={styles.likeButton}
+            onPress={onLike}
+            activeOpacity={0.7}
+          >
+            <Ionicons
+              name={isLiked ? "heart" : "heart-outline"}
+              size={18}
+              color={isLiked ? "#FF3B30" : "#fff"}
+            />
+          </TouchableOpacity>
         </View>
 
-        {/* Description */}
-        <Text style={styles.description} numberOfLines={2}>
-          {hostel?.description}
-        </Text>
-      </View>
-    </TouchableOpacity>
+        {/* Content Section */}
+        <View style={styles.contentContainer}>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title} numberOfLines={1}>
+                {hostel?.name}
+              </Text>
+              <View style={styles.locationContainer}>
+                <FontAwesome6 name="map-pin" size={10} color={"red"} />
+                <Text style={styles.location} numberOfLines={1}>
+                  {hostel?.address}
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Description */}
+          <Text style={styles.description} numberOfLines={2}>
+            {hostel?.description}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    </Link>
   );
 };
 

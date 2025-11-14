@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Stack, useRouter } from "expo-router";
 import React from "react";
-import { Pressable } from "react-native";
+import { Platform, Pressable } from "react-native";
 import { Colors } from "../../constants/theme";
 
 const AuthLayout = () => {
@@ -9,6 +9,47 @@ const AuthLayout = () => {
   return (
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="(modal)/hostel/[id]"
+        options={{
+          sheetAllowedDetents: [0.9],
+          title: "",
+          headerShadowVisible: false,
+          sheetCornerRadius: 16,
+          sheetGrabberVisible: true,
+          headerTransparent: true,
+          sheetExpandsWhenScrolledToEdge: true,
+          headerShown: true,
+          headerLeft: () => (
+            <Pressable
+              style={{
+                padding: 4,
+                borderRadius: 20,
+                backgroundColor: Colors.light,
+              }}
+              onPress={() => router.dismiss()}
+            >
+              <Ionicons name="arrow-back" size={28} />
+            </Pressable>
+          ),
+          ...(Platform.OS === "ios"
+            ? {
+                headerRight: () => (
+                  <Pressable
+                    style={{
+                      padding: 4,
+                      borderRadius: 20,
+                      backgroundColor: Colors.light,
+                    }}
+                    onPress={() => router.dismiss()}
+                  >
+                    <Ionicons name="close-sharp" size={28} />
+                  </Pressable>
+                ),
+              }
+            : {}),
+        }}
+      />
       <Stack.Screen
         name="(modal)/location"
         options={{

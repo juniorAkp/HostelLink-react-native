@@ -3,7 +3,7 @@ export interface Hostels {
   name: string;
   description: string;
   amenities: string[];
-  phoneNumbers: string[];
+  phone_numbers: string[];
   exact_location: {
     lng: number;
     lat: number;
@@ -11,5 +11,7 @@ export interface Hostels {
   address: string;
   images: string[];
   type: string;
+  website_url: string;
+  email_addresses: string[];
   country: string;
 }
