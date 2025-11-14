@@ -89,8 +89,8 @@ const useUserStore = create<UserStore>()(
             email,
             password,
           });
-          get().getUser(data.user?.id!);
           if (error) throw error;
+          get().getUser(data.user?.id!);
         } catch (err: any) {
           const msg = err instanceof AuthError ? err.message : "Login failed";
           set({ errorMessage: msg });

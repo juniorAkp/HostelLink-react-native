@@ -5,7 +5,11 @@ import useUserStore from "../hooks/use-userStore";
 const RootLayout = () => {
   const { isGuest, user } = useUserStore();
   return (
-    <Stack>
+    <Stack
+      screenOptions={{
+        statusBarStyle: "dark",
+      }}
+    >
       <Stack.Protected guard={isGuest || !!user}>
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       </Stack.Protected>

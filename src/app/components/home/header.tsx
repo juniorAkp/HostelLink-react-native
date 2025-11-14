@@ -12,12 +12,12 @@ import {
 import Animated, {
   Extrapolation,
   interpolate,
-  runOnJS,
   SharedValue,
   useAnimatedReaction,
   useAnimatedStyle,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { scheduleOnRN } from "react-native-worklets";
 import { Colors } from "../../constants/theme";
 
 interface RestaurantHeaderProps {
@@ -58,8 +58,14 @@ const RestaurantHeader = ({ title, scrollOffset }: RestaurantHeaderProps) => {
       const header1ShouldBeActive =
         header1Opacity > 0.1 && !header2ShouldBeActive;
 
-      runOnJS(setHeader1PointerEvents)(header1ShouldBeActive ? "auto" : "none");
-      runOnJS(setHeader2PointerEvents)(header2ShouldBeActive ? "auto" : "none");
+      scheduleOnRN(
+        setHeader1PointerEvents,
+        header1ShouldBeActive ? "auto" : "none"
+      );
+      scheduleOnRN(
+        setHeader2PointerEvents,
+        header2ShouldBeActive ? "auto" : "none"
+      );
     }
   );
 

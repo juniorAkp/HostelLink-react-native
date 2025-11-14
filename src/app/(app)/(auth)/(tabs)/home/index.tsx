@@ -1,14 +1,18 @@
+import SearchCard from "@/src/app/components/common/searchCard";
 import RestaurantHeader from "@/src/app/components/home/header";
+import PopularCard from "@/src/app/components/home/popularCard";
 import HorizontalCard from "@/src/app/components/home/smallCard";
 import { Fonts } from "@/src/app/constants/theme";
-import { StyleSheet, Text, View } from "react-native";
+import { useHostels } from "@/src/app/hooks/useHostels";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 const HEADER_HEIGHT = 60;
-const RestaurantListPage = () => {
+
+const HostelPage = () => {
   const insets = useSafeAreaInsets();
   const scrollOffset = useSharedValue(0);
 
@@ -17,6 +21,9 @@ const RestaurantListPage = () => {
       scrollOffset.value = event.contentOffset.y;
     },
   });
+
+  const { data } = useHostels();
+
   return (
     <View style={styles.container}>
       <RestaurantHeader title="Hostels" scrollOffset={scrollOffset} />
@@ -28,6 +35,26 @@ const RestaurantListPage = () => {
       >
         <Text style={styles.pageTitle}>Hostels</Text>
         {/* <PopularCard /> */}
+        <Text style={styles.textHeading}>Popular Hostels</Text>
+        <FlatList
+          maxToRenderPerBatch={5}
+          initialNumToRender={5}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={data}
+          renderItem={({ item }) => <PopularCard hostel={item} />}
+        />
+        {/* <PopularCard hostel={}/> */}
+        <Text style={styles.textHeading}>Nearby Hostels</Text>
+        <FlatList
+          maxToRenderPerBatch={5}
+          initialNumToRender={5}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={data}
+          renderItem={({ item }) => <SearchCard hostel={item} />}
+        />
+        <Text style={styles.textHeading}>Recommended Hostels</Text>
         <HorizontalCard />
         {[...Array(30)].map((_, i) => (
           <View
@@ -58,6 +85,12 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingHorizontal: 16,
   },
+  textHeading: {
+    fontFamily: Fonts.brand,
+    fontSize: 26,
+    marginTop: 15,
+    marginBottom: 15,
+  },
   allRestaurantsTitle: {
     fontFamily: Fonts.brandBold,
     fontSize: 20,
@@ -65,4 +98,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
 });
-export default RestaurantListPage;
+export default HostelPage;
