@@ -21,3 +21,11 @@ export const registerSchema = z.object({
       "Needs uppercase, lowercase & number"
     ),
 });
+
+export const updateProfileSchema = z.object({
+  username: z
+    .string()
+    .min(3, "Username must be at least 3 characters")
+    .regex(/^[a-zA-Z0-9_]+$/, "Only letters, numbers, and underscores"),
+  phone: z.string().min(10, "Phone number must be 10 characters long").max(10),
+});
