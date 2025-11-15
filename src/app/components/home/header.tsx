@@ -139,20 +139,12 @@ const RestaurantHeader = ({
         style={[styles.header1, header1Style]}
         pointerEvents={header1PointerEvents}
       >
-        <Link href="/location" asChild>
-          <Pressable style={styles.locationButton}>
-            <FontAwesome6 name="map-pin" size={20} color={"red"} />
-            <Text style={styles.locationText}>{address}</Text>
-            <Ionicons name="chevron-down" size={16} />
-          </Pressable>
-        </Link>
+        <Pressable style={styles.locationButton}>
+          <FontAwesome6 name="map-pin" size={20} color={"red"} />
+          <Text style={styles.locationText}>{address}</Text>
+        </Pressable>
 
         <View style={styles.rightIcons}>
-          <Link href="/filter" asChild>
-            <TouchableOpacity style={styles.iconButton}>
-              <Ionicons name="filter" size={20} />
-            </TouchableOpacity>
-          </Link>
           <Link href="/favourite" asChild>
             <TouchableOpacity style={styles.iconButton}>
               <Ionicons name="heart" size={20} color="#FF3B30" />
@@ -168,17 +160,14 @@ const RestaurantHeader = ({
       >
         <View style={styles.centerContent}>
           <Text style={styles.titleSmall}>{title}</Text>
-          <Link href="/location" asChild>
-            <TouchableOpacity style={styles.locationSmall}>
-              <Text style={styles.locationSmallText}>Münster</Text>
-              <Ionicons name="chevron-down" size={14} />
-            </TouchableOpacity>
-          </Link>
+          <Pressable style={styles.locationSmall}>
+            <Text style={styles.locationSmallText}>{address}</Text>
+          </Pressable>
         </View>
         <View style={styles.rightIcons}>
-          <Link href="/location" asChild>
+          <Link href="/favourite" asChild>
             <TouchableOpacity style={styles.iconButton}>
-              <Ionicons name="filter" size={20} />
+              <Ionicons name="heart" size={20} color="#FF3B30" />
             </TouchableOpacity>
           </Link>
         </View>
