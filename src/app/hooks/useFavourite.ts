@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 import { hostelService } from "../services/hostelServices";
+import { asyncZustandStorage } from "../utils/zutstandStorage";
 
 interface FavouriteState {
   favouriteHostelIds: string[];
@@ -11,25 +13,33 @@ interface FavouriteState {
   setInitialised: (v: boolean) => void;
 }
 
-export const useFavouriteStore = create<FavouriteState>()((set, get) => ({
-  favouriteHostelIds: [],
-  addFavourite: (hostelId) => {
-    const current = get().favouriteHostelIds;
-    if (!current.includes(hostelId)) {
-      set({ favouriteHostelIds: [...current, hostelId] });
+export const useFavouriteStore = create<FavouriteState>()(
+  persist(
+    (set, get) => ({
+      favouriteHostelIds: [],
+      addFavourite: (hostelId) => {
+        const current = get().favouriteHostelIds;
+        if (!current.includes(hostelId)) {
+          set({ favouriteHostelIds: [...current, hostelId] });
+        }
+      },
+      removeFavourite: (hostelId) => {
+        set({
+          favouriteHostelIds: get().favouriteHostelIds.filter(
+            (id) => id !== hostelId
+          ),
+        });
+      },
+      setFavourites: (ids) => set({ favouriteHostelIds: ids }),
+      isInitialised: false,
+      setInitialised: (v) => set({ isInitialised: v }),
+    }),
+    {
+      name: "favourite-storage",
+      storage: createJSONStorage(() => asyncZustandStorage),
     }
-  },
-  removeFavourite: (hostelId) => {
-    set({
-      favouriteHostelIds: get().favouriteHostelIds.filter(
-        (id) => id !== hostelId
-      ),
-    });
-  },
-  setFavourites: (ids) => set({ favouriteHostelIds: ids }),
-  isInitialised: false,
-  setInitialised: (v) => set({ isInitialised: v }),
-}));
+  )
+);
 
 // Fetch a single hostel by its id
 export const useFavouriteHostel = (hostelId: string | null) => {
@@ -50,12 +60,14 @@ export const useFavouriteHostels = () => {
     queryKey: ["favouriteHostels", favouriteHostelIds],
     queryFn: async () => {
       if (!favouriteHostelIds.length) return [];
-      // The hostelService.getById may need to be adjusted to accept array input for batch fetch,
-      // otherwise fall back to Promise.all
+
       const hostels = await Promise.all(
         favouriteHostelIds.map((id) => hostelService.getById(id))
       );
-      return hostels.filter(Boolean);
+
+      return hostels.filter(
+        (h): h is NonNullable<typeof h> => h !== null && h !== undefined
+      );
     },
     enabled: favouriteHostelIds.length > 0,
   });

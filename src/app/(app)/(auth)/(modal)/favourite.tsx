@@ -1,62 +1,106 @@
+import HorizontalCard from "@/src/app/components/home/smallCard";
 import { Colors, Fonts } from "@/src/app/constants/theme";
-import { useFavouriteHostels } from "@/src/app/hooks/useFavourite";
+import {
+  useFavouriteHostels,
+  useFavouriteStore,
+  useSetFavourite,
+} from "@/src/app/hooks/useFavourite";
 import { FontAwesome6 } from "@expo/vector-icons";
 import React from "react";
+import { ActivityIndicator, FlatList, StyleSheet, Text } from "react-native";
 import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 const Favourite = () => {
-  const { data: hostel, isFetching, error } = useFavouriteHostels();
+  const {
+    data: favouriteHostels = [],
+    isFetching,
+    error,
+  } = useFavouriteHostels();
 
-  // Loading State
+  const { addFavourite, removeFavourite } = useSetFavourite();
+  const { favouriteHostelIds } = useFavouriteStore();
+  const insets = useSafeAreaInsets();
+
+  const toggleLike = (hostelId: string) => {
+    if (favouriteHostelIds.includes(hostelId)) {
+      removeFavourite(hostelId);
+    } else {
+      addFavourite(hostelId);
+    }
+  };
+
+  // Loading
   if (isFetching) {
     return (
-      <View style={styles.loadingContainer}>
+      <SafeAreaView
+        style={styles.loadingContainer}
+        edges={["top", "left", "right"]}
+      >
         <ActivityIndicator size="large" color={Colors.primary} />
-      </View>
+      </SafeAreaView>
     );
   }
 
-  // Error State
+  // Error
   if (error) {
     return (
-      <View style={styles.errorContainer}>
+      <SafeAreaView
+        style={{
+          paddingTop: insets.top + 60,
+        }}
+        edges={["top", "left", "right"]}
+      >
         <Text style={styles.errorText}>{error?.message}</Text>
-      </View>
+      </SafeAreaView>
     );
   }
 
-  //empty state
-  if (!hostel) {
+  // Empty state
+  if (!favouriteHostels.length) {
     return (
-      <View style={styles.errorContainer}>
-        <FontAwesome6 name="heart-crack" size={24} color={"red"} />
-        <Text
-          style={{
-            fontFamily: Fonts.brandBold,
-            fontSize: 24,
-            marginBottom: 10,
-          }}
-        >
-          No favourite Hostels
+      <SafeAreaView
+        style={styles.errorContainer}
+        edges={["top", "left", "right"]}
+      >
+        <FontAwesome6 name="heart-crack" size={24} color="red" />
+        <Text style={styles.emptyTitle}>No favourite Hostels</Text>
+        <Text style={styles.emptySubtitle}>
+          Favourite Hostels will appear here
         </Text>
-        <Text>Favourite Hostels will appear here</Text>
-      </View>
+      </SafeAreaView>
     );
   }
+
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
+    <SafeAreaView
+      style={{
+        flex: 1,
+        paddingTop: insets.top + 60,
+        backgroundColor: Colors.background,
+      }}
+      edges={["top", "left", "right"]}
     >
-      <Text>Favourite</Text>
-    </ScrollView>
+      <FlatList
+        data={favouriteHostels}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => {
+          const isLiked = favouriteHostelIds.includes(item.id);
+
+          return (
+            <HorizontalCard
+              hostel={item}
+              isLiked={isLiked}
+              onLike={() => toggleLike(item.id)}
+            />
+          );
+        }}
+        contentContainerStyle={styles.listContent}
+        showsVerticalScrollIndicator={false}
+      />
+    </SafeAreaView>
   );
 };
 
@@ -65,10 +109,10 @@ export default Favourite;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
-  scrollContent: {
-    paddingBottom: 40, // Extra space at bottom
+  listContent: {
+    paddingHorizontal: 6,
+    paddingBottom: 40,
   },
   loadingContainer: {
     flex: 1,
@@ -85,5 +129,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#d32f2f",
     textAlign: "center",
+  },
+  emptyTitle: {
+    fontFamily: Fonts.brandBold,
+    fontSize: 24,
+    marginBottom: 10,
+    marginTop: 6,
+  },
+  emptySubtitle: {
+    fontSize: 14,
+    opacity: 0.7,
   },
 });
