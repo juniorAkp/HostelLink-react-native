@@ -1,6 +1,6 @@
 import { Colors, Fonts } from "@/src/app/constants/theme";
 import { useFavouriteHostels } from "@/src/app/hooks/useFavourite";
-import { Feather } from "@expo/vector-icons";
+import { FontAwesome6 } from "@expo/vector-icons";
 import React from "react";
 import {
   ActivityIndicator,
@@ -35,7 +35,7 @@ const Favourite = () => {
   if (!hostel) {
     return (
       <View style={styles.errorContainer}>
-        <Feather name="search" size={24} />
+        <FontAwesome6 name="heart-crack" size={24} color={"red"} />
         <Text
           style={{
             fontFamily: Fonts.brandBold,
@@ -43,9 +43,9 @@ const Favourite = () => {
             marginBottom: 10,
           }}
         >
-          No Recent Searches
+          No favourite Hostels
         </Text>
-        <Text>Recent Searches will appear here</Text>
+        <Text>Favourite Hostels will appear here</Text>
       </View>
     );
   }
