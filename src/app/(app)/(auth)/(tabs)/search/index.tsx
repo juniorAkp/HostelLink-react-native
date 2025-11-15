@@ -1,14 +1,8 @@
-import HorizontalCard from "@/src/app/components/home/smallCard";
-import { Colors, Fonts } from "@/src/app/constants/theme";
-import { useSearchStore } from "@/src/app/hooks/use-useSearchStore";
-import { useSearch } from "@/src/app/hooks/useHostels";
-import { useLocationStore } from "@/src/app/hooks/useLocation";
-import { getDistance } from "@/src/app/utils/haversine";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useMemo } from "react";
 import {
   ActivityIndicator,
-  ScrollView,
+  FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -16,6 +10,13 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useDebounce } from "use-debounce";
+
+import SearchCard from "@/src/app/components/common/searchCard";
+import { Colors, Fonts } from "@/src/app/constants/theme";
+import { useSearchStore } from "@/src/app/hooks/use-useSearchStore";
+import { useSearch } from "@/src/app/hooks/useHostels";
+import { useLocationStore } from "@/src/app/hooks/useLocation";
+import { getDistance } from "@/src/app/utils/haversine";
 
 const SearchScreen = () => {
   const insets = useSafeAreaInsets();
@@ -27,19 +28,18 @@ const SearchScreen = () => {
     setSearchQuery,
     clearSearches,
   } = useSearchStore();
+
   const { latitude, longitude } = useLocationStore();
 
-  // Debounce server search
   const [debouncedSearchQuery] = useDebounce(searchQuery, 300);
 
-  // Server-side search
   const {
     data: searchResults = [],
     isFetching,
     isError,
   } = useSearch(debouncedSearchQuery);
 
-  // Sort by distance (after server returns)
+  // Sort by distance
   const sortedResults = useMemo(() => {
     if (!latitude || !longitude || !searchResults.length) return searchResults;
 
@@ -65,34 +65,29 @@ const SearchScreen = () => {
     addSearch(term);
   };
 
-  const hasResults = sortedResults.length > 0;
-  const showRecent = recentSearches.length > 0 && !searchQuery;
+  const showRecent = recentSearches.length > 0 && !searchQuery.trim();
 
-  if (!searchQuery.trim()) {
+  // ---- Render Empty / Loading States ----
+  if (!searchQuery.trim() && !showRecent) {
     return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <View style={styles.centered}>
         <MaterialCommunityIcons name="magnify" size={48} color={Colors.muted} />
-        <Text>Start Searching</Text>
+        <Text style={styles.emptyText}>Start Searching</Text>
       </View>
     );
   }
+
   if (isFetching) {
     return (
-      <View
-        style={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+      <View style={styles.centered}>
         <ActivityIndicator size={48} color={Colors.primary} />
       </View>
     );
   }
 
-  if (searchQuery.trim() && !hasResults && !isFetching) {
+  if (searchQuery.trim() && !sortedResults.length && !isFetching) {
     return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <View style={styles.centered}>
         <MaterialCommunityIcons name="magnify" size={48} color={Colors.muted} />
         <Text style={styles.emptyTitle}>
           No Search Results match "{debouncedSearchQuery}"
@@ -101,107 +96,87 @@ const SearchScreen = () => {
     );
   }
 
-  return (
-    <ScrollView
-      style={styles.scrollView}
-      contentContainerStyle={[
-        styles.content,
-        { paddingBottom: insets.bottom + 80 },
-      ]}
-      showsVerticalScrollIndicator={false}
-      keyboardShouldPersistTaps="handled"
-    >
-      {/* RECENT SEARCHES */}
-      {showRecent && (
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Recent Searches</Text>
-            <TouchableOpacity onPress={clearSearches} hitSlop={8}>
-              <Text style={styles.clearAllText}>Clear All</Text>
-            </TouchableOpacity>
-          </View>
+  const renderHeader = () => {
+    if (!showRecent) return null;
 
-          <View style={styles.recentList}>
-            {recentSearches.map((term, index) => (
-              <View key={term}>
-                <TouchableOpacity
-                  style={styles.recentItem}
-                  onPress={() => handleRecentPress(term)}
-                >
-                  <MaterialCommunityIcons
-                    name="clock-outline"
-                    size={20}
-                    color={Colors.muted}
-                    style={styles.recentIcon}
-                  />
-                  <Text style={styles.recentText} numberOfLines={1}>
-                    {term}
-                  </Text>
-                </TouchableOpacity>
-
-                {index < recentSearches.length - 1 && (
-                  <View style={styles.separator} />
-                )}
-              </View>
-            ))}
-          </View>
+    return (
+      <View style={styles.recentContainer}>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Recent Searches</Text>
+          <TouchableOpacity onPress={clearSearches} hitSlop={8}>
+            <Text style={styles.clearAllText}>Clear All</Text>
+          </TouchableOpacity>
         </View>
-      )}
 
-      {/* LIVE SEARCH RESULTS */}
-      {debouncedSearchQuery && (
-        <View style={styles.section}>
-          {/* Error */}
-          {isError && !isFetching && (
-            <View style={styles.emptyContainer}>
+        {recentSearches.map((term, index) => (
+          <View key={term}>
+            <TouchableOpacity
+              style={styles.recentItem}
+              onPress={() => handleRecentPress(term)}
+            >
               <MaterialCommunityIcons
-                name="alert-circle-outline"
-                size={48}
-                color={"red"}
+                name="clock-outline"
+                size={20}
+                color={Colors.muted}
+                style={styles.recentIcon}
               />
-              <Text style={styles.emptyTitle}>Search failed</Text>
-              <Text style={styles.emptySubtitle}>Please try again</Text>
-            </View>
-          )}
-
-          {/* Results */}
-          {sortedResults && (
-            <>
-              <Text style={styles.resultCount}>
-                {sortedResults.length} hostel
-                {sortedResults.length !== 1 ? "s" : ""} found
+              <Text style={styles.recentText} numberOfLines={1}>
+                {term}
               </Text>
+            </TouchableOpacity>
+            {index < recentSearches.length - 1 && (
+              <View style={styles.separator} />
+            )}
+          </View>
+        ))}
+      </View>
+    );
+  };
 
-              <View style={styles.resultsList}>
-                {sortedResults.map((hostel) => (
-                  <View key={hostel.id} style={styles.resultItem}>
-                    <HorizontalCard hostel={hostel} />
-                  </View>
-                ))}
-              </View>
-            </>
-          )}
-        </View>
+  return (
+    <FlatList
+      data={sortedResults}
+      keyExtractor={(item) => item.id.toString()}
+      numColumns={2}
+      columnWrapperStyle={styles.columnWrapper}
+      contentContainerStyle={{
+        paddingHorizontal: 16,
+        paddingBottom: insets.bottom + 80,
+        paddingTop: insets.top + 60,
+      }}
+      ListHeaderComponent={renderHeader}
+      renderItem={({ item }) => (
+        <SearchCard
+          hostel={item}
+          onPress={() => handleRecentPress(debouncedSearchQuery)}
+        />
       )}
-    </ScrollView>
+      showsVerticalScrollIndicator={false}
+    />
   );
 };
 
 export default SearchScreen;
 
 const styles = StyleSheet.create({
-  scrollView: {
+  centered: {
     flex: 1,
-    backgroundColor: Colors.background,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 20,
   },
-  content: {
-    paddingHorizontal: 16,
-    paddingTop: 12,
+  emptyText: {
+    fontFamily: Fonts.brand,
+    fontSize: 16,
+    color: Colors.muted,
+    marginTop: 12,
   },
-
-  // Section
-  section: {
-    marginTop: 24,
+  emptyTitle: {
+    fontFamily: Fonts.brandBold,
+    fontSize: 18,
+    color: Colors.text,
+    textAlign: "center",
+    marginTop: 12,
   },
   sectionHeader: {
     flexDirection: "row",
@@ -212,17 +187,19 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontFamily: Fonts.brandBold,
     fontSize: 18,
-    color: Colors.text,
+    color: Colors.primary,
   },
   clearAllText: {
     fontFamily: Fonts.brand,
     fontSize: 15,
     color: "red",
   },
-
-  // Recent Searches
+  recentContainer: {
+    marginTop: 30,
+    marginBottom: 16,
+  },
   recentList: {
-    backgroundColor: Colors.light,
+    backgroundColor: Colors.primary,
     borderRadius: 12,
     overflow: "hidden",
   },
@@ -230,7 +207,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 14,
-    paddingHorizontal: 16,
   },
   recentIcon: {
     marginRight: 12,
@@ -239,61 +215,15 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: Fonts.brand,
     fontSize: 16,
-    color: Colors.text,
+    color: Colors.primary,
   },
   separator: {
     height: StyleSheet.hairlineWidth,
     backgroundColor: Colors.secondary,
     marginLeft: 48,
   },
-
-  // Loading
-  loadingContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
-  },
-  loadingText: {
-    marginLeft: 12,
-    fontFamily: Fonts.brand,
-    fontSize: 16,
-    color: Colors.muted,
-  },
-
-  // Empty / Error States
-  emptyContainer: {
-    alignItems: "center",
-    paddingVertical: 60,
-  },
-  emptyTitle: {
-    marginTop: 16,
-    fontFamily: Fonts.brandBold,
-    fontSize: 18,
-    color: Colors.text,
-  },
-  emptySubtitle: {
-    marginTop: 8,
-    fontFamily: Fonts.brand,
-    fontSize: 15,
-    color: Colors.muted,
-    textAlign: "center",
-    paddingHorizontal: 20,
-  },
-
-  // Results
-  resultCount: {
-    fontFamily: Fonts.brandBold,
-    fontSize: 16,
-    color: Colors.primary,
-    marginBottom: 12,
-  },
-  resultsList: {
-    gap: 12,
-  },
-  resultItem: {
-    backgroundColor: Colors.light,
-    borderRadius: 12,
-    overflow: "hidden",
+  columnWrapper: {
+    justifyContent: "space-between",
+    marginBottom: 16,
   },
 });

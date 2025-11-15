@@ -21,7 +21,11 @@ const SearchCard = ({
 }: SearchCardProps) => {
   return (
     <Link href={`/hostel/${hostel.id}`} asChild>
-      <TouchableOpacity style={styles.container} activeOpacity={0.9}>
+      <TouchableOpacity
+        style={styles.container}
+        activeOpacity={0.9}
+        onPress={onPress}
+      >
         <View style={styles.imageContainer}>
           <Image
             source={{
