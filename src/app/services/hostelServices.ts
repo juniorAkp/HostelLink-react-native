@@ -3,8 +3,11 @@ import { supabase } from "../lib/supabase";
 
 export const hostelService = {
   //get all hostels available
-  getAll: async (): Promise<Hostels[]> => {
-    const { data, error } = await supabase.from("listings").select("*");
+  getAll: async (country: string): Promise<Hostels[]> => {
+    const { data, error } = await supabase
+      .from("listings")
+      .select("*")
+      .eq("country", country);
 
     if (error) {
       console.log(error); //debug error
@@ -28,30 +31,15 @@ export const hostelService = {
   },
 
   search: async (searchTerm: string): Promise<Hostels[]> => {
-    // Searches for hostels by name or amenities using case-insensitive LIKE queries.
-    // Returns an array of Hostels that match either field.
-    // If searchTerm is empty, return all hostels.
-    if (!searchTerm.trim()) {
-      const { data, error } = await supabase.from("listings").select("*");
-      if (error) {
-        console.log(error); //debug error
-        return [];
-      }
+    const term = searchTerm.trim();
+    if (!term) return [];
 
-      return data as Hostels[];
-    }
+    const { data, error } = await supabase.rpc("search_listings", {
+      query_text: term,
+    });
 
-    // Perform a single query matching either the 'name' or 'amenities' fields.
-    const { data, error } = await supabase
-      .from("listings")
-      .select("*")
-      .or(`name.ilike.%${searchTerm}%,amenities.ilike.%${searchTerm}%`);
+    if (error) throw error;
 
-    if (error) {
-      console.log(error); //debug error
-      return [];
-    }
-
-    return data as Hostels[];
+    return (data ?? []) as Hostels[];
   },
 };

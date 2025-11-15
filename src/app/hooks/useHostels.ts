@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { hostelService } from "../services/hostelServices";
 
-export const useHostels = () => {
+export const useHostels = (country: string) => {
   return useQuery({
     queryKey: ["hostels"],
     queryFn: async () => {
-      return hostelService.getAll();
+      return hostelService.getAll(country);
     },
   });
 };

@@ -9,12 +9,18 @@ interface LocationState {
   latitude: number | null;
   longitude: number | null;
   address: string | null;
+  country: string | null;
   isWatching: boolean;
   isLoading: boolean;
   error: string | null;
 
   // Actions
-  setLocation: (lat: number, lng: number, address?: string) => void;
+  setLocation: (
+    lat: number,
+    lng: number,
+    country?: string,
+    address?: string
+  ) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   startWatching: () => Promise<void>;
@@ -31,15 +37,17 @@ export const useLocationStore = create<LocationState>()(
       latitude: null,
       longitude: null,
       address: null,
+      country: null,
       isWatching: false,
       isLoading: false,
       error: null,
       _subscription: null,
 
-      setLocation: (lat, lng, address) =>
+      setLocation: (lat, lng, country, address) =>
         set({
           latitude: lat,
           longitude: lng,
+          country: country ?? null,
           address: address ?? null,
           error: null,
         }),
@@ -99,7 +107,8 @@ export const useLocationStore = create<LocationState>()(
                   ? `${reverse[0].city}, ${reverse[0].country}`
                   : "Unknown location";
 
-                get().setLocation(latitude, longitude, address);
+                const country = reverse[0].country ?? "";
+                get().setLocation(latitude, longitude, country, address);
               } catch (err) {
                 get().setLocation(latitude, longitude); // fallback
               }
@@ -129,6 +138,7 @@ export const useLocationStore = create<LocationState>()(
       partialize: (state) => ({
         latitude: state.latitude,
         longitude: state.longitude,
+        country: state.country,
         address: state.address,
       }),
       storage: createJSONStorage(() => asyncZustandStorage),

@@ -36,16 +36,22 @@ const HostelPage = () => {
     },
   });
 
-  const { isFetching, isError, error, data: hostels = [] } = useHostels();
   const {
     latitude,
     longitude,
     address,
     isLoading: locationLoading,
     error: locationError,
+    country,
     startWatching,
     stopWatching,
   } = useLocationStore();
+  const {
+    isFetching,
+    isError,
+    error,
+    data: hostels = [],
+  } = useHostels(country ?? "");
 
   const { addFavourite, removeFavourite } = useSetFavourite();
   const { favouriteHostelIds } = useFavouriteStore();
