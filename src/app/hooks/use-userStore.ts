@@ -192,6 +192,7 @@ const useUserStore = create<UserStore>()(
               phone_number: phone,
             })
             .eq("id", userId);
+          get().getUser(userId);
           if (error) throw error;
         } catch (error: any) {
           const msg =
