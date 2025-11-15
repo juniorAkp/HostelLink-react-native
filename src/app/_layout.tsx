@@ -10,8 +10,8 @@ import { Slot, SplashScreen } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import OfflineScreen from "./components/common/OfflineScreen";
-
 // Prevent splash from hiding too early
 SplashScreen.preventAutoHideAsync();
 
@@ -73,7 +73,9 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
         <StatusBar style="auto" animated />
-        <Slot />
+        <KeyboardProvider>
+          <Slot />
+        </KeyboardProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>
   );

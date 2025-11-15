@@ -3,6 +3,10 @@ import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import {
+  KeyboardAwareScrollView,
+  KeyboardToolbar,
+} from "react-native-keyboard-controller";
 import AuthButton from "../../components/auth/AuthButton";
 import { Colors, Fonts } from "../../constants/theme";
 import useUserStore from "../../hooks/use-userStore";
@@ -91,7 +95,15 @@ const Page = () => {
       </Text>
 
       <View style={styles.buttonContainer}>
-        {commonInputs}
+        <>
+          <KeyboardAwareScrollView
+            bottomOffset={62}
+            contentContainerStyle={styles.keyboardContainer}
+          >
+            {commonInputs}
+          </KeyboardAwareScrollView>
+          <KeyboardToolbar />
+        </>
 
         {zodErrors &&
           zodErrors.map((err, i) => (
@@ -149,4 +161,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   privacyLink: { color: "#4285F4", textDecorationLine: "underline" },
+  keyboardContainer: {
+    gap: 16,
+    padding: 16,
+  },
 });

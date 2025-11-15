@@ -4,7 +4,10 @@ import useUserStore from "@/src/app/hooks/use-userStore";
 import React, { useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-
+import {
+  KeyboardAwareScrollView,
+  KeyboardToolbar,
+} from "react-native-keyboard-controller";
 const Page = () => {
   const {
     user,
@@ -58,23 +61,31 @@ const Page = () => {
       <Text style={styles.title}>Update Profile</Text>
 
       <View style={styles.buttonContainer}>
-        <TextInput
-          placeholder="Username"
-          placeholderTextColor="#888"
-          value={username}
-          onChangeText={setUsername}
-          autoCapitalize="none"
-          style={styles.textInput}
-        />
+        <>
+          <KeyboardAwareScrollView
+            bottomOffset={62}
+            contentContainerStyle={styles.keyboardContainer}
+          >
+            <TextInput
+              placeholder="Username"
+              placeholderTextColor="#888"
+              value={username}
+              onChangeText={setUsername}
+              autoCapitalize="none"
+              style={styles.textInput}
+            />
 
-        <TextInput
-          placeholder="Phone Number"
-          placeholderTextColor="#888"
-          value={phone}
-          onChangeText={setPhone}
-          keyboardType="phone-pad"
-          style={styles.textInput}
-        />
+            <TextInput
+              placeholder="Phone Number"
+              placeholderTextColor="#888"
+              value={phone}
+              onChangeText={setPhone}
+              keyboardType="phone-pad"
+              style={styles.textInput}
+            />
+          </KeyboardAwareScrollView>
+          <KeyboardToolbar />
+        </>
 
         {/* Zod Validation Errors */}
         {zodErrors && (
@@ -135,5 +146,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  keyboardContainer: {
+    gap: 16,
+    padding: 16,
   },
 });
