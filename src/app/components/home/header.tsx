@@ -150,7 +150,7 @@ const RestaurantHeader = ({ title, scrollOffset }: RestaurantHeaderProps) => {
           </Link>
           <Link href="/location" asChild>
             <TouchableOpacity style={styles.iconButton}>
-              <Ionicons name="map-outline" size={20} />
+              <Ionicons name="heart-outline" size={20} color="#FF3B30" />
             </TouchableOpacity>
           </Link>
         </View>
