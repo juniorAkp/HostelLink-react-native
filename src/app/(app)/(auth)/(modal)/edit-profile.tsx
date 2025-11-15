@@ -4,10 +4,6 @@ import useUserStore from "@/src/app/hooks/use-userStore";
 import React, { useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import {
-  KeyboardAwareScrollView,
-  KeyboardToolbar,
-} from "react-native-keyboard-controller";
 const Page = () => {
   const {
     user,
@@ -25,7 +21,7 @@ const Page = () => {
   useEffect(() => {
     if (user) {
       setUsername(user.username ?? "");
-      setPhone(user.phone_number ?? "");
+      setPhone(user.phone_number ?? "Add phone number");
     }
   }, [user]);
 
@@ -61,31 +57,23 @@ const Page = () => {
       <Text style={styles.title}>Update Profile</Text>
 
       <View style={styles.buttonContainer}>
-        <>
-          <KeyboardAwareScrollView
-            bottomOffset={62}
-            contentContainerStyle={styles.keyboardContainer}
-          >
-            <TextInput
-              placeholder="Username"
-              placeholderTextColor="#888"
-              value={username}
-              onChangeText={setUsername}
-              autoCapitalize="none"
-              style={styles.textInput}
-            />
+        <TextInput
+          placeholder="Username"
+          placeholderTextColor="#888"
+          value={username}
+          onChangeText={setUsername}
+          autoCapitalize="none"
+          style={styles.textInput}
+        />
 
-            <TextInput
-              placeholder="Phone Number"
-              placeholderTextColor="#888"
-              value={phone}
-              onChangeText={setPhone}
-              keyboardType="phone-pad"
-              style={styles.textInput}
-            />
-          </KeyboardAwareScrollView>
-          <KeyboardToolbar />
-        </>
+        <TextInput
+          placeholder="Phone Number"
+          placeholderTextColor="#888"
+          value={phone}
+          onChangeText={setPhone}
+          keyboardType="phone-pad"
+          style={styles.textInput}
+        />
 
         {/* Zod Validation Errors */}
         {zodErrors && (
@@ -119,7 +107,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#fff",
   },
   title: {
     fontSize: 28,
