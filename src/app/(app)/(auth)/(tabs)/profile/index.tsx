@@ -167,8 +167,8 @@ const Page = () => {
       >
         {/* Header */}
 
-        <View style={[styles.header, { paddingTop: insets.top }]}>
-          <Text style={styles.headerTitle}>Profile</Text>
+        <View style={[styles.header]}>
+          <Text style={styles.headerTitle}>Your Profile</Text>
         </View>
         {/* User Details Section */}
         <View style={styles.userSection}>
@@ -213,9 +213,9 @@ const Page = () => {
         <MenuSection title="Account">
           <MenuItem
             disabled={isGuest}
-            icon="person-outline"
-            title="Personal Information"
-            subtitle="Name, email, phone number"
+            icon="mail"
+            title="Email Verfication"
+            subtitle="Verify your Email"
             onPress={() => {}}
           />
           <View style={styles.separator} />
@@ -301,14 +301,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     paddingHorizontal: 20,
     paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.light,
   },
   headerTitle: {
     fontSize: 34,
-    fontWeight: "700",
     color: Colors.dark,
-    fontFamily: Fonts.brandBold,
+    fontFamily: Fonts.brandBlack,
   },
   scrollView: {
     flex: 1,
