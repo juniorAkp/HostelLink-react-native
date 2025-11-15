@@ -12,8 +12,6 @@ interface HorizontalCardProps {
   onPress?: () => void;
   onLike?: () => void;
   isLiked?: boolean;
-  price?: string;
-  rating?: number;
 }
 
 const HorizontalCard = ({
@@ -22,9 +20,6 @@ const HorizontalCard = ({
   isLiked = false,
   hostel,
 }: HorizontalCardProps) => {
-  // Get first few amenities for display
-  // const displayedAmenities = hostel.amenities?.slice(0, 3) || [];
-
   return (
     <Link href={`/hostel/${hostel.id}`} asChild>
       <TouchableOpacity

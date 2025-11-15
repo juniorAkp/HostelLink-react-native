@@ -10,7 +10,6 @@ import { Hostels } from "../../data/hostel";
 
 interface PopularCardProps {
   hostel: Hostels;
-  isFetching?: boolean;
   onPress?: () => void;
   onLike?: () => void;
   isLiked?: boolean;
@@ -20,7 +19,6 @@ const PopularCard = ({
   hostel,
   onPress,
   onLike,
-  isFetching,
   isLiked = false,
 }: PopularCardProps) => {
   return (

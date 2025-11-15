@@ -3,6 +3,10 @@ import RestaurantHeader from "@/src/app/components/home/header";
 import PopularCard from "@/src/app/components/home/popularCard";
 import HorizontalCard from "@/src/app/components/home/smallCard";
 import { Colors, Fonts } from "@/src/app/constants/theme";
+import {
+  useFavouriteStore,
+  useSetFavourite,
+} from "@/src/app/hooks/useFavourite";
 import { useHostels } from "@/src/app/hooks/useHostels";
 import { useLocationStore } from "@/src/app/hooks/useLocation";
 import { getDistance } from "@/src/app/utils/haversine";
@@ -43,6 +47,17 @@ const HostelPage = () => {
     stopWatching,
   } = useLocationStore();
 
+  const { addFavourite, removeFavourite } = useSetFavourite();
+  const { favouriteHostelIds } = useFavouriteStore();
+
+  const toggleLike = (hostelId: string) => {
+    //if hostel id includes the favouritehosteIds remove
+    if (favouriteHostelIds.includes(hostelId)) {
+      removeFavourite(hostelId);
+    } else {
+      addFavourite(hostelId);
+    }
+  };
   // Start location watching
   useEffect(() => {
     startWatching();
@@ -115,7 +130,16 @@ const HostelPage = () => {
           showsHorizontalScrollIndicator={false}
           data={hostels}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <PopularCard hostel={item} />}
+          renderItem={({ item }) => {
+            const isLiked = favouriteHostelIds.includes(item.id);
+            return (
+              <PopularCard
+                hostel={item}
+                isLiked={isLiked}
+                onLike={() => toggleLike(item.id)}
+              />
+            );
+          }}
           contentContainerStyle={{ paddingHorizontal: 6 }}
         />
 
@@ -128,7 +152,16 @@ const HostelPage = () => {
           showsHorizontalScrollIndicator={false}
           data={sortedHostels}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <SearchCard hostel={item} />}
+          renderItem={({ item }) => {
+            const isLiked = favouriteHostelIds.includes(item.id);
+            return (
+              <SearchCard
+                hostel={item}
+                isLiked={isLiked}
+                onLike={() => toggleLike(item.id)}
+              />
+            );
+          }}
           contentContainerStyle={{ paddingHorizontal: 6 }}
         />
 
@@ -137,7 +170,16 @@ const HostelPage = () => {
         <FlatList
           data={sortedHostels.slice(0, 5)}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <HorizontalCard hostel={item} />}
+          renderItem={({ item }) => {
+            const isLiked = favouriteHostelIds.includes(item.id);
+            return (
+              <HorizontalCard
+                hostel={item}
+                isLiked={isLiked}
+                onLike={() => toggleLike(item.id)}
+              />
+            );
+          }}
           scrollEnabled={false}
         />
       </Animated.ScrollView>
