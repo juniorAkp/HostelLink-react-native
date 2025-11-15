@@ -1,6 +1,6 @@
 // stores/useLocationStore.ts
 import * as Location from "expo-location";
-import { Linking } from "react-native";
+import { Alert, Linking } from "react-native";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { asyncZustandStorage } from "../utils/zutstandStorage";
@@ -71,7 +71,11 @@ export const useLocationStore = create<LocationState>()(
           const { status } = await Location.requestForegroundPermissionsAsync();
           if (status !== "granted") {
             set({ error: "Location permission denied", isLoading: false });
-            Linking.openSettings();
+            // Use Alert with OK/Cancel, and only open settings if OK
+            Alert.alert("Location Permission", "Enable location in settings", [
+              { text: "Cancel", style: "cancel" },
+              { text: "OK", onPress: () => Linking.openSettings() },
+            ]);
             return;
           }
 
@@ -90,6 +94,7 @@ export const useLocationStore = create<LocationState>()(
                   latitude,
                   longitude,
                 });
+                // console.log(reverse);
                 const address = reverse[0]
                   ? `${reverse[0].city}, ${reverse[0].country}`
                   : "Unknown location";
