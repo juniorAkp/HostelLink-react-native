@@ -22,12 +22,17 @@ import { Colors } from "../../constants/theme";
 
 interface RestaurantHeaderProps {
   title: string;
+  address?: string;
   scrollOffset: SharedValue<number>;
 }
 
 const SCOLL_THRESHOLD = 60;
 
-const RestaurantHeader = ({ title, scrollOffset }: RestaurantHeaderProps) => {
+const RestaurantHeader = ({
+  title,
+  scrollOffset,
+  address,
+}: RestaurantHeaderProps) => {
   const insets = useSafeAreaInsets();
   const [header1PointerEvents, setHeader1PointerEvents] = useState<
     "auto" | "none"
@@ -137,7 +142,7 @@ const RestaurantHeader = ({ title, scrollOffset }: RestaurantHeaderProps) => {
         <Link href="/location" asChild>
           <Pressable style={styles.locationButton}>
             <FontAwesome6 name="map-pin" size={20} color={"red"} />
-            <Text style={styles.locationText}>Münster</Text>
+            <Text style={styles.locationText}>{address}</Text>
             <Ionicons name="chevron-down" size={16} />
           </Pressable>
         </Link>

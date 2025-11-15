@@ -4,6 +4,8 @@ import PopularCard from "@/src/app/components/home/popularCard";
 import HorizontalCard from "@/src/app/components/home/smallCard";
 import { Colors, Fonts } from "@/src/app/constants/theme";
 import { useHostels } from "@/src/app/hooks/useHostels";
+import { useLocationStore } from "@/src/app/hooks/useLocation";
+import { useEffect } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -16,7 +18,27 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 const HEADER_HEIGHT = 60;
+
+// Haversine formula: distance in KM
+const getDistance = (
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+): number => {
+  const R = 6371; // Earth's radius in km
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * (Math.PI / 180)) *
+      Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLon / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+};
 
 const HostelPage = () => {
   const insets = useSafeAreaInsets();
@@ -28,9 +50,44 @@ const HostelPage = () => {
     },
   });
 
-  const { isFetching, isError, error, data: hostels } = useHostels();
+  const { isFetching, isError, error, data: hostels = [] } = useHostels();
+  const {
+    latitude,
+    longitude,
+    address,
+    isLoading: locationLoading,
+    error: locationError,
+    startWatching,
+    stopWatching,
+  } = useLocationStore();
 
-  // Loading State
+  // Start location watching
+  useEffect(() => {
+    startWatching();
+    return () => stopWatching();
+  }, [startWatching, stopWatching]);
+
+  // Sort hostels by distance if location available
+  const sortedHostels =
+    latitude && longitude
+      ? [...hostels].sort((a, b) => {
+          const distA = getDistance(
+            latitude,
+            longitude,
+            a.exact_location.lat,
+            a.exact_location.lng
+          );
+          const distB = getDistance(
+            latitude,
+            longitude,
+            b.exact_location.lat,
+            b.exact_location.lng
+          );
+          return distA - distB;
+        })
+      : hostels;
+
+  // Loading
   if (isFetching) {
     return (
       <View style={styles.loadingContainer}>
@@ -39,12 +96,12 @@ const HostelPage = () => {
     );
   }
 
-  // Error State
-  if (isError || !hostels) {
+  // Error
+  if (isError || !hostels.length) {
     return (
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>
-          {error?.message || "Failed to load hostel details"}
+          {error?.message || "No hostels found"}
         </Text>
       </View>
     );
@@ -53,48 +110,53 @@ const HostelPage = () => {
   return (
     <View style={styles.container}>
       <RestaurantHeader
+        address={address ?? (locationLoading ? "Detecting..." : "Location off")}
         title="Discover Great Hostels"
         scrollOffset={scrollOffset}
       />
+
       <Animated.ScrollView
         onScroll={scrollHandler}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingTop: insets.top + HEADER_HEIGHT,
-          paddingBottom: insets.bottom + HEADER_HEIGHT,
+          paddingBottom: insets.bottom + 20,
         }}
       >
         <Text style={styles.pageTitle}>Discover Great Hostels</Text>
-        {/* <PopularCard /> */}
+
+        {/* Popular Hostels */}
         <Text style={styles.textHeading}>Popular Hostels</Text>
         <FlatList
-          maxToRenderPerBatch={5}
-          initialNumToRender={5}
           horizontal
           showsHorizontalScrollIndicator={false}
           data={hostels}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => <PopularCard hostel={item} />}
+          contentContainerStyle={{ paddingHorizontal: 6 }}
         />
-        {/* <PopularCard hostel={}/> */}
-        <Text style={styles.textHeading}>Nearby Hostels</Text>
+
+        {/* Nearby Hostels */}
+        <Text style={styles.textHeading}>
+          {latitude ? "Nearby Hostels" : "All Hostels"}
+        </Text>
         <FlatList
-          maxToRenderPerBatch={5}
-          initialNumToRender={5}
           horizontal
           showsHorizontalScrollIndicator={false}
-          data={hostels}
+          data={sortedHostels}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => <SearchCard hostel={item} />}
+          contentContainerStyle={{ paddingHorizontal: 6 }}
         />
-        <Text style={styles.textHeading}>Recommended Hostels For You</Text>
+
+        {/* Recommended */}
+        <Text style={styles.textHeading}>Recommended For You</Text>
         <FlatList
-          maxToRenderPerBatch={5}
-          initialNumToRender={5}
-          scrollEnabled={false}
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          data={hostels}
+          data={sortedHostels.slice(0, 5)}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => <HorizontalCard hostel={item} />}
+          scrollEnabled={false}
         />
       </Animated.ScrollView>
     </View>
@@ -104,23 +166,19 @@ const HostelPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 10,
+    backgroundColor: "#fff",
   },
   pageTitle: {
     fontFamily: Fonts.brandBlack,
     fontSize: 30,
     marginBottom: 16,
+    paddingHorizontal: 16,
   },
   textHeading: {
     fontFamily: Fonts.brandBold,
     fontSize: 20,
-    marginTop: 15,
-    marginBottom: 15,
-  },
-  allRestaurantsTitle: {
-    fontFamily: Fonts.brandBold,
-    fontSize: 20,
-    marginBottom: 16,
+    marginTop: 20,
+    marginBottom: 12,
     paddingHorizontal: 16,
   },
   loadingContainer: {
@@ -140,4 +198,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
+
 export default HostelPage;
