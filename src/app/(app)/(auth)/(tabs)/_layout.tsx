@@ -67,7 +67,7 @@ const TabLayout = () => {
     <NativeTabs
       minimizeBehavior="onScrollDown"
       backgroundColor={"white"}
-      blurEffect="systemDefault"
+      blurEffect="dark"
     >
       <NativeTabs.Trigger name="home">
         <Label>Home</Label>
