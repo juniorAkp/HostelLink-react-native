@@ -36,6 +36,8 @@ interface UserStore {
     phone: string
   ) => Promise<void>;
   getUser: (userId: string) => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
+  updatePassword: (newPassword: string) => Promise<void>;
 }
 
 const useUserStore = create<UserStore>()(
@@ -197,6 +199,42 @@ const useUserStore = create<UserStore>()(
         } catch (error: any) {
           const msg =
             error instanceof AuthError ? error.message : "Update failed";
+          set({ errorMessage: msg });
+          throw error;
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+      resetPassword: async (email: string) => {
+        set({ isLoading: true, errorMessage: null });
+        try {
+          const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: "hostellink://reset-password",
+          });
+          if (error) throw error;
+        } catch (error: any) {
+          const msg =
+            error instanceof AuthError
+              ? error.message
+              : "Failed to send password reset email";
+          set({ errorMessage: msg });
+          throw error;
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+      updatePassword: async (newPassword: string) => {
+        set({ isLoading: true, errorMessage: null });
+        try {
+          const { error } = await supabase.auth.updateUser({
+            password: newPassword,
+          });
+          if (error) throw error;
+        } catch (error: any) {
+          const msg =
+            error instanceof AuthError
+              ? error.message
+              : "Failed to update password";
           set({ errorMessage: msg });
           throw error;
         } finally {

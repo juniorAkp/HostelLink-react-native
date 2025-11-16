@@ -13,6 +13,8 @@ const RootLayout = () => {
       <Stack.Protected guard={!isGuest && !user}>
         <Stack.Screen name="(public)" options={{ headerShown: false }} />
       </Stack.Protected>
+
+      <Stack.Screen name="(security)" options={{ headerShown: false }} />
     </Stack>
   );
 };

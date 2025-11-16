@@ -219,13 +219,15 @@ const Page = () => {
             onPress={() => {}}
           />
           <View style={styles.separator} />
-          <MenuItem
-            disabled={isGuest}
-            icon="lock-closed-outline"
-            title="Password & Security"
-            subtitle="Change password, two-factor authentication"
-            onPress={() => {}}
-          />
+          <Link href={"/security"} asChild>
+            <MenuItem
+              disabled={isGuest}
+              icon="lock-closed-outline"
+              title="Password & Security"
+              subtitle="Change password, two-factor authentication"
+              onPress={() => {}}
+            />
+          </Link>
           <View style={styles.separator} />
           <MenuItem
             disabled={isGuest}

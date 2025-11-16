@@ -8,7 +8,7 @@ const Page = () => {
   const {
     user,
     updateProfile,
-    zodErrors, // ← default to empty array
+    zodErrors,
     errorMessage,
     clearError,
     isLoading,
@@ -88,7 +88,7 @@ const Page = () => {
 
         <AuthButton
           title="Update Profile"
-          isDisabled={!hasChanges || isLoading} // ← fixed logic
+          isDisabled={!hasChanges || isLoading}
           isLoading={isLoading}
           onPress={handleProfileUpdate}
           color="#fff"
