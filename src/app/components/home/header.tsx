@@ -1,6 +1,5 @@
 import { FontAwesome6 } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Link } from "expo-router";
 import { useState } from "react";
 import {
   Pressable,
@@ -137,7 +136,7 @@ const RestaurantHeader = ({
       style={[
         styles.headerContainer,
         shadowStyle,
-        { paddingTop: insets.top, backgroundColor: colors.background },
+        { paddingTop: insets.top, backgroundColor: colors.card },
       ]}
     >
       {/* Header 1 */}
@@ -153,13 +152,11 @@ const RestaurantHeader = ({
         </Pressable>
 
         <View style={styles.rightIcons}>
-          <Link href="/favourite" asChild>
-            <TouchableOpacity
-              style={[styles.iconButton, { backgroundColor: colors.card }]}
-            >
-              <Ionicons name="heart" size={20} color="#FF3B30" />
-            </TouchableOpacity>
-          </Link>
+          <TouchableOpacity
+            style={[styles.iconButton, { backgroundColor: colors.card }]}
+          >
+            <Ionicons name="heart" size={20} color="#FF3B30" />
+          </TouchableOpacity>
         </View>
       </Animated.View>
 
@@ -179,13 +176,11 @@ const RestaurantHeader = ({
           </Pressable>
         </View>
         <View style={styles.rightIcons}>
-          <Link href="/favourite" asChild>
-            <TouchableOpacity
-              style={[styles.iconButton, { backgroundColor: colors.card }]}
-            >
-              <Ionicons name="heart" size={20} color="#FF3B30" />
-            </TouchableOpacity>
-          </Link>
+          <TouchableOpacity
+            style={[styles.iconButton, { backgroundColor: colors.card }]}
+          >
+            <Ionicons name="heart" size={20} color="#FF3B30" />
+          </TouchableOpacity>
         </View>
       </Animated.View>
     </Animated.View>

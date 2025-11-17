@@ -1,9 +1,8 @@
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import { Link } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
+import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 import { blurhash } from "../../constants/blurhash";
 import { Fonts } from "../../constants/theme";
 import type { Hostels } from "../../data/hostel";
@@ -15,6 +14,7 @@ interface SearchCardProps {
   onLike?: () => void;
   isLiked?: boolean;
 }
+
 const SearchCard = ({
   hostel,
   onPress,
@@ -22,54 +22,69 @@ const SearchCard = ({
   isLiked = false,
 }: SearchCardProps) => {
   const { colors } = useTheme();
+
   return (
-    <Link href={`/hostel/${hostel.id}`} asChild>
-      <TouchableOpacity
-        style={[styles.container, { backgroundColor: colors.card }]}
-        activeOpacity={0.9}
-        onPress={onPress}
-      >
-        <View style={styles.imageContainer}>
-          <Image
-            source={{
-              uri: hostel?.images[0],
-            }}
-            contentFit="cover"
-            transition={200}
-            style={styles.image}
-            placeholder={{ blurhash: blurhash }}
+    <TouchableOpacity
+      style={[
+        styles.container,
+        {
+          backgroundColor: colors.card,
+          borderColor: colors.border,
+        },
+      ]}
+      activeOpacity={0.9}
+      onPress={onPress}
+    >
+      {/* Image Section */}
+      <View style={[styles.imageContainer, { backgroundColor: colors.light }]}>
+        <Image
+          source={{
+            uri: hostel?.images[0],
+          }}
+          contentFit="cover"
+          transition={200}
+          style={styles.image}
+          placeholder={{ blurhash: blurhash }}
+        />
+
+        {/* Like Button */}
+        <TouchableOpacity
+          style={[styles.likeButton, { backgroundColor: "rgba(0, 0, 0, 0.5)" }]}
+          onPress={onLike}
+          activeOpacity={0.7}
+        >
+          <Ionicons
+            name={isLiked ? "heart" : "heart-outline"}
+            size={20}
+            color={isLiked ? "#FF3B30" : "#fff"}
           />
+        </TouchableOpacity>
+      </View>
 
-          {/* Like Button */}
-          <TouchableOpacity
-            style={styles.likeButton}
-            onPress={onLike}
-            activeOpacity={0.7}
+      {/* Content Section */}
+      <View style={styles.info}>
+        <Text style={[styles.title, { color: colors.text }]} numberOfLines={1}>
+          {hostel?.name}
+        </Text>
+
+        <View style={styles.locationContainer}>
+          <FontAwesome6 name="location-dot" size={12} color={colors.primary} />
+          <Text
+            numberOfLines={1}
+            style={[styles.location, { color: colors.muted }]}
           >
-            <Ionicons
-              name={isLiked ? "heart" : "heart-outline"}
-              size={20}
-              color={isLiked ? "#FF3B30" : "#fff"}
-            />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.info}>
-          <Text style={[styles.text, { color: colors.text }]}>
-            {hostel?.name}
+            {hostel?.address}
           </Text>
-          <View style={{ flexDirection: "row", gap: 4 }}>
-            <FontAwesome6 name="map-pin" size={10} color={"red"} />
-            <Text numberOfLines={1} style={{ color: colors.muted }}>
-              {hostel?.address}
-            </Text>
-          </View>
+        </View>
 
-          <Text numberOfLines={1} style={{ color: colors.muted }}>
-            {hostel?.description}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    </Link>
+        <Text
+          numberOfLines={2}
+          style={[styles.description, { color: colors.muted }]}
+        >
+          {hostel?.description}
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
@@ -77,8 +92,7 @@ export default SearchCard;
 
 const styles = StyleSheet.create({
   container: {
-    width: scale(170),
-    height: verticalScale(200),
+    width: scale(180),
     borderRadius: scale(16),
     overflow: "hidden",
     marginRight: scale(16),
@@ -87,47 +101,54 @@ const styles = StyleSheet.create({
       width: 0,
       height: verticalScale(2),
     },
-
     shadowOpacity: 0.1,
     shadowRadius: scale(8),
-    elevation: 5,
+    elevation: 4,
+    borderWidth: 1,
   },
   imageContainer: {
-    width: scale(170),
-    height: verticalScale(120),
+    width: "100%",
+    height: verticalScale(140),
     position: "relative",
-    borderRadius: scale(10),
     overflow: "hidden",
   },
   image: {
     width: "100%",
     height: "100%",
-    borderRadius: scale(10),
   },
   likeButton: {
     position: "absolute",
-    top: scale(12),
-    right: scale(12),
-    width: scale(36),
-    height: scale(36),
-    borderRadius: scale(18),
-    backgroundColor: "transparent",
+    top: scale(8),
+    right: scale(8),
+    width: scale(32),
+    height: scale(32),
+    borderRadius: scale(16),
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: verticalScale(2),
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: scale(4),
-    elevation: 3,
   },
   info: {
-    padding: scale(5),
-    gap: scale(4),
+    padding: scale(12),
+    gap: verticalScale(6),
   },
-  text: {
+  title: {
+    fontSize: moderateScale(16),
+    fontWeight: "700",
     fontFamily: Fonts.brandBold,
+    letterSpacing: -0.3,
+  },
+  locationContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: scale(6),
+  },
+  location: {
+    fontSize: moderateScale(12),
+    flex: 1,
+    fontFamily: Fonts.brand,
+  },
+  description: {
+    fontSize: moderateScale(12),
+    lineHeight: verticalScale(17),
+    fontFamily: Fonts.brand,
   },
 });

@@ -11,6 +11,7 @@ import { useHostels } from "@/src/app/hooks/useHostels";
 import { useLocationStore } from "@/src/app/hooks/useLocation";
 import { useTheme } from "@/src/app/hooks/useTheme";
 import { getDistance } from "@/src/app/utils/haversine";
+import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import {
   ActivityIndicator,
@@ -60,6 +61,8 @@ const HostelPage = () => {
 
   const { addFavourite, removeFavourite } = useSetFavourite();
   const { favouriteHostelIds } = useFavouriteStore();
+
+  const router = useRouter();
 
   const toggleLike = (hostelId: string) => {
     if (favouriteHostelIds.includes(hostelId)) {
@@ -143,7 +146,7 @@ const HostelPage = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingTop: insets.top + HEADER_HEIGHT,
-          paddingBottom: insets.bottom + HEADER_HEIGHT,
+          paddingBottom: insets.bottom,
         }}
       >
         <Text style={[styles.pageTitle, { color: colors.text }]}>
@@ -184,11 +187,14 @@ const HostelPage = () => {
           renderItem={({ item }) => {
             const isLiked = favouriteHostelIds.includes(item.id);
             return (
-              <SearchCard
-                hostel={item}
-                isLiked={isLiked}
-                onLike={() => toggleLike(item.id)}
-              />
+              <View>
+                <SearchCard
+                  hostel={item}
+                  isLiked={isLiked}
+                  onPress={() => router.push(`/hostel/${item.id}`)}
+                  onLike={() => toggleLike(item.id)}
+                />
+              </View>
             );
           }}
           contentContainerStyle={{ paddingHorizontal: scale(6) }}
@@ -204,11 +210,14 @@ const HostelPage = () => {
           renderItem={({ item }) => {
             const isLiked = favouriteHostelIds.includes(item.id);
             return (
-              <HorizontalCard
-                hostel={item}
-                isLiked={isLiked}
-                onLike={() => toggleLike(item.id)}
-              />
+              <View>
+                <HorizontalCard
+                  hostel={item}
+                  isLiked={isLiked}
+                  onPress={() => router.push(`/hostel/${item.id}`)}
+                  onLike={() => toggleLike(item.id)}
+                />
+              </View>
             );
           }}
           scrollEnabled={false}
