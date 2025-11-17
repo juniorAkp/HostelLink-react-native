@@ -1,9 +1,17 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import AuthButton from "../../components/auth/AuthButton";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import RegularButton from "../../components/common/RegularButtont";
 import { Colors, Fonts } from "../../constants/theme";
 import useUserStore from "../../hooks/use-userStore";
 
@@ -48,6 +56,7 @@ const Page = () => {
     setUsername("");
   };
 
+  const insets = useSafeAreaInsets();
   const commonInputs = (
     <>
       {!isLoginState && (
@@ -81,54 +90,64 @@ const Page = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <Pressable style={styles.closeBtn} onPress={() => router.dismiss()}>
-        <Ionicons name="close" size={28} color="#000" />
-      </Pressable>
-
-      <Text style={styles.title}>
-        {isLoginState ? "Welcome Back!" : "Create An Account!"}
-      </Text>
-
-      <View style={styles.buttonContainer}>
-        {commonInputs}
-
-        {zodErrors &&
-          zodErrors.map((err, i) => (
-            <Text key={i} style={{ color: "red", fontSize: 14 }}>
-              {err}
-            </Text>
-          ))}
-
-        <AuthButton
-          isLoading={isLoading}
-          isDisabled={isDisabled}
-          title={isLoginState ? "Login" : "Register"}
-          onPress={isLoginState ? handleLogin : handleRegister}
-          color="#fff"
-          icon="log-in-outline"
-          buttonColor={isDisabled ? Colors.muted : "#4285F4"}
-          style={{ marginTop: 25 }}
-        />
-
-        <Text style={{ textAlign: "center", marginTop: 30 }}>
-          {isLoginState
-            ? "Don't have an account? "
-            : "Already have an account? "}
-          <Text style={styles.privacyLink} onPress={toggleMode}>
-            {isLoginState ? "Create Account" : "Login"}
-          </Text>
+    <KeyboardAvoidingView
+      style={[
+        styles.container,
+        {
+          paddingBottom: insets.bottom,
+        },
+      ]}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Text style={styles.title}>
+          {isLoginState ? "Welcome Back!" : "Create An Account!"}
         </Text>
-      </View>
-    </View>
+
+        <View style={styles.buttonContainer}>
+          {commonInputs}
+
+          {zodErrors &&
+            zodErrors.map((err, i) => (
+              <Text key={i} style={{ color: "red", fontSize: 14 }}>
+                {err}
+              </Text>
+            ))}
+
+          <RegularButton
+            isLoading={isLoading}
+            isDisabled={isDisabled}
+            title={isLoginState ? "Login" : "Register"}
+            onPress={isLoginState ? handleLogin : handleRegister}
+            color="#fff"
+            buttonColor={isDisabled ? Colors.muted : "#4285F4"}
+            style={{ marginTop: 25 }}
+          />
+
+          <Text style={{ textAlign: "center", marginTop: 30 }}>
+            {isLoginState
+              ? "Don't have an account? "
+              : "Already have an account? "}
+            <Text style={styles.privacyLink} onPress={toggleMode}>
+              {isLoginState ? "Create Account" : "Login"}
+            </Text>
+          </Text>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 export default Page;
 
-// styles unchanged (you can keep yours)
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#fff" },
+  container: { flex: 1, backgroundColor: "#fff" },
+  scrollContent: { flexGrow: 1, padding: 20 },
   closeBtn: {
     alignSelf: "flex-end",
     backgroundColor: Colors.light,

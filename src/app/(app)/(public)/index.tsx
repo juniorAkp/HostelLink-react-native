@@ -3,13 +3,16 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
 import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AuthButton from "../../components/auth/AuthButton";
+import RegularButton from "../../components/common/RegularButtont";
 import { blurhash } from "../../constants/blurhash";
 import { Colors, Fonts } from "../../constants/theme";
 import useUserStore from "../../hooks/use-userStore";
 
 export default function Index() {
   const { setIsGuest } = useUserStore();
+  const insets = useSafeAreaInsets();
 
   const skip = () => {
     setIsGuest(true);
@@ -19,7 +22,14 @@ export default function Index() {
     Linking.openURL("https://google.com");
   };
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          paddingBottom: insets.bottom,
+        },
+      ]}
+    >
       {/* skip button */}
       <Pressable style={styles.skip} onPress={skip}>
         <Text style={styles.skipText}>Skip</Text>
@@ -68,12 +78,11 @@ export default function Index() {
           </Animated.View>
           <Animated.View entering={FadeInDown.delay(300)}>
             <Link href="/other-options" asChild>
-              <AuthButton
+              <RegularButton
                 title="Continue with Email"
                 onPress={() => {}}
                 color="#fff"
-                icon="mail"
-                buttonColor="#4285F4"
+                buttonColor={Colors.primary}
               />
             </Link>
           </Animated.View>

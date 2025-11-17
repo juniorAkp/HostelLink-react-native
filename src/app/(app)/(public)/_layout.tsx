@@ -14,11 +14,10 @@ const PublicLayout = () => {
       <Stack.Screen
         name="other-options"
         options={{
-          headerShown: false,
-          presentation: "formSheet",
+          headerShown: true,
+          headerBackTitle: "Onboarding",
+          headerBackButtonDisplayMode: "minimal",
           title: "",
-          sheetAllowedDetents: [0.6],
-          sheetCornerRadius: 16,
           headerShadowVisible: false,
         }}
       />
