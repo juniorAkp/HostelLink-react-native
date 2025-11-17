@@ -5,8 +5,9 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 import { blurhash } from "../../constants/blurhash";
-import { Colors, Fonts } from "../../constants/theme";
+import { Fonts } from "../../constants/theme";
 import type { Hostels } from "../../data/hostel";
+import { useTheme } from "../../hooks/useTheme";
 
 interface SearchCardProps {
   hostel: Hostels;
@@ -20,10 +21,11 @@ const SearchCard = ({
   onLike,
   isLiked = false,
 }: SearchCardProps) => {
+  const { colors } = useTheme();
   return (
     <Link href={`/hostel/${hostel.id}`} asChild>
       <TouchableOpacity
-        style={styles.container}
+        style={[styles.container, { backgroundColor: colors.card }]}
         activeOpacity={0.9}
         onPress={onPress}
       >
@@ -52,13 +54,19 @@ const SearchCard = ({
           </TouchableOpacity>
         </View>
         <View style={styles.info}>
-          <Text style={styles.text}>{hostel?.name}</Text>
+          <Text style={[styles.text, { color: colors.text }]}>
+            {hostel?.name}
+          </Text>
           <View style={{ flexDirection: "row", gap: 4 }}>
             <FontAwesome6 name="map-pin" size={10} color={"red"} />
-            <Text numberOfLines={1}>{hostel?.address}</Text>
+            <Text numberOfLines={1} style={{ color: colors.muted }}>
+              {hostel?.address}
+            </Text>
           </View>
 
-          <Text numberOfLines={1}>{hostel?.description}</Text>
+          <Text numberOfLines={1} style={{ color: colors.muted }}>
+            {hostel?.description}
+          </Text>
         </View>
       </TouchableOpacity>
     </Link>
@@ -72,7 +80,6 @@ const styles = StyleSheet.create({
     width: scale(170),
     height: verticalScale(200),
     borderRadius: scale(16),
-    backgroundColor: "#fff",
     overflow: "hidden",
     marginRight: scale(16),
     shadowColor: "#000",
@@ -89,7 +96,6 @@ const styles = StyleSheet.create({
     width: scale(170),
     height: verticalScale(120),
     position: "relative",
-    backgroundColor: Colors.light,
     borderRadius: scale(10),
     overflow: "hidden",
   },

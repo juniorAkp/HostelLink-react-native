@@ -1,14 +1,17 @@
 import { Stack } from "expo-router";
 import React from "react";
+import { useTheme } from "../../hooks/useTheme";
 
 const PublicLayout = () => {
+  const { colors } = useTheme();
+
   return (
     <Stack>
       <Stack.Screen
         name="index"
         options={{
           headerShown: false,
-          contentStyle: { backgroundColor: "#fff" },
+          contentStyle: { backgroundColor: colors.background },
         }}
       />
       <Stack.Screen

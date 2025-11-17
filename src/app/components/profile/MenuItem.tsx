@@ -1,7 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { moderateScale, scale, verticalScale } from "react-native-size-matters";
-import { Colors, Fonts } from "../../constants/theme";
+import { Fonts } from "../../constants/theme";
+import { useTheme } from "../../hooks/useTheme";
 
 const MenuItem = ({
   icon,
@@ -19,39 +20,54 @@ const MenuItem = ({
   showChevron?: boolean;
   danger?: boolean;
   disabled?: boolean;
-}) => (
-  <TouchableOpacity
-    style={[styles.menuItem, disabled && styles.menuItemDisabled]}
-    onPress={onPress}
-    disabled={disabled || !onPress}
-    activeOpacity={0.7}
-  >
-    <View style={styles.menuItemLeft}>
-      {icon && (
-        <View
-          style={[styles.menuItemIcon, danger && styles.menuItemIconDanger]}
-        >
-          <Ionicons
-            name={icon}
-            size={20}
-            color={danger ? "#FF3B30" : Colors.muted}
-          />
+}) => {
+  const { colors } = useTheme();
+  return (
+    <TouchableOpacity
+      style={[styles.menuItem, disabled && styles.menuItemDisabled]}
+      onPress={onPress}
+      disabled={disabled || !onPress}
+      activeOpacity={0.7}
+    >
+      <View style={styles.menuItemLeft}>
+        {icon && (
+          <View
+            style={[
+              styles.menuItemIcon,
+              { backgroundColor: colors.card },
+              danger && styles.menuItemIconDanger,
+            ]}
+          >
+            <Ionicons
+              name={icon}
+              size={20}
+              color={danger ? "#FF3B30" : colors.muted}
+            />
+          </View>
+        )}
+        <View style={styles.menuItemTextContainer}>
+          <Text
+            style={[
+              styles.menuItemTitle,
+              { color: colors.text },
+              danger && styles.menuItemTitleDanger,
+            ]}
+          >
+            {title}
+          </Text>
+          {subtitle && (
+            <Text style={[styles.menuItemSubtitle, { color: colors.muted }]}>
+              {subtitle}
+            </Text>
+          )}
         </View>
-      )}
-      <View style={styles.menuItemTextContainer}>
-        <Text
-          style={[styles.menuItemTitle, danger && styles.menuItemTitleDanger]}
-        >
-          {title}
-        </Text>
-        {subtitle && <Text style={styles.menuItemSubtitle}>{subtitle}</Text>}
       </View>
-    </View>
-    {showChevron && onPress && (
-      <Ionicons name="chevron-forward" size={20} color="#999" />
-    )}
-  </TouchableOpacity>
-);
+      {showChevron && onPress && (
+        <Ionicons name="chevron-forward" size={20} color={colors.muted} />
+      )}
+    </TouchableOpacity>
+  );
+};
 
 export default MenuItem;
 const styles = StyleSheet.create({
@@ -76,7 +92,6 @@ const styles = StyleSheet.create({
     width: scale(32),
     height: scale(32),
     borderRadius: scale(8),
-    backgroundColor: Colors.light,
     alignItems: "center",
     justifyContent: "center",
     marginRight: scale(12),
@@ -90,7 +105,6 @@ const styles = StyleSheet.create({
   menuItemTitle: {
     fontSize: moderateScale(16),
     fontWeight: "600",
-    color: Colors.dark,
     marginBottom: verticalScale(2),
     fontFamily: Fonts.brandBold,
   },
@@ -99,7 +113,6 @@ const styles = StyleSheet.create({
   },
   menuItemSubtitle: {
     fontSize: moderateScale(13),
-    color: Colors.muted,
     marginTop: verticalScale(2),
   },
 });

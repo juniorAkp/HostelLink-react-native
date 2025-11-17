@@ -1,10 +1,11 @@
 import HorizontalCard from "@/src/app/components/home/smallCard";
-import { Colors, Fonts } from "@/src/app/constants/theme";
+import { Fonts } from "@/src/app/constants/theme";
 import {
   useFavouriteHostels,
   useFavouriteStore,
   useSetFavourite,
 } from "@/src/app/hooks/useFavourite";
+import { useTheme } from "@/src/app/hooks/useTheme";
 import { FontAwesome6 } from "@expo/vector-icons";
 import React from "react";
 import { ActivityIndicator, FlatList, StyleSheet, Text } from "react-native";
@@ -14,6 +15,7 @@ import {
 } from "react-native-safe-area-context";
 
 const Favourite = () => {
+  const { colors } = useTheme();
   const {
     data: favouriteHostels = [],
     isFetching,
@@ -39,7 +41,7 @@ const Favourite = () => {
         style={styles.loadingContainer}
         edges={["top", "left", "right"]}
       >
-        <ActivityIndicator size="large" color={Colors.primary} />
+        <ActivityIndicator size="large" color={colors.primary} />
       </SafeAreaView>
     );
   }
@@ -53,7 +55,9 @@ const Favourite = () => {
         }}
         edges={["top", "left", "right"]}
       >
-        <Text style={styles.errorText}>{error?.message}</Text>
+        <Text style={[styles.errorText, { color: colors.error }]}>
+          {error?.message}
+        </Text>
       </SafeAreaView>
     );
   }
@@ -66,8 +70,10 @@ const Favourite = () => {
         edges={["top", "left", "right"]}
       >
         <FontAwesome6 name="heart-crack" size={24} color="red" />
-        <Text style={styles.emptyTitle}>No favourite Hostels</Text>
-        <Text style={styles.emptySubtitle}>
+        <Text style={[styles.emptyTitle, { color: colors.text }]}>
+          No favourite Hostels
+        </Text>
+        <Text style={[styles.emptySubtitle, { color: colors.muted }]}>
           Favourite Hostels will appear here
         </Text>
       </SafeAreaView>
@@ -79,7 +85,7 @@ const Favourite = () => {
       style={{
         flex: 1,
         paddingTop: insets.top + 60,
-        backgroundColor: Colors.background,
+        backgroundColor: colors.background,
       }}
       edges={["top", "left", "right"]}
     >
@@ -127,7 +133,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 16,
-    color: "#d32f2f",
     textAlign: "center",
   },
   emptyTitle: {

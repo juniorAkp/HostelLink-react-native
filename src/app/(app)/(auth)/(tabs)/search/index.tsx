@@ -13,13 +13,15 @@ import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 import { useDebounce } from "use-debounce";
 
 import HorizontalCard from "@/src/app/components/home/smallCard";
-import { Colors, Fonts } from "@/src/app/constants/theme";
+import { Fonts } from "@/src/app/constants/theme";
 import { useSearchStore } from "@/src/app/hooks/use-useSearchStore";
 import { useSearch } from "@/src/app/hooks/useHostels";
 import { useLocationStore } from "@/src/app/hooks/useLocation";
+import { useTheme } from "@/src/app/hooks/useTheme";
 import { getDistance } from "@/src/app/utils/haversine";
 
 const SearchScreen = () => {
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
 
   const {
@@ -71,8 +73,10 @@ const SearchScreen = () => {
   if (!searchQuery.trim() && !showRecent) {
     return (
       <View style={styles.centered}>
-        <MaterialCommunityIcons name="magnify" size={48} color={Colors.muted} />
-        <Text style={styles.emptyText}>Start Searching</Text>
+        <MaterialCommunityIcons name="magnify" size={48} color={colors.muted} />
+        <Text style={[styles.emptyText, { color: colors.muted }]}>
+          Start Searching
+        </Text>
       </View>
     );
   }
@@ -80,7 +84,7 @@ const SearchScreen = () => {
   if (isFetching) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size={48} color={Colors.primary} />
+        <ActivityIndicator size={48} color={colors.primary} />
       </View>
     );
   }
@@ -88,8 +92,8 @@ const SearchScreen = () => {
   if (searchQuery.trim() && !sortedResults.length && !isFetching) {
     return (
       <View style={styles.centered}>
-        <MaterialCommunityIcons name="magnify" size={48} color={Colors.muted} />
-        <Text style={styles.emptyTitle}>
+        <MaterialCommunityIcons name="magnify" size={48} color={colors.muted} />
+        <Text style={[styles.emptyTitle, { color: colors.primary }]}>
           No Search Results match "{debouncedSearchQuery}"
         </Text>
       </View>
@@ -102,7 +106,9 @@ const SearchScreen = () => {
     return (
       <View style={styles.recentContainer}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Recent Searches</Text>
+          <Text style={[styles.sectionTitle, { color: colors.primary }]}>
+            Recent Searches
+          </Text>
           <TouchableOpacity onPress={clearSearches} hitSlop={8}>
             <Text style={styles.clearAllText}>Clear All</Text>
           </TouchableOpacity>
@@ -117,15 +123,20 @@ const SearchScreen = () => {
               <MaterialCommunityIcons
                 name="clock-outline"
                 size={20}
-                color={Colors.muted}
+                color={colors.muted}
                 style={styles.recentIcon}
               />
-              <Text style={styles.recentText} numberOfLines={1}>
+              <Text
+                style={[styles.recentText, { color: colors.primary }]}
+                numberOfLines={1}
+              >
                 {term}
               </Text>
             </TouchableOpacity>
             {index < recentSearches.length - 1 && (
-              <View style={styles.separator} />
+              <View
+                style={[styles.separator, { backgroundColor: colors.border }]}
+              />
             )}
           </View>
         ))}
@@ -147,7 +158,7 @@ const SearchScreen = () => {
             style={{
               fontFamily: Fonts.brandBold,
               fontSize: moderateScale(14),
-              color: Colors.primary,
+              color: colors.primary,
             }}
           >
             Found {sortedResults.length}{" "}
@@ -188,13 +199,11 @@ const styles = StyleSheet.create({
   emptyText: {
     fontFamily: Fonts.brand,
     fontSize: moderateScale(16),
-    color: Colors.muted,
     marginTop: verticalScale(12),
   },
   emptyTitle: {
     fontFamily: Fonts.brandBold,
     fontSize: moderateScale(18),
-    color: Colors.primary,
     textAlign: "center",
     marginTop: verticalScale(12),
   },
@@ -207,7 +216,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontFamily: Fonts.brandBold,
     fontSize: moderateScale(18),
-    color: Colors.primary,
   },
   clearAllText: {
     fontFamily: Fonts.brand,
@@ -218,7 +226,6 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(16),
   },
   recentList: {
-    backgroundColor: Colors.primary,
     borderRadius: scale(12),
     overflow: "hidden",
   },
@@ -234,11 +241,9 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: Fonts.brand,
     fontSize: moderateScale(16),
-    color: Colors.primary,
   },
   separator: {
     height: StyleSheet.hairlineWidth,
-    backgroundColor: Colors.secondary,
     marginLeft: scale(48),
   },
   columnWrapper: {

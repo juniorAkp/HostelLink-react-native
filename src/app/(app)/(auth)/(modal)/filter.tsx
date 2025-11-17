@@ -1,4 +1,5 @@
-import { Colors, Fonts } from "@/src/app/constants/theme";
+import { Fonts } from "@/src/app/constants/theme";
+import { useTheme } from "@/src/app/hooks/useTheme";
 import { useState } from "react";
 import {
   ScrollView,
@@ -33,6 +34,7 @@ const sortOptions = [
 ];
 
 const Page = () => {
+  const { colors } = useTheme();
   const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
   const [selectedPrice, setSelectedPrice] = useState<string | null>(null);
   const [woltPlusOnly, setWoltPlusOnly] = useState(false);
@@ -48,7 +50,7 @@ const Page = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Filter</Text>
+      <Text style={[styles.title, { color: colors.text }]}>Filter</Text>
 
       {/* Cuisine Filters */}
       <View style={styles.filterSection}>
@@ -58,13 +60,21 @@ const Page = () => {
               key={cuisine}
               style={[
                 styles.chip,
-                selectedCuisines.includes(cuisine) && styles.chipSelected,
+                {
+                  backgroundColor: colors.card,
+                  borderColor: colors.border,
+                  borderWidth: 1,
+                },
+                selectedCuisines.includes(cuisine) && {
+                  backgroundColor: colors.primary,
+                },
               ]}
               onPress={() => toggleCuisine(cuisine)}
             >
               <Text
                 style={[
                   styles.chipText,
+                  { color: colors.text },
                   selectedCuisines.includes(cuisine) && styles.chipTextSelected,
                 ]}
               >
@@ -77,14 +87,21 @@ const Page = () => {
 
       {/* Price Filter */}
       <View style={styles.filterSection}>
-        <Text style={styles.sectionTitle}>PRICE</Text>
+        <Text style={[styles.sectionTitle, { color: colors.muted }]}>
+          PRICE
+        </Text>
         <View style={styles.chipContainer}>
           {priceFilters.map((price) => (
             <TouchableOpacity
               key={price}
               style={[
                 styles.chip,
-                selectedPrice === price && styles.chipSelected,
+                {
+                  backgroundColor: colors.card,
+                  borderColor: colors.border,
+                  borderWidth: 1,
+                },
+                selectedPrice === price && { backgroundColor: colors.primary },
               ]}
               onPress={() =>
                 setSelectedPrice(price === selectedPrice ? null : price)
@@ -93,6 +110,7 @@ const Page = () => {
               <Text
                 style={[
                   styles.chipText,
+                  { color: colors.text },
                   selectedPrice === price && styles.chipTextSelected,
                 ]}
               >
@@ -104,19 +122,29 @@ const Page = () => {
       </View>
 
       {/* Wolt+ Toggle */}
-      <View style={[styles.filterSection, styles.toggleSection]}>
-        <Text style={styles.toggleText}>Only show Wolt+ venues</Text>
+      <View
+        style={[
+          styles.filterSection,
+          styles.toggleSection,
+          { borderColor: colors.border },
+        ]}
+      >
+        <Text style={[styles.toggleText, { color: colors.text }]}>
+          Only show Wolt+ venues
+        </Text>
         <Switch
           value={woltPlusOnly}
           onValueChange={setWoltPlusOnly}
-          trackColor={{ false: Colors.light, true: Colors.primary }}
+          trackColor={{ false: colors.card, true: colors.primary }}
           thumbColor="#fff"
         />
       </View>
 
       {/* Sort By */}
       <View style={styles.filterSection}>
-        <Text style={styles.sectionTitle}>SORT BY</Text>
+        <Text style={[styles.sectionTitle, { color: colors.muted }]}>
+          SORT BY
+        </Text>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -127,13 +155,19 @@ const Page = () => {
               key={option}
               style={[
                 styles.chip,
-                selectedSort === option && styles.chipSelected,
+                {
+                  backgroundColor: colors.card,
+                  borderColor: colors.border,
+                  borderWidth: 1,
+                },
+                selectedSort === option && { backgroundColor: colors.primary },
               ]}
               onPress={() => setSelectedSort(option)}
             >
               <Text
                 style={[
                   styles.chipText,
+                  { color: colors.text },
                   selectedSort === option && styles.chipTextSelected,
                 ]}
               >
@@ -145,7 +179,9 @@ const Page = () => {
       </View>
 
       {/* Apply Button */}
-      <TouchableOpacity style={styles.applyButton}>
+      <TouchableOpacity
+        style={[styles.applyButton, { backgroundColor: colors.primary }]}
+      >
         <Text style={styles.applyButtonText}>Apply</Text>
       </TouchableOpacity>
     </View>
@@ -169,7 +205,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 12,
     fontWeight: "600",
-    color: "#666",
     marginBottom: 12,
     letterSpacing: 0.5,
   },
@@ -182,14 +217,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 20,
-    backgroundColor: Colors.primaryLight,
   },
-  chipSelected: {
-    backgroundColor: Colors.primary,
-  },
+  chipSelected: {},
   chipText: {
     fontSize: 12,
-    color: Colors.secondary,
   },
   chipTextSelected: {
     color: "#fff",
@@ -202,14 +233,11 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: "#f0f0f0",
   },
   toggleText: {
     fontSize: 16,
-    color: "#000",
   },
   applyButton: {
-    backgroundColor: Colors.primary,
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: "center",

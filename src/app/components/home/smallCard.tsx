@@ -5,8 +5,9 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 import { blurhash } from "../../constants/blurhash";
-import { Colors, Fonts } from "../../constants/theme";
+import { Fonts } from "../../constants/theme";
 import type { Hostels } from "../../data/hostel";
+import { useTheme } from "../../hooks/useTheme";
 
 interface HorizontalCardProps {
   hostel: Hostels;
@@ -21,10 +22,14 @@ const HorizontalCard = ({
   isLiked = false,
   hostel,
 }: HorizontalCardProps) => {
+  const { colors } = useTheme();
   return (
     <Link href={`/hostel/${hostel.id}`} asChild>
       <TouchableOpacity
-        style={styles.container}
+        style={[
+          styles.container,
+          { backgroundColor: colors.card, borderColor: colors.border },
+        ]}
         onPress={onPress}
         activeOpacity={0.9}
       >
@@ -59,12 +64,18 @@ const HorizontalCard = ({
           {/* Header */}
           <View style={styles.header}>
             <View style={styles.titleContainer}>
-              <Text style={styles.title} numberOfLines={1}>
+              <Text
+                style={[styles.title, { color: colors.text }]}
+                numberOfLines={1}
+              >
                 {hostel?.name}
               </Text>
               <View style={styles.locationContainer}>
                 <FontAwesome6 name="map-pin" size={10} color={"red"} />
-                <Text style={styles.location} numberOfLines={1}>
+                <Text
+                  style={[styles.location, { color: colors.muted }]}
+                  numberOfLines={1}
+                >
                   {hostel?.address}
                 </Text>
               </View>
@@ -72,7 +83,10 @@ const HorizontalCard = ({
           </View>
 
           {/* Description */}
-          <Text style={styles.description} numberOfLines={2}>
+          <Text
+            style={[styles.description, { color: colors.muted }]}
+            numberOfLines={2}
+          >
             {hostel?.description}
           </Text>
         </View>
@@ -88,7 +102,6 @@ const styles = StyleSheet.create({
     width: "100%",
     minHeight: verticalScale(120),
     flexDirection: "row",
-    backgroundColor: "#fff",
     borderRadius: scale(12),
     padding: scale(5),
     overflow: "hidden",
@@ -102,13 +115,11 @@ const styles = StyleSheet.create({
     shadowRadius: scale(8),
     elevation: 3,
     borderWidth: 1,
-    borderColor: Colors.light,
   },
   imageContainer: {
     width: scale(150),
     height: verticalScale(120),
     position: "relative",
-    backgroundColor: Colors.light,
     borderRadius: scale(16),
     overflow: "hidden",
   },
@@ -165,7 +176,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: moderateScale(16),
     fontWeight: "700",
-    color: Colors.dark,
     marginBottom: verticalScale(4),
     fontFamily: Fonts.brandBold,
   },
@@ -176,13 +186,11 @@ const styles = StyleSheet.create({
   },
   location: {
     fontSize: moderateScale(12),
-    color: Colors.muted,
     flex: 1,
     fontFamily: Fonts.brandBold,
   },
   description: {
     fontSize: moderateScale(13),
-    color: Colors.muted,
     lineHeight: verticalScale(18),
     marginBottom: verticalScale(8),
   },
@@ -194,19 +202,16 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(8),
   },
   amenityTag: {
-    backgroundColor: Colors.light,
     paddingHorizontal: scale(8),
     paddingVertical: verticalScale(4),
     borderRadius: scale(8),
   },
   amenityText: {
     fontSize: moderateScale(11),
-    color: Colors.muted,
     fontFamily: Fonts.brandBold,
   },
   moreAmenities: {
     fontSize: moderateScale(11),
-    color: Colors.primary,
     fontFamily: Fonts.brandBold,
   },
   footer: {
@@ -222,32 +227,27 @@ const styles = StyleSheet.create({
   },
   priceLabel: {
     fontSize: moderateScale(11),
-    color: Colors.muted,
     fontFamily: Fonts.brandBold,
   },
   price: {
     fontSize: moderateScale(18),
     fontWeight: "700",
-    color: Colors.primary,
     fontFamily: Fonts.brandBold,
   },
   priceUnit: {
     fontSize: moderateScale(11),
-    color: Colors.muted,
     fontFamily: Fonts.brandBold,
   },
   countryBadge: {
     flexDirection: "row",
     alignItems: "center",
     gap: scale(4),
-    backgroundColor: Colors.light,
     paddingHorizontal: scale(8),
     paddingVertical: verticalScale(4),
     borderRadius: scale(8),
   },
   countryText: {
     fontSize: moderateScale(11),
-    color: Colors.primary,
     fontWeight: "600",
     fontFamily: Fonts.brandBold,
   },

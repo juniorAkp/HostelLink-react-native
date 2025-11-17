@@ -1,7 +1,8 @@
 import MenuItem from "@/src/app/components/profile/MenuItem";
 import MenuSection from "@/src/app/components/profile/MenuSection";
-import { Colors, Fonts } from "@/src/app/constants/theme";
+import { Fonts } from "@/src/app/constants/theme";
 import useUserStore from "@/src/app/hooks/use-userStore";
+import { useTheme } from "@/src/app/hooks/useTheme";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
@@ -18,6 +19,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 
 const Page = () => {
+  const { colors } = useTheme();
   const { user, logout, deleteAccount, setIsGuest, isGuest } = useUserStore();
   const insets = useSafeAreaInsets();
   const [isDeleting, setIsDeleting] = useState(false);
@@ -108,7 +110,9 @@ const Page = () => {
         {/* Header */}
 
         <View style={[styles.header]}>
-          <Text style={styles.headerTitle}>Your Profile</Text>
+          <Text style={[styles.headerTitle, { color: colors.text }]}>
+            Your Profile
+          </Text>
         </View>
         {/* User Details Section */}
         <View style={styles.userSection}>
@@ -122,29 +126,52 @@ const Page = () => {
                 transition={200}
               />
             ) : (
-              <View style={styles.avatarPlaceholder}>
+              <View
+                style={[
+                  styles.avatarPlaceholder,
+                  { backgroundColor: colors.primary },
+                ]}
+              >
                 <Text style={styles.avatarText}>{userInitials}</Text>
               </View>
             )}
             <TouchableOpacity
-              style={styles.editAvatarButton}
+              style={[
+                styles.editAvatarButton,
+                {
+                  backgroundColor: colors.primary,
+                  borderColor: colors.background,
+                },
+              ]}
               disabled={isGuest}
               activeOpacity={0.7}
             >
               <Ionicons name="camera" size={16} color="#fff" />
             </TouchableOpacity>
           </View>
-          <Text style={styles.userName}>{user?.username || "Guest"}</Text>
-          <Text style={styles.userEmail}>
+          <Text style={[styles.userName, { color: colors.text }]}>
+            {user?.username || "Guest"}
+          </Text>
+          <Text style={[styles.userEmail, { color: colors.muted }]}>
             {user?.email || "guest@gmail.com"}
           </Text>
           {!isGuest ? (
             <Link href="/edit-profile" asChild>
               <TouchableOpacity
-                style={styles.editProfileButton}
+                style={[
+                  styles.editProfileButton,
+                  { backgroundColor: colors.card, borderColor: colors.border },
+                ]}
                 activeOpacity={0.7}
               >
-                <Text style={styles.editProfileButtonText}>Edit Profile</Text>
+                <Text
+                  style={[
+                    styles.editProfileButtonText,
+                    { color: colors.primary },
+                  ]}
+                >
+                  Edit Profile
+                </Text>
               </TouchableOpacity>
             </Link>
           ) : null}
@@ -189,7 +216,9 @@ const Page = () => {
             subtitle="Verify your Email"
             onPress={() => {}}
           />
-          <View style={styles.separator} />
+          <View
+            style={[styles.separator, { backgroundColor: colors.border }]}
+          />
           <Link href={"/reset-password"} asChild>
             <MenuItem
               disabled={isGuest}
@@ -199,7 +228,9 @@ const Page = () => {
               onPress={() => {}}
             />
           </Link>
-          <View style={styles.separator} />
+          <View
+            style={[styles.separator, { backgroundColor: colors.border }]}
+          />
           <MenuItem
             disabled={isGuest}
             icon="notifications-outline"
@@ -216,19 +247,25 @@ const Page = () => {
             title="Privacy Policy"
             onPress={() => {}}
           />
-          <View style={styles.separator} />
+          <View
+            style={[styles.separator, { backgroundColor: colors.border }]}
+          />
           <MenuItem
             icon="document-outline"
             title="Terms of Service"
             onPress={() => {}}
           />
-          <View style={styles.separator} />
+          <View
+            style={[styles.separator, { backgroundColor: colors.border }]}
+          />
           <MenuItem
             icon="help-circle-outline"
             title="Help & Support"
             onPress={() => {}}
           />
-          <View style={styles.separator} />
+          <View
+            style={[styles.separator, { backgroundColor: colors.border }]}
+          />
           <MenuItem
             icon="information-circle-outline"
             title="About"
@@ -271,13 +308,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    backgroundColor: Colors.background,
     paddingHorizontal: scale(6),
     paddingBottom: verticalScale(16),
   },
   headerTitle: {
     fontSize: moderateScale(34),
-    color: Colors.dark,
     fontFamily: Fonts.brandBlack,
   },
   scrollView: {
@@ -300,13 +335,11 @@ const styles = StyleSheet.create({
     width: scale(100),
     height: scale(100),
     borderRadius: scale(50),
-    backgroundColor: Colors.light,
   },
   avatarPlaceholder: {
     width: scale(100),
     height: scale(100),
     borderRadius: scale(50),
-    backgroundColor: Colors.primary,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -323,41 +356,33 @@ const styles = StyleSheet.create({
     width: scale(32),
     height: scale(32),
     borderRadius: scale(16),
-    backgroundColor: Colors.primary,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: scale(3),
-    borderColor: Colors.background,
   },
   userName: {
     fontSize: moderateScale(24),
     fontWeight: "700",
-    color: Colors.dark,
     marginBottom: verticalScale(4),
     fontFamily: Fonts.brandBold,
   },
   userEmail: {
     fontSize: moderateScale(14),
-    color: Colors.muted,
     marginBottom: verticalScale(16),
   },
   editProfileButton: {
     paddingVertical: verticalScale(8),
     paddingHorizontal: scale(24),
     borderRadius: scale(20),
-    backgroundColor: Colors.light,
     borderWidth: 1,
-    borderColor: Colors.secondary,
   },
   editProfileButtonText: {
     fontSize: moderateScale(14),
     fontWeight: "600",
-    color: Colors.primary,
     fontFamily: Fonts.brandBold,
   },
   separator: {
     height: 1,
-    backgroundColor: Colors.light,
     marginLeft: scale(60),
   },
 });

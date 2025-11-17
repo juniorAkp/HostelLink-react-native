@@ -8,6 +8,7 @@ import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 import { blurhash } from "../../constants/blurhash";
 import { Fonts } from "../../constants/theme";
 import { Hostels } from "../../data/hostel";
+import { useTheme } from "../../hooks/useTheme";
 
 interface PopularCardProps {
   hostel: Hostels;
@@ -22,10 +23,11 @@ const PopularCard = ({
   onLike,
   isLiked = false,
 }: PopularCardProps) => {
+  const { colors } = useTheme();
   return (
     <Link href={`/hostel/${hostel.id}`} asChild>
       <TouchableOpacity
-        style={styles.container}
+        style={[styles.container, { backgroundColor: colors.card }]}
         onPress={onPress}
         activeOpacity={0.9}
       >
@@ -79,7 +81,6 @@ const styles = StyleSheet.create({
     width: scale(280),
     height: verticalScale(320),
     borderRadius: scale(16),
-    backgroundColor: "#fff",
     overflow: "hidden",
     marginRight: scale(16),
     shadowColor: "#000",

@@ -1,4 +1,4 @@
-import { Colors, Fonts } from "@/src/app/constants/theme";
+import { Fonts } from "@/src/app/constants/theme";
 import { useSearchStore } from "@/src/app/hooks/use-useSearchStore";
 import { Stack } from "expo-router";
 import React from "react";
@@ -10,9 +10,6 @@ const Layout = () => {
       <Stack.Screen
         name="index"
         options={{
-          contentStyle: {
-            backgroundColor: Colors.background,
-          },
           title: "Search",
           headerSearchBarOptions: {
             autoFocus: true,

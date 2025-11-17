@@ -19,7 +19,7 @@ import Animated, {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 import { scheduleOnRN } from "react-native-worklets";
-import { Colors } from "../../constants/theme";
+import { useTheme } from "../../hooks/useTheme";
 
 interface RestaurantHeaderProps {
   title: string;
@@ -34,6 +34,7 @@ const RestaurantHeader = ({
   scrollOffset,
   address,
 }: RestaurantHeaderProps) => {
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const [header1PointerEvents, setHeader1PointerEvents] = useState<
     "auto" | "none"
@@ -133,7 +134,11 @@ const RestaurantHeader = ({
 
   return (
     <Animated.View
-      style={[styles.headerContainer, shadowStyle, { paddingTop: insets.top }]}
+      style={[
+        styles.headerContainer,
+        shadowStyle,
+        { paddingTop: insets.top, backgroundColor: colors.background },
+      ]}
     >
       {/* Header 1 */}
       <Animated.View
@@ -142,12 +147,16 @@ const RestaurantHeader = ({
       >
         <Pressable style={styles.locationButton}>
           <FontAwesome6 name="map-pin" size={20} color={"red"} />
-          <Text style={styles.locationText}>{address}</Text>
+          <Text style={[styles.locationText, { color: colors.text }]}>
+            {address}
+          </Text>
         </Pressable>
 
         <View style={styles.rightIcons}>
           <Link href="/favourite" asChild>
-            <TouchableOpacity style={styles.iconButton}>
+            <TouchableOpacity
+              style={[styles.iconButton, { backgroundColor: colors.card }]}
+            >
               <Ionicons name="heart" size={20} color="#FF3B30" />
             </TouchableOpacity>
           </Link>
@@ -160,14 +169,20 @@ const RestaurantHeader = ({
         pointerEvents={header2PointerEvents}
       >
         <View style={styles.centerContent}>
-          <Text style={styles.titleSmall}>{title}</Text>
+          <Text style={[styles.titleSmall, { color: colors.text }]}>
+            {title}
+          </Text>
           <Pressable style={styles.locationSmall}>
-            <Text style={styles.locationSmallText}>{address}</Text>
+            <Text style={[styles.locationSmallText, { color: colors.muted }]}>
+              {address}
+            </Text>
           </Pressable>
         </View>
         <View style={styles.rightIcons}>
           <Link href="/favourite" asChild>
-            <TouchableOpacity style={styles.iconButton}>
+            <TouchableOpacity
+              style={[styles.iconButton, { backgroundColor: colors.card }]}
+            >
               <Ionicons name="heart" size={20} color="#FF3B30" />
             </TouchableOpacity>
           </Link>
@@ -183,7 +198,6 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    backgroundColor: "#fff",
     zIndex: 100,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: verticalScale(2) },
@@ -219,7 +233,6 @@ const styles = StyleSheet.create({
   },
   locationButtonIcon: {
     borderRadius: scale(20),
-    backgroundColor: Colors.light,
     padding: scale(10),
   },
   rightIcons: {
@@ -229,7 +242,6 @@ const styles = StyleSheet.create({
   iconButton: {
     width: scale(40),
     height: scale(40),
-    backgroundColor: Colors.light,
     borderRadius: scale(20),
     alignItems: "center",
     justifyContent: "center",
@@ -251,7 +263,6 @@ const styles = StyleSheet.create({
   },
   locationSmallText: {
     fontSize: moderateScale(12),
-    color: Colors.muted,
   },
 });
 export default RestaurantHeader;

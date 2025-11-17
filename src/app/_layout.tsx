@@ -31,6 +31,8 @@ const queryClient = new QueryClient({
 });
 
 export default function RootLayout() {
+  const theme = useColorScheme();
+
   const [fontsLoaded, fontError] = useFonts({
     Nunito_400Regular,
     Nunito_700Bold,
@@ -59,8 +61,6 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded, fontError, isOnline]);
-
-  const theme = useColorScheme();
 
   if (!fontsLoaded || isOnline === null) {
     return null;

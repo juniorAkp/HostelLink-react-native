@@ -2,13 +2,14 @@ import SearchCard from "@/src/app/components/common/searchCard";
 import RestaurantHeader from "@/src/app/components/home/header";
 import PopularCard from "@/src/app/components/home/popularCard";
 import HorizontalCard from "@/src/app/components/home/smallCard";
-import { Colors, Fonts } from "@/src/app/constants/theme";
+import { Fonts } from "@/src/app/constants/theme";
 import {
   useFavouriteStore,
   useSetFavourite,
 } from "@/src/app/hooks/useFavourite";
 import { useHostels } from "@/src/app/hooks/useHostels";
 import { useLocationStore } from "@/src/app/hooks/useLocation";
+import { useTheme } from "@/src/app/hooks/useTheme";
 import { getDistance } from "@/src/app/utils/haversine";
 import { useEffect } from "react";
 import {
@@ -29,6 +30,7 @@ import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 const HEADER_HEIGHT = verticalScale(60);
 
 const HostelPage = () => {
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const scrollOffset = useSharedValue(0);
 
@@ -93,7 +95,7 @@ const HostelPage = () => {
   if (isFetching) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={Colors.primary} />
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
@@ -101,7 +103,7 @@ const HostelPage = () => {
   if (sortedHostels.length === 0) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>
+        <Text style={[styles.errorText, { color: colors.error }]}>
           {error?.message || " Oops! No hostels found in your region"}
         </Text>
       </View>
@@ -112,7 +114,7 @@ const HostelPage = () => {
   if (isError) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>
+        <Text style={[styles.errorText, { color: colors.error }]}>
           {error?.message || "An error occurred while fetching Hostels"}
         </Text>
         <Button
@@ -144,10 +146,14 @@ const HostelPage = () => {
           paddingBottom: insets.bottom + HEADER_HEIGHT,
         }}
       >
-        <Text style={styles.pageTitle}>Discover Great Hostels</Text>
+        <Text style={[styles.pageTitle, { color: colors.text }]}>
+          Discover Great Hostels
+        </Text>
 
         {/* Popular Hostels */}
-        <Text style={styles.textHeading}>Popular Hostels</Text>
+        <Text style={[styles.textHeading, { color: colors.text }]}>
+          Popular Hostels
+        </Text>
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -167,7 +173,7 @@ const HostelPage = () => {
         />
 
         {/* Nearby Hostels */}
-        <Text style={styles.textHeading}>
+        <Text style={[styles.textHeading, { color: colors.text }]}>
           {latitude ? "Nearby Hostels" : "All Hostels"}
         </Text>
         <FlatList
@@ -189,7 +195,9 @@ const HostelPage = () => {
         />
 
         {/* Recommended */}
-        <Text style={styles.textHeading}>Recommended For You</Text>
+        <Text style={[styles.textHeading, { color: colors.text }]}>
+          Recommended For You
+        </Text>
         <FlatList
           data={sortedHostels.slice(0, 5)}
           keyExtractor={(item) => item.id}
@@ -241,7 +249,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: moderateScale(16),
-    color: "#d32f2f",
     textAlign: "center",
   },
 });
