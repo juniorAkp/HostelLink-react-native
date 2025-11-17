@@ -144,7 +144,7 @@ const HostelPage = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingTop: insets.top + HEADER_HEIGHT,
-          paddingBottom: insets.bottom + 20,
+          paddingBottom: insets.bottom + HEADER_HEIGHT,
         }}
       >
         <Text style={styles.pageTitle}>Discover Great Hostels</Text>

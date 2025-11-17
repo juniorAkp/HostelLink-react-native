@@ -67,7 +67,6 @@ const SearchScreen = () => {
 
   const showRecent = recentSearches.length > 0 && !searchQuery.trim();
 
-  // ---- Render Empty / Loading States ----
   if (!searchQuery.trim() && !showRecent) {
     return (
       <View style={styles.centered}>
@@ -142,7 +141,7 @@ const SearchScreen = () => {
       contentContainerStyle={{
         paddingHorizontal: 16,
         paddingBottom: insets.bottom + 80,
-        paddingTop: insets.top + 60,
+        paddingTop: insets.top,
       }}
       ListHeaderComponent={renderHeader}
       renderItem={({ item }) => (
@@ -174,7 +173,7 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontFamily: Fonts.brandBold,
     fontSize: 18,
-    color: Colors.text,
+    color: Colors.primary,
     textAlign: "center",
     marginTop: 12,
   },
@@ -195,7 +194,6 @@ const styles = StyleSheet.create({
     color: "red",
   },
   recentContainer: {
-    marginTop: 30,
     marginBottom: 16,
   },
   recentList: {

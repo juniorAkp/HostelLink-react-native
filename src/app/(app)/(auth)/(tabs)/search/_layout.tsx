@@ -16,7 +16,6 @@ const Layout = () => {
           title: "Search",
           headerSearchBarOptions: {
             autoFocus: true,
-
             hideWhenScrolling: true,
             placement: "automatic",
             placeholder: "Search for hostels",
