@@ -17,6 +17,7 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 import { scheduleOnRN } from "react-native-worklets";
 import { Colors } from "../../constants/theme";
 
@@ -26,7 +27,7 @@ interface RestaurantHeaderProps {
   scrollOffset: SharedValue<number>;
 }
 
-const SCOLL_THRESHOLD = 60;
+const SCOLL_THRESHOLD = verticalScale(60);
 
 const RestaurantHeader = ({
   title,
@@ -184,14 +185,13 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: "#fff",
     zIndex: 100,
-    // boxShadow: '0px 2px 4px -2px rgba(0, 0, 0, 0.2)',
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: verticalScale(2) },
+    shadowRadius: scale(4),
   },
   header1: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
+    paddingHorizontal: scale(16),
+    paddingTop: verticalScale(8),
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -201,56 +201,56 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: scale(16),
+    paddingVertical: verticalScale(12),
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
   locationText: {
-    fontSize: 14,
+    fontSize: moderateScale(14),
     fontWeight: "600",
   },
   locationButton: {
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 20,
-    gap: 6,
+    borderRadius: scale(20),
+    gap: scale(6),
   },
   locationButtonIcon: {
-    borderRadius: 20,
+    borderRadius: scale(20),
     backgroundColor: Colors.light,
-    padding: 10,
+    padding: scale(10),
   },
   rightIcons: {
     flexDirection: "row",
-    gap: 8,
+    gap: scale(8),
   },
   iconButton: {
-    width: 40,
-    height: 40,
+    width: scale(40),
+    height: scale(40),
     backgroundColor: Colors.light,
-    borderRadius: 20,
+    borderRadius: scale(20),
     alignItems: "center",
     justifyContent: "center",
   },
   centerContent: {
     flex: 1,
     alignItems: "center",
-    paddingLeft: 40,
+    paddingLeft: scale(40),
   },
   titleSmall: {
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontWeight: 700,
-    marginBottom: 2,
+    marginBottom: verticalScale(2),
   },
   locationSmall: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 2,
+    gap: scale(2),
   },
   locationSmallText: {
-    fontSize: 12,
+    fontSize: moderateScale(12),
     color: Colors.muted,
   },
 });

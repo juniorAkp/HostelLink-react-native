@@ -1,5 +1,4 @@
-import { StyleSheet, Text } from "react-native";
-import { View } from "react-native-reanimated/lib/typescript/Animated";
+import { StyleSheet, Text, View } from "react-native";
 import { Colors, Fonts } from "../../constants/theme";
 
 const MenuSection = ({

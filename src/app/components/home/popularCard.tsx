@@ -4,6 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 import { blurhash } from "../../constants/blurhash";
 import { Fonts } from "../../constants/theme";
 import { Hostels } from "../../data/hostel";
@@ -75,19 +76,19 @@ export default PopularCard;
 
 const styles = StyleSheet.create({
   container: {
-    width: 280,
-    height: 320,
-    borderRadius: 16,
+    width: scale(280),
+    height: verticalScale(320),
+    borderRadius: scale(16),
     backgroundColor: "#fff",
     overflow: "hidden",
-    marginRight: 16,
+    marginRight: scale(16),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: verticalScale(2),
     },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowRadius: scale(8),
     elevation: 5,
   },
   imageContainer: {
@@ -104,21 +105,21 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 140,
+    height: verticalScale(140),
   },
   textOverlay: {
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    padding: 16,
-    paddingBottom: 20,
+    padding: scale(16),
+    paddingBottom: verticalScale(20),
   },
   titleText: {
-    fontSize: 20,
+    fontSize: moderateScale(20),
     fontWeight: "700",
     color: "#fff",
-    marginBottom: 6,
+    marginBottom: verticalScale(6),
     fontFamily: Fonts.brandBold,
     textShadowColor: "rgba(0, 0, 0, 0.5)",
     textShadowOffset: { width: 0, height: 1 },
@@ -129,19 +130,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   ratingText: {
-    fontSize: 14,
+    fontSize: moderateScale(14),
     fontWeight: "600",
     color: "#fff",
-    marginLeft: 4,
+    marginLeft: scale(4),
     fontFamily: Fonts.brandBold,
     textShadowColor: "rgba(0, 0, 0, 0.5)",
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 3,
   },
   locationText: {
-    fontSize: 13,
+    fontSize: moderateScale(13),
     color: "#fff",
-    marginLeft: 4,
+    marginLeft: scale(4),
     opacity: 0.9,
     textShadowColor: "rgba(0, 0, 0, 0.5)",
     textShadowOffset: { width: 0, height: 1 },
@@ -149,21 +150,21 @@ const styles = StyleSheet.create({
   },
   likeButton: {
     position: "absolute",
-    top: 12,
-    right: 12,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    top: scale(12),
+    right: scale(12),
+    width: scale(36),
+    height: scale(36),
+    borderRadius: scale(18),
     backgroundColor: "transparent",
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: verticalScale(2),
     },
     shadowOpacity: 0.2,
-    shadowRadius: 4,
+    shadowRadius: scale(4),
     elevation: 3,
   },
 });

@@ -3,6 +3,7 @@ import { Image } from "expo-image";
 import { Link } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { scale, verticalScale } from "react-native-size-matters";
 import { blurhash } from "../../constants/blurhash";
 import { Colors, Fonts } from "../../constants/theme";
 import type { Hostels } from "../../data/hostel";
@@ -68,57 +69,57 @@ export default SearchCard;
 
 const styles = StyleSheet.create({
   container: {
-    width: 170,
-    height: 200,
-    borderRadius: 16,
+    width: scale(170),
+    height: verticalScale(200),
+    borderRadius: scale(16),
     backgroundColor: "#fff",
     overflow: "hidden",
-    marginRight: 16,
+    marginRight: scale(16),
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: verticalScale(2),
     },
 
     shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowRadius: scale(8),
     elevation: 5,
   },
   imageContainer: {
-    width: 170,
-    height: 120,
+    width: scale(170),
+    height: verticalScale(120),
     position: "relative",
     backgroundColor: Colors.light,
-    borderRadius: 10,
+    borderRadius: scale(10),
     overflow: "hidden",
   },
   image: {
     width: "100%",
     height: "100%",
-    borderRadius: 10,
+    borderRadius: scale(10),
   },
   likeButton: {
     position: "absolute",
-    top: 12,
-    right: 12,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    top: scale(12),
+    right: scale(12),
+    width: scale(36),
+    height: scale(36),
+    borderRadius: scale(18),
     backgroundColor: "transparent",
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: verticalScale(2),
     },
     shadowOpacity: 0.2,
-    shadowRadius: 4,
+    shadowRadius: scale(4),
     elevation: 3,
   },
   info: {
-    padding: 5,
-    gap: 4,
+    padding: scale(5),
+    gap: scale(4),
   },
   text: {
     fontFamily: Fonts.brandBold,

@@ -24,8 +24,9 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 
-const HEADER_HEIGHT = 60;
+const HEADER_HEIGHT = verticalScale(60);
 
 const HostelPage = () => {
   const insets = useSafeAreaInsets();
@@ -59,20 +60,17 @@ const HostelPage = () => {
   const { favouriteHostelIds } = useFavouriteStore();
 
   const toggleLike = (hostelId: string) => {
-    //if hostel id includes the favouritehosteIds remove
     if (favouriteHostelIds.includes(hostelId)) {
       removeFavourite(hostelId);
     } else {
       addFavourite(hostelId);
     }
   };
-  // Start location watching
   useEffect(() => {
     startWatching();
     return () => stopWatching();
   }, [startWatching, stopWatching]);
 
-  // Sort hostels by distance if location available
   const sortedHostels =
     latitude && longitude
       ? [...hostels].sort((a, b) => {
@@ -92,7 +90,6 @@ const HostelPage = () => {
         })
       : hostels;
 
-  // Loading
   if (isFetching) {
     return (
       <View style={styles.loadingContainer}>
@@ -166,7 +163,7 @@ const HostelPage = () => {
               />
             );
           }}
-          contentContainerStyle={{ paddingHorizontal: 6 }}
+          contentContainerStyle={{ paddingHorizontal: scale(6) }}
         />
 
         {/* Nearby Hostels */}
@@ -188,7 +185,7 @@ const HostelPage = () => {
               />
             );
           }}
-          contentContainerStyle={{ paddingHorizontal: 6 }}
+          contentContainerStyle={{ paddingHorizontal: scale(6) }}
         />
 
         {/* Recommended */}
@@ -207,6 +204,7 @@ const HostelPage = () => {
             );
           }}
           scrollEnabled={false}
+          contentContainerStyle={{ paddingHorizontal: scale(6) }}
         />
       </Animated.ScrollView>
     </View>
@@ -219,16 +217,16 @@ const styles = StyleSheet.create({
   },
   pageTitle: {
     fontFamily: Fonts.brandBlack,
-    fontSize: 30,
-    marginBottom: 16,
-    paddingHorizontal: 16,
+    fontSize: moderateScale(30),
+    marginBottom: verticalScale(16),
+    paddingHorizontal: scale(6),
   },
   textHeading: {
     fontFamily: Fonts.brandBold,
-    fontSize: 20,
-    marginTop: 20,
-    marginBottom: 12,
-    paddingHorizontal: 16,
+    fontSize: moderateScale(20),
+    marginTop: verticalScale(20),
+    marginBottom: verticalScale(12),
+    paddingHorizontal: scale(6),
   },
   loadingContainer: {
     flex: 1,
@@ -239,10 +237,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 20,
+    padding: scale(20),
   },
   errorText: {
-    fontSize: 16,
+    fontSize: moderateScale(16),
     color: "#d32f2f",
     textAlign: "center",
   },
