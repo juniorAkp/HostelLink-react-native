@@ -1,12 +1,14 @@
 import { blurhash } from "@/src/app/constants/blurhash";
 import { Colors, Fonts } from "@/src/app/constants/theme";
+import useUserStore from "@/src/app/hooks/use-userStore";
 import { useHostel } from "@/src/app/hooks/useHostels";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import {
   ActivityIndicator,
+  Alert,
   Button,
   FlatList,
   Linking,
@@ -14,6 +16,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 
@@ -27,6 +30,7 @@ const HostelPage = () => {
     refetch,
   } = useHostel(id as string);
   const router = useRouter();
+  const { user, isGuest } = useUserStore();
 
   // Loading State
   if (isFetching) {
@@ -220,6 +224,43 @@ const HostelPage = () => {
             </Text>
           </View>
         )}
+
+        {/* Partner CTA Banner - Only show for non-admin authenticated users */}
+        {!isGuest && user?.role !== "admin" && (
+          <TouchableOpacity
+            style={styles.partnerBanner}
+            activeOpacity={0.8}
+            onPress={() => {
+              Alert.alert(
+                "Become a Hostel Partner",
+                "List your hostel on HostelLink and reach thousands of potential guests. Upgrade to a partner account to get started.",
+                [
+                  { text: "Not Now", style: "cancel" },
+                  {
+                    text: "Learn More",
+                    onPress: () => {
+                      // TODO: Navigate to partner onboarding
+                      Alert.alert("Coming Soon", "Partner onboarding page");
+                    },
+                  },
+                ]
+              );
+            }}
+          >
+            <View style={styles.partnerBannerIcon}>
+              <Ionicons name="business" size={24} color={Colors.primary} />
+            </View>
+            <View style={styles.partnerBannerContent}>
+              <Text style={styles.partnerBannerTitle}>
+                Own a hostel? List it here!
+              </Text>
+              <Text style={styles.partnerBannerSubtitle}>
+                Join HostelLink as a partner and grow your business
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color={Colors.muted} />
+          </TouchableOpacity>
+        )}
       </View>
     </ScrollView>
   );
@@ -354,5 +395,38 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: Colors.primary,
     textDecorationLine: "underline",
+  },
+  partnerBanner: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Colors.light,
+    borderRadius: 12,
+    padding: 16,
+    marginTop: 24,
+    borderWidth: 1,
+    borderColor: Colors.secondary,
+    gap: 12,
+  },
+  partnerBannerIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  partnerBannerContent: {
+    flex: 1,
+  },
+  partnerBannerTitle: {
+    fontFamily: Fonts.brandBold,
+    fontSize: 15,
+    color: Colors.dark,
+    marginBottom: 2,
+  },
+  partnerBannerSubtitle: {
+    fontFamily: Fonts.brand,
+    fontSize: 13,
+    color: Colors.muted,
   },
 });

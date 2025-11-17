@@ -149,12 +149,42 @@ const Page = () => {
           ) : null}
         </View>
 
+        {/* Hostel Management Section - Only for authenticated users */}
+        {!isGuest && (
+          <MenuSection title="Business">
+            {user?.role === "admin" ? (
+              <MenuItem
+                icon="business-outline"
+                title="My Hostels"
+                subtitle="Manage your hostel listings"
+                onPress={() => {
+                  // TODO: Navigate to hostel dashboard
+                  Alert.alert("Coming Soon", "Hostel management dashboard");
+                }}
+              />
+            ) : (
+              <MenuItem
+                icon="ribbon-outline"
+                title="Become a Hostel Partner"
+                subtitle="Start earning by listing your hostel"
+                onPress={() => {
+                  // TODO: Navigate to partner onboarding
+                  Alert.alert(
+                    "Become a Partner",
+                    "Upgrade to a hostel partner account to list and manage your hostels on HostelLink"
+                  );
+                }}
+              />
+            )}
+          </MenuSection>
+        )}
+
         {/* Account Management Section */}
         <MenuSection title="Account">
           <MenuItem
             disabled={isGuest}
             icon="mail"
-            title="Email Verfication"
+            title="Email Verification"
             subtitle="Verify your Email"
             onPress={() => {}}
           />
