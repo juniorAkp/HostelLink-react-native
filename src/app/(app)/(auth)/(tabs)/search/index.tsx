@@ -9,9 +9,10 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 import { useDebounce } from "use-debounce";
 
-import SearchCard from "@/src/app/components/common/searchCard";
+import HorizontalCard from "@/src/app/components/home/smallCard";
 import { Colors, Fonts } from "@/src/app/constants/theme";
 import { useSearchStore } from "@/src/app/hooks/use-useSearchStore";
 import { useSearch } from "@/src/app/hooks/useHostels";
@@ -133,25 +134,45 @@ const SearchScreen = () => {
   };
 
   return (
-    <FlatList
-      data={sortedResults}
-      keyExtractor={(item) => item.id.toString()}
-      numColumns={2}
-      columnWrapperStyle={styles.columnWrapper}
-      contentContainerStyle={{
-        paddingHorizontal: 16,
-        paddingBottom: insets.bottom + 80,
-        paddingTop: insets.top,
-      }}
-      ListHeaderComponent={renderHeader}
-      renderItem={({ item }) => (
-        <SearchCard
-          hostel={item}
-          onPress={() => handleRecentPress(debouncedSearchQuery)}
-        />
+    <>
+      {searchQuery.trim().length > 0 && (
+        <View
+          style={{
+            paddingHorizontal: scale(16),
+            paddingVertical: verticalScale(8),
+            backgroundColor: "transparent",
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: Fonts.brandBold,
+              fontSize: moderateScale(14),
+              color: Colors.primary,
+            }}
+          >
+            Found {sortedResults.length}{" "}
+            {sortedResults.length === 1 ? "result" : "results"}
+          </Text>
+        </View>
       )}
-      showsVerticalScrollIndicator={false}
-    />
+      <FlatList
+        data={sortedResults}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{
+          paddingHorizontal: scale(16),
+          paddingBottom: insets.bottom + verticalScale(80),
+          paddingTop: insets.top,
+        }}
+        ListHeaderComponent={renderHeader}
+        renderItem={({ item }) => (
+          <HorizontalCard
+            hostel={item}
+            onPress={() => handleRecentPress(debouncedSearchQuery)}
+          />
+        )}
+        showsVerticalScrollIndicator={false}
+      />
+    </>
   );
 };
 
@@ -162,66 +183,66 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: scale(20),
   },
   emptyText: {
     fontFamily: Fonts.brand,
-    fontSize: 16,
+    fontSize: moderateScale(16),
     color: Colors.muted,
-    marginTop: 12,
+    marginTop: verticalScale(12),
   },
   emptyTitle: {
     fontFamily: Fonts.brandBold,
-    fontSize: 18,
+    fontSize: moderateScale(18),
     color: Colors.primary,
     textAlign: "center",
-    marginTop: 12,
+    marginTop: verticalScale(12),
   },
   sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: verticalScale(12),
   },
   sectionTitle: {
     fontFamily: Fonts.brandBold,
-    fontSize: 18,
+    fontSize: moderateScale(18),
     color: Colors.primary,
   },
   clearAllText: {
     fontFamily: Fonts.brand,
-    fontSize: 15,
+    fontSize: moderateScale(15),
     color: "red",
   },
   recentContainer: {
-    marginBottom: 16,
+    marginBottom: verticalScale(16),
   },
   recentList: {
     backgroundColor: Colors.primary,
-    borderRadius: 12,
+    borderRadius: scale(12),
     overflow: "hidden",
   },
   recentItem: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 14,
+    paddingVertical: verticalScale(14),
   },
   recentIcon: {
-    marginRight: 12,
+    marginRight: scale(12),
   },
   recentText: {
     flex: 1,
     fontFamily: Fonts.brand,
-    fontSize: 16,
+    fontSize: moderateScale(16),
     color: Colors.primary,
   },
   separator: {
     height: StyleSheet.hairlineWidth,
     backgroundColor: Colors.secondary,
-    marginLeft: 48,
+    marginLeft: scale(48),
   },
   columnWrapper: {
     justifyContent: "space-between",
-    marginBottom: 16,
+    marginBottom: verticalScale(16),
   },
 });
