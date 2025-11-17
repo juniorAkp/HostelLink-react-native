@@ -1,4 +1,4 @@
-import AuthButton from "@/src/app/components/auth/AuthButton";
+import RegularButton from "@/src/app/components/common/RegularButtont";
 import { Colors, Fonts } from "@/src/app/constants/theme";
 import useUserStore from "@/src/app/hooks/use-userStore";
 import React, { useEffect, useState } from "react";
@@ -17,7 +17,6 @@ const Page = () => {
   const [username, setUsername] = useState("");
   const [phone, setPhone] = useState("");
 
-  // Sync form with user data
   useEffect(() => {
     if (user) {
       setUsername(user.username ?? "");
@@ -25,14 +24,12 @@ const Page = () => {
     }
   }, [user]);
 
-  // Show server/validation errors
   useEffect(() => {
     if (errorMessage) {
       Alert.alert("Error", errorMessage, [{ text: "OK", onPress: clearError }]);
     }
   }, [errorMessage, clearError]);
 
-  // Realtime button disable logic
   const hasChanges =
     username.trim() !== (user?.username ?? "") ||
     phone.trim() !== (user?.phone_number ?? "");
@@ -43,11 +40,10 @@ const Page = () => {
     clearError();
   };
 
-  // Loading or no user
   if (!user) {
     return (
       <View style={styles.loadingContainer}>
-        <Text>Loading...</Text>
+        <Text>No user found</Text>
       </View>
     );
   }
@@ -86,14 +82,13 @@ const Page = () => {
           </View>
         )}
 
-        <AuthButton
+        <RegularButton
           title="Update Profile"
           isDisabled={!hasChanges || isLoading}
           isLoading={isLoading}
           onPress={handleProfileUpdate}
           color="#fff"
-          icon="save-outline"
-          buttonColor="#4285F4"
+          buttonColor={Colors.primary}
           style={{ marginTop: 25 }}
         />
       </View>
@@ -112,7 +107,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontFamily: Fonts.brandBlack,
     marginVertical: 22,
-    textAlign: "center",
   },
   buttonContainer: {
     gap: 12,

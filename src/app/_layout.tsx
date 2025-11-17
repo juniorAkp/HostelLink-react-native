@@ -4,11 +4,17 @@ import {
   Nunito_900Black,
 } from "@expo-google-fonts/nunito";
 import NetInfo from "@react-native-community/netinfo";
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import { Slot, SplashScreen } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
+import { useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import OfflineScreen from "./components/common/OfflineScreen";
@@ -36,20 +42,16 @@ export default function RootLayout() {
   // Subscribe to network changes
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
-      setIsOnline(state.isInternetReachable ?? false);
+      setIsOnline(state.isConnected ?? false);
     });
 
-    // Initial check
     NetInfo.fetch().then((state) => {
-      setIsOnline(state.isInternetReachable ?? false);
+      setIsOnline(state.isConnected ?? false);
     });
 
     return () => unsubscribe();
   }, []);
 
-  console.log("is online? ", isOnline);
-
-  // Hide splash when fonts + connection are ready
   useEffect(() => {
     if (fontError) console.error(fontError);
 
@@ -58,25 +60,26 @@ export default function RootLayout() {
     }
   }, [fontsLoaded, fontError, isOnline]);
 
-  // Still loading fonts or checking connection
+  const theme = useColorScheme();
+
   if (!fontsLoaded || isOnline === null) {
     return null;
   }
 
-  // Offline  show offline screen
   if (!isOnline) {
     return <OfflineScreen />;
   }
 
-  // Online → render app
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <QueryClientProvider client={queryClient}>
-        <StatusBar style="auto" animated />
-        <KeyboardProvider>
-          <Slot />
-        </KeyboardProvider>
-      </QueryClientProvider>
+      <ThemeProvider value={theme === "dark" ? DarkTheme : DefaultTheme}>
+        <QueryClientProvider client={queryClient}>
+          <StatusBar style="auto" animated />
+          <KeyboardProvider>
+            <Slot />
+          </KeyboardProvider>
+        </QueryClientProvider>
+      </ThemeProvider>
     </GestureHandlerRootView>
   );
 }

@@ -103,7 +103,6 @@ const AuthLayout = () => {
       <Stack.Screen
         name="(modal)/edit-profile"
         options={{
-          sheetAllowedDetents: [0.5],
           title: "",
           headerShadowVisible: false,
           sheetCornerRadius: 16,
@@ -111,69 +110,35 @@ const AuthLayout = () => {
           contentStyle: {
             backgroundColor: Colors.background,
           },
-          headerRight: () => (
-            <Pressable
-              style={{
-                padding: 4,
-                borderRadius: 20,
-                backgroundColor: Colors.light,
-              }}
-              onPress={() => router.dismiss()}
-            >
-              <Ionicons name="close-sharp" size={28} />
-            </Pressable>
-          ),
+          headerShown: true,
+          headerBackTitle: "Profile",
+          headerBackButtonDisplayMode: "minimal",
         }}
       />
       <Stack.Screen
         name="(modal)/security"
         options={{
-          presentation: "formSheet",
-          sheetAllowedDetents: [0.5],
           title: "",
           headerShadowVisible: false,
-          sheetCornerRadius: 16,
-          sheetGrabberVisible: true,
           contentStyle: {
             backgroundColor: Colors.background,
           },
-          headerRight: () => (
-            <Pressable
-              style={{
-                padding: 4,
-                borderRadius: 20,
-                backgroundColor: Colors.light,
-              }}
-              onPress={() => router.dismiss()}
-            >
-              <Ionicons name="close-sharp" size={28} />
-            </Pressable>
-          ),
+          headerShown: true,
+          headerBackTitle: "Profile",
+          headerBackButtonDisplayMode: "minimal",
         }}
       />
       <Stack.Screen
         name="(modal)/reset-password"
         options={{
-          sheetAllowedDetents: [0.5],
           title: "",
           headerShadowVisible: false,
-          sheetCornerRadius: 16,
-          sheetGrabberVisible: true,
           contentStyle: {
             backgroundColor: Colors.background,
           },
-          headerRight: () => (
-            <Pressable
-              style={{
-                padding: 4,
-                borderRadius: 20,
-                backgroundColor: Colors.light,
-              }}
-              onPress={() => router.dismiss()}
-            >
-              <Ionicons name="close-sharp" size={28} />
-            </Pressable>
-          ),
+          headerShown: true,
+          headerBackTitle: "Profile",
+          headerBackButtonDisplayMode: "minimal",
         }}
       />
     </Stack>

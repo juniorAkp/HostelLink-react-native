@@ -23,21 +23,21 @@ const ResetPasswordScreen = () => {
       </View>
       <Text style={styles.label}>New Password</Text>
       <TextInput
+        placeholder="Password"
+        placeholderTextColor="#888"
         secureTextEntry
-        placeholder="Enter new password"
         value={password}
         onChangeText={setPassword}
-        style={styles.input}
-        placeholderTextColor={Colors.muted}
+        style={styles.textInput}
       />
       <Text style={styles.label}>Confirm Password</Text>
       <TextInput
+        placeholder="Password"
+        placeholderTextColor="#888"
         secureTextEntry
-        placeholder="Confirm new password"
         value={password}
         onChangeText={setPassword}
-        style={styles.input}
-        placeholderTextColor={Colors.muted}
+        style={styles.textInput}
       />
 
       <Pressable
@@ -68,17 +68,9 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
   title: {
-    fontFamily: Fonts.brandBold,
+    fontFamily: Fonts.brandBlack,
     fontSize: 28,
-    color: Colors.primary,
   },
-  subtitle: {
-    fontFamily: Fonts.brand,
-    fontSize: 15,
-    color: Colors.muted,
-    marginTop: 4,
-  },
-
   card: {
     marginTop: 20,
     marginHorizontal: 20,
@@ -92,21 +84,16 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     fontFamily: Fonts.brandBold,
     fontSize: 16,
-    color: Colors.primary,
     marginBottom: 6,
   },
 
-  input: {
-    width: "100%",
-    borderWidth: 1,
-    borderColor: Colors.muted,
-    borderRadius: 12,
-    padding: 14,
-    fontFamily: Fonts.brand,
-    color: Colors.primary,
+  textInput: {
+    backgroundColor: Colors.secondary,
+    borderRadius: 15,
+    padding: 18,
+    fontSize: 16,
     marginBottom: 16,
   },
-
   button: {
     width: "100%",
     backgroundColor: Colors.primary,

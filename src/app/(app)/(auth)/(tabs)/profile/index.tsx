@@ -190,12 +190,12 @@ const Page = () => {
             onPress={() => {}}
           />
           <View style={styles.separator} />
-          <Link href={"/security"} asChild>
+          <Link href={"/reset-password"} asChild>
             <MenuItem
               disabled={isGuest}
               icon="lock-closed-outline"
-              title="Password & Security"
-              subtitle="Change password, two-factor authentication"
+              title="Password"
+              subtitle="Change your password at any time"
               onPress={() => {}}
             />
           </Link>
