@@ -15,6 +15,7 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 
 const Page = () => {
   const { user, logout, deleteAccount, setIsGuest, isGuest } = useUserStore();
@@ -100,7 +101,7 @@ const Page = () => {
         style={styles.scrollView}
         contentContainerStyle={[
           styles.content,
-          { paddingBottom: insets.bottom + 60 },
+          { paddingBottom: insets.bottom + verticalScale(60) },
         ]}
         showsVerticalScrollIndicator={false}
       >
@@ -271,11 +272,11 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: Colors.background,
-    paddingHorizontal: 20,
-    paddingBottom: 16,
+    paddingHorizontal: scale(6),
+    paddingBottom: verticalScale(16),
   },
   headerTitle: {
-    fontSize: 34,
+    fontSize: moderateScale(34),
     color: Colors.dark,
     fontFamily: Fonts.brandBlack,
   },
@@ -283,34 +284,34 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    paddingTop: 20,
+    paddingTop: verticalScale(20),
   },
   userSection: {
     alignItems: "center",
-    paddingVertical: 32,
-    paddingHorizontal: 20,
-    marginBottom: 8,
+    paddingVertical: verticalScale(32),
+    paddingHorizontal: scale(20),
+    marginBottom: verticalScale(8),
   },
   avatarContainer: {
     position: "relative",
-    marginBottom: 16,
+    marginBottom: verticalScale(16),
   },
   avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: scale(100),
+    height: scale(100),
+    borderRadius: scale(50),
     backgroundColor: Colors.light,
   },
   avatarPlaceholder: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: scale(100),
+    height: scale(100),
+    borderRadius: scale(50),
     backgroundColor: Colors.primary,
     alignItems: "center",
     justifyContent: "center",
   },
   avatarText: {
-    fontSize: 36,
+    fontSize: moderateScale(36),
     fontWeight: "700",
     color: "#fff",
     fontFamily: Fonts.brandBold,
@@ -319,37 +320,37 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     right: 0,
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: scale(32),
+    height: scale(32),
+    borderRadius: scale(16),
     backgroundColor: Colors.primary,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 3,
+    borderWidth: scale(3),
     borderColor: Colors.background,
   },
   userName: {
-    fontSize: 24,
+    fontSize: moderateScale(24),
     fontWeight: "700",
     color: Colors.dark,
-    marginBottom: 4,
+    marginBottom: verticalScale(4),
     fontFamily: Fonts.brandBold,
   },
   userEmail: {
-    fontSize: 14,
+    fontSize: moderateScale(14),
     color: Colors.muted,
-    marginBottom: 16,
+    marginBottom: verticalScale(16),
   },
   editProfileButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 24,
-    borderRadius: 20,
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: scale(24),
+    borderRadius: scale(20),
     backgroundColor: Colors.light,
     borderWidth: 1,
     borderColor: Colors.secondary,
   },
   editProfileButtonText: {
-    fontSize: 14,
+    fontSize: moderateScale(14),
     fontWeight: "600",
     color: Colors.primary,
     fontFamily: Fonts.brandBold,
@@ -357,7 +358,7 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     backgroundColor: Colors.light,
-    marginLeft: 60,
+    marginLeft: scale(60),
   },
 });
 export default Page;

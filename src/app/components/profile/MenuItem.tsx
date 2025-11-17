@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 import { Colors, Fonts } from "../../constants/theme";
 
 const MenuItem = ({
@@ -58,9 +59,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    minHeight: 56,
+    paddingVertical: verticalScale(16),
+    paddingHorizontal: scale(16),
+    minHeight: verticalScale(56),
   },
   menuItemDisabled: {
     opacity: 0.5,
@@ -72,13 +73,13 @@ const styles = StyleSheet.create({
   },
 
   menuItemIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
+    width: scale(32),
+    height: scale(32),
+    borderRadius: scale(8),
     backgroundColor: Colors.light,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 12,
+    marginRight: scale(12),
   },
   menuItemIconDanger: {
     backgroundColor: "#FFE5E5",
@@ -87,18 +88,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   menuItemTitle: {
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontWeight: "600",
     color: Colors.dark,
-    marginBottom: 2,
+    marginBottom: verticalScale(2),
     fontFamily: Fonts.brandBold,
   },
   menuItemTitleDanger: {
     color: "#FF3B30",
   },
   menuItemSubtitle: {
-    fontSize: 13,
+    fontSize: moderateScale(13),
     color: Colors.muted,
-    marginTop: 2,
+    marginTop: verticalScale(2),
   },
 });
