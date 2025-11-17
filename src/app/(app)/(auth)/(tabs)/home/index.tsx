@@ -13,6 +13,7 @@ import { getDistance } from "@/src/app/utils/haversine";
 import { useEffect } from "react";
 import {
   ActivityIndicator,
+  Button,
   FlatList,
   StyleSheet,
   Text,
@@ -51,6 +52,7 @@ const HostelPage = () => {
     isError,
     error,
     data: hostels = [],
+    refetch,
   } = useHostels(country ?? "");
 
   const { addFavourite, removeFavourite } = useSetFavourite();
@@ -99,13 +101,31 @@ const HostelPage = () => {
     );
   }
 
-  // Error
-  if (isError || !hostels.length) {
+  if (sortedHostels.length === 0) {
     return (
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>
-          {error?.message || "No hostels found"}
+          {error?.message || " Oops! No hostels found in your region"}
         </Text>
+      </View>
+    );
+  }
+
+  // Error
+  if (isError) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>
+          {error?.message || "An error occurred while fetching Hostels"}
+        </Text>
+        <Button
+          title="Retry"
+          onPress={() =>
+            refetch({
+              throwOnError: true,
+            })
+          }
+        />
       </View>
     );
   }

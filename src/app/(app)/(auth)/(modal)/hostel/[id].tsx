@@ -7,6 +7,8 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import {
   ActivityIndicator,
+  Button,
+  FlatList,
   Linking,
   Pressable,
   ScrollView,
@@ -17,7 +19,13 @@ import {
 
 const HostelPage = () => {
   const { id } = useLocalSearchParams();
-  const { data: hostel, isFetching, isError, error } = useHostel(id as string);
+  const {
+    data: hostel,
+    isFetching,
+    isError,
+    error,
+    refetch,
+  } = useHostel(id as string);
   const router = useRouter();
 
   // Loading State
@@ -34,8 +42,16 @@ const HostelPage = () => {
     return (
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>
-          {error?.message || "Failed to load hostel details"}
+          {error?.message || "Failed to fetch hostel details"}
         </Text>
+        <Button
+          title="Retry"
+          onPress={() =>
+            refetch({
+              throwOnError: true,
+            })
+          }
+        />
       </View>
     );
   }
@@ -100,13 +116,47 @@ const HostelPage = () => {
               <Text style={styles.seeAllText}>See All</Text>
             </Pressable>
           </View>
-
           <View style={styles.amenitiesRow}>
             {hostel.amenities.map((amenity, idx) => (
               <View key={idx} style={styles.amenityChip}>
                 <Text style={styles.amenityText}>{amenity}</Text>
               </View>
             ))}
+          </View>
+        </View>
+
+        <Separator />
+
+        {/* Gallery */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <SectionTitle>Gallery</SectionTitle>
+            <Pressable>
+              <Text style={styles.seeAllText}>See All</Text>
+            </Pressable>
+          </View>
+          <View style={styles.amenitiesRow}>
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              initialNumToRender={4}
+              key={hostel.id}
+              maxToRenderPerBatch={4}
+              data={hostel.images}
+              renderItem={({ item }) => {
+                return (
+                  <View style={styles.galleryImage}>
+                    <Image
+                      contentFit="cover"
+                      transition={200}
+                      style={styles.image}
+                      source={{ uri: item }}
+                      placeholder={{ blurhash: blurhash }}
+                    />
+                  </View>
+                );
+              }}
+            />
           </View>
         </View>
 
@@ -211,6 +261,7 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
+    borderRadius: 16,
   },
   detailsContainer: {
     paddingHorizontal: 16,
@@ -279,6 +330,12 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.brand,
     fontSize: 14,
     color: "#000",
+  },
+  galleryImage: {
+    height: 120,
+    width: 120,
+    borderRadius: 16,
+    marginRight: 10,
   },
   detailText: {
     fontFamily: Fonts.brand,
