@@ -1,3 +1,5 @@
+import MenuItem from "@/src/app/components/profile/MenuItem";
+import MenuSection from "@/src/app/components/profile/MenuSection";
 import { Colors, Fonts } from "@/src/app/constants/theme";
 import useUserStore from "@/src/app/hooks/use-userStore";
 import { Ionicons } from "@expo/vector-icons";
@@ -92,69 +94,6 @@ const Page = () => {
     );
   };
 
-  const MenuSection = ({
-    title,
-    children,
-  }: {
-    title?: string;
-    children: React.ReactNode;
-  }) => (
-    <View style={styles.section}>
-      {title && <Text style={styles.sectionTitle}>{title}</Text>}
-      <View style={styles.menuContainer}>{children}</View>
-    </View>
-  );
-
-  const MenuItem = ({
-    icon,
-    title,
-    subtitle,
-    onPress,
-    showChevron = true,
-    danger = false,
-    disabled = false,
-  }: {
-    icon?: keyof typeof Ionicons.glyphMap;
-    title: string;
-    subtitle?: string;
-    onPress?: () => void;
-    showChevron?: boolean;
-    danger?: boolean;
-    disabled?: boolean;
-  }) => (
-    <TouchableOpacity
-      style={[styles.menuItem, disabled && styles.menuItemDisabled]}
-      onPress={onPress}
-      disabled={disabled || !onPress}
-      activeOpacity={0.7}
-    >
-      <View style={styles.menuItemLeft}>
-        {icon && (
-          <View
-            style={[styles.menuItemIcon, danger && styles.menuItemIconDanger]}
-          >
-            <Ionicons
-              name={icon}
-              size={20}
-              color={danger ? "#FF3B30" : Colors.muted}
-            />
-          </View>
-        )}
-        <View style={styles.menuItemTextContainer}>
-          <Text
-            style={[styles.menuItemTitle, danger && styles.menuItemTitleDanger]}
-          >
-            {title}
-          </Text>
-          {subtitle && <Text style={styles.menuItemSubtitle}>{subtitle}</Text>}
-        </View>
-      </View>
-      {showChevron && onPress && (
-        <Ionicons name="chevron-forward" size={20} color="#999" />
-      )}
-    </TouchableOpacity>
-  );
-
   return (
     <View style={styles.container}>
       <ScrollView
@@ -188,6 +127,7 @@ const Page = () => {
             )}
             <TouchableOpacity
               style={styles.editAvatarButton}
+              disabled={isGuest}
               activeOpacity={0.7}
             >
               <Ionicons name="camera" size={16} color="#fff" />
@@ -384,78 +324,10 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     fontFamily: Fonts.brandBold,
   },
-  section: {
-    marginBottom: 24,
-    paddingHorizontal: 20,
-  },
-  sectionTitle: {
-    fontSize: 13,
-    fontWeight: "600",
-    color: Colors.muted,
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
-    marginBottom: 12,
-    paddingHorizontal: 4,
-    fontFamily: Fonts.brandBold,
-  },
-  menuContainer: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    overflow: "hidden",
-    borderWidth: 1,
-    borderColor: Colors.light,
-  },
-  menuItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    minHeight: 56,
-  },
-  menuItemDisabled: {
-    opacity: 0.5,
-  },
-  menuItemLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-  menuItemIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
-    backgroundColor: Colors.light,
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 12,
-  },
-  menuItemIconDanger: {
-    backgroundColor: "#FFE5E5",
-  },
-  menuItemTextContainer: {
-    flex: 1,
-  },
-  menuItemTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: Colors.dark,
-    marginBottom: 2,
-    fontFamily: Fonts.brandBold,
-  },
-  menuItemTitleDanger: {
-    color: "#FF3B30",
-  },
-  menuItemSubtitle: {
-    fontSize: 13,
-    color: Colors.muted,
-    marginTop: 2,
-  },
   separator: {
     height: 1,
     backgroundColor: Colors.light,
     marginLeft: 60,
   },
 });
-
 export default Page;
