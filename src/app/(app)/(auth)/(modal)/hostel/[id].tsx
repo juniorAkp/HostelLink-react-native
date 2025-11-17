@@ -1,7 +1,8 @@
 import { blurhash } from "@/src/app/constants/blurhash";
-import { Colors, Fonts } from "@/src/app/constants/theme";
+import { Fonts } from "@/src/app/constants/theme";
 import useUserStore from "@/src/app/hooks/use-userStore";
 import { useHostel } from "@/src/app/hooks/useHostels";
+import { useTheme } from "@/src/app/hooks/useTheme";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -31,12 +32,18 @@ const HostelPage = () => {
   } = useHostel(id as string);
   const router = useRouter();
   const { user, isGuest } = useUserStore();
+  const { colors } = useTheme();
 
   // Loading State
   if (isFetching) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={Colors.primary} />
+      <View
+        style={[
+          styles.loadingContainer,
+          { backgroundColor: colors.background },
+        ]}
+      >
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
@@ -44,8 +51,10 @@ const HostelPage = () => {
   // Error State
   if (isError || !hostel) {
     return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>
+      <View
+        style={[styles.errorContainer, { backgroundColor: colors.background }]}
+      >
+        <Text style={[styles.errorText, { color: colors.error }]}>
           {error?.message || "Failed to fetch hostel details"}
         </Text>
         <Button
@@ -61,21 +70,25 @@ const HostelPage = () => {
   }
 
   // Reusable Separator
-  const Separator = () => <View style={styles.separator} />;
+  const Separator = () => (
+    <View style={[styles.separator, { backgroundColor: colors.border }]} />
+  );
 
   // Reusable Section Title
   const SectionTitle = ({ children }: { children: string | string[] }) => (
-    <Text style={styles.sectionTitle}>{children}</Text>
+    <Text style={[styles.sectionTitle, { color: colors.text }]}>
+      {children}
+    </Text>
   );
 
   // Reusable Detail Text
   const DetailText = ({ children }: { children: string }) => (
-    <Text style={styles.detailText}>{children}</Text>
+    <Text style={[styles.detailText, { color: colors.muted }]}>{children}</Text>
   );
 
   return (
     <ScrollView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: colors.background }]}
       contentContainerStyle={styles.scrollContent}
       showsVerticalScrollIndicator={false}
     >
@@ -95,17 +108,21 @@ const HostelPage = () => {
         {/* Name + Address + Navigate Button */}
         <View style={styles.headerRow}>
           <View style={{ flex: 1 }}>
-            <Text style={styles.hostelName}>{hostel.name}</Text>
-            <Text style={styles.hostelAddress}>{hostel.address}</Text>
+            <Text style={[styles.hostelName, { color: colors.text }]}>
+              {hostel.name}
+            </Text>
+            <Text style={[styles.hostelAddress, { color: colors.muted }]}>
+              {hostel.address}
+            </Text>
           </View>
           <Pressable
-            style={styles.navigateButton}
+            style={[styles.navigateButton, { backgroundColor: colors.light }]}
             onPress={() => router.dismiss()}
           >
             <MaterialCommunityIcons
               name="navigation-variant"
               size={24}
-              color="#000"
+              color={colors.text}
             />
           </Pressable>
         </View>
@@ -117,13 +134,20 @@ const HostelPage = () => {
           <View style={styles.sectionHeader}>
             <SectionTitle>Amenities</SectionTitle>
             <Pressable>
-              <Text style={styles.seeAllText}>See All</Text>
+              <Text style={[styles.seeAllText, { color: colors.primary }]}>
+                See All
+              </Text>
             </Pressable>
           </View>
           <View style={styles.amenitiesRow}>
             {hostel.amenities.map((amenity, idx) => (
-              <View key={idx} style={styles.amenityChip}>
-                <Text style={styles.amenityText}>{amenity}</Text>
+              <View
+                key={idx}
+                style={[styles.amenityChip, { backgroundColor: colors.light }]}
+              >
+                <Text style={[styles.amenityText, { color: colors.text }]}>
+                  {amenity}
+                </Text>
               </View>
             ))}
           </View>
@@ -136,7 +160,9 @@ const HostelPage = () => {
           <View style={styles.sectionHeader}>
             <SectionTitle>Gallery</SectionTitle>
             <Pressable>
-              <Text style={styles.seeAllText}>See All</Text>
+              <Text style={[styles.seeAllText, { color: colors.primary }]}>
+                See All
+              </Text>
             </Pressable>
           </View>
           <View style={styles.amenitiesRow}>
@@ -185,7 +211,11 @@ const HostelPage = () => {
                 Phone Number{hostel.phone_numbers.length > 1 ? "s" : ""}
               </SectionTitle>
               {hostel.phone_numbers.map((phone, idx) => (
-                <Text key={idx} style={styles.linkText} selectable>
+                <Text
+                  key={idx}
+                  style={[styles.linkText, { color: colors.primary }]}
+                  selectable
+                >
                   {phone}
                 </Text>
               ))}
@@ -202,7 +232,11 @@ const HostelPage = () => {
                 Email Address{hostel.email_addresses.length > 1 ? "es" : ""}
               </SectionTitle>
               {hostel.email_addresses.map((email, idx) => (
-                <Text key={idx} style={styles.linkText} selectable>
+                <Text
+                  key={idx}
+                  style={[styles.linkText, { color: colors.primary }]}
+                  selectable
+                >
                   {email}
                 </Text>
               ))}
@@ -216,7 +250,7 @@ const HostelPage = () => {
           <View style={styles.section}>
             <SectionTitle>Website</SectionTitle>
             <Text
-              style={styles.websiteLink}
+              style={[styles.websiteLink, { color: colors.primary }]}
               selectable
               onPress={() => Linking.openURL(hostel.website_url!)}
             >
@@ -228,7 +262,10 @@ const HostelPage = () => {
         {/* Partner CTA Banner - Only show for non-admin authenticated users */}
         {!isGuest && user?.role !== "admin" && (
           <TouchableOpacity
-            style={styles.partnerBanner}
+            style={[
+              styles.partnerBanner,
+              { backgroundColor: colors.light, borderColor: colors.border },
+            ]}
             activeOpacity={0.8}
             onPress={() => {
               Alert.alert(
@@ -247,18 +284,25 @@ const HostelPage = () => {
               );
             }}
           >
-            <View style={styles.partnerBannerIcon}>
-              <Ionicons name="business" size={24} color={Colors.primary} />
+            <View
+              style={[
+                styles.partnerBannerIcon,
+                { backgroundColor: colors.card },
+              ]}
+            >
+              <Ionicons name="business" size={24} color={colors.primary} />
             </View>
             <View style={styles.partnerBannerContent}>
-              <Text style={styles.partnerBannerTitle}>
+              <Text style={[styles.partnerBannerTitle, { color: colors.text }]}>
                 Own a hostel? List it here!
               </Text>
-              <Text style={styles.partnerBannerSubtitle}>
+              <Text
+                style={[styles.partnerBannerSubtitle, { color: colors.muted }]}
+              >
                 Join HostelLink as a partner and grow your business
               </Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color={Colors.muted} />
+            <Ionicons name="chevron-forward" size={20} color={colors.muted} />
           </TouchableOpacity>
         )}
       </View>
@@ -271,7 +315,6 @@ export default HostelPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
   scrollContent: {
     paddingBottom: 40, // Extra space at bottom
@@ -289,7 +332,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 16,
-    color: "#d32f2f",
     textAlign: "center",
   },
   imageContainer: {
@@ -317,22 +359,18 @@ const styles = StyleSheet.create({
   hostelName: {
     fontFamily: Fonts.brandBlack,
     fontSize: 24,
-    color: "#000",
   },
   hostelAddress: {
     fontFamily: Fonts.brand,
     fontSize: 15,
-    color: Colors.muted,
     marginTop: 2,
   },
   navigateButton: {
     padding: 8,
     borderRadius: 30,
-    backgroundColor: Colors.light,
   },
   separator: {
     height: 1,
-    backgroundColor: Colors.secondary,
     marginVertical: 16,
   },
   section: {
@@ -346,12 +384,10 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontFamily: Fonts.brandBold,
     fontSize: 16,
-    color: "#000",
   },
   seeAllText: {
     fontFamily: Fonts.brandBold,
     fontSize: 16,
-    color: Colors.primary,
   },
   amenitiesRow: {
     flexDirection: "row",
@@ -362,7 +398,6 @@ const styles = StyleSheet.create({
   amenityChip: {
     paddingHorizontal: 12,
     paddingVertical: 6,
-    backgroundColor: Colors.light,
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
@@ -370,7 +405,6 @@ const styles = StyleSheet.create({
   amenityText: {
     fontFamily: Fonts.brand,
     fontSize: 14,
-    color: "#000",
   },
   galleryImage: {
     height: 120,
@@ -381,37 +415,31 @@ const styles = StyleSheet.create({
   detailText: {
     fontFamily: Fonts.brand,
     fontSize: 15,
-    color: Colors.muted,
     lineHeight: 22,
   },
   linkText: {
     fontFamily: Fonts.brand,
     fontSize: 15,
-    color: Colors.primary,
     marginBottom: 2,
   },
   websiteLink: {
     fontFamily: Fonts.brand,
     fontSize: 15,
-    color: Colors.primary,
     textDecorationLine: "underline",
   },
   partnerBanner: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: Colors.light,
     borderRadius: 12,
     padding: 16,
     marginTop: 24,
     borderWidth: 1,
-    borderColor: Colors.secondary,
     gap: 12,
   },
   partnerBannerIcon: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -421,12 +449,10 @@ const styles = StyleSheet.create({
   partnerBannerTitle: {
     fontFamily: Fonts.brandBold,
     fontSize: 15,
-    color: Colors.dark,
     marginBottom: 2,
   },
   partnerBannerSubtitle: {
     fontFamily: Fonts.brand,
     fontSize: 13,
-    color: Colors.muted,
   },
 });
