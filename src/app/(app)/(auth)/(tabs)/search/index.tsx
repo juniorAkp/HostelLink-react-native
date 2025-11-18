@@ -407,7 +407,6 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(16),
   },
   separator: {
-    marginLeft: scale(48),
     marginLeft: scale(32),
   },
   columnWrapper: {
