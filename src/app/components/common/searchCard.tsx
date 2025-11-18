@@ -78,7 +78,7 @@ const SearchCard = ({
         </View>
 
         <Text
-          numberOfLines={2}
+          numberOfLines={1}
           style={[styles.description, { color: colors.muted }]}
         >
           {hostel?.description}

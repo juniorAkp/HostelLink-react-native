@@ -13,6 +13,7 @@ import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 import { useDebounce } from "use-debounce";
 
 import HorizontalCard from "@/src/app/components/home/smallCard";
+import SearchBar from "@/src/app/components/search/SearchBar";
 import { Fonts } from "@/src/app/constants/theme";
 import { useSearchStore } from "@/src/app/hooks/use-useSearchStore";
 import { useSearch } from "@/src/app/hooks/useHostels";
@@ -68,34 +69,128 @@ const SearchScreen = () => {
     addSearch(term);
   };
 
+  const handleSearch = (text: string) => {
+    setSearchQuery(text);
+  };
+
+  const handleClear = () => {
+    setSearchQuery("");
+  };
+
   const showRecent = recentSearches.length > 0 && !searchQuery.trim();
 
   if (!searchQuery.trim() && !showRecent) {
     return (
-      <View style={styles.centered}>
-        <MaterialCommunityIcons name="magnify" size={48} color={colors.muted} />
-        <Text style={[styles.emptyText, { color: colors.muted }]}>
-          Start Searching
-        </Text>
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor: colors.background,
+            paddingTop: insets.top + verticalScale(16),
+            paddingHorizontal: scale(16),
+          },
+        ]}
+      >
+        {/* Search Bar */}
+        <SearchBar
+          value={searchQuery}
+          onChangeText={handleSearch}
+          onClear={handleClear}
+          placeholder="Search hostels by name or location..."
+        />
+
+        {/* Empty State */}
+        <View style={styles.centered}>
+          <MaterialCommunityIcons
+            name="magnify"
+            size={moderateScale(64)}
+            color={colors.muted}
+          />
+          <Text style={[styles.emptyText, { color: colors.muted }]}>
+            Start searching for hostels
+          </Text>
+          <Text
+            style={[
+              styles.emptySubtext,
+              { color: colors.muted, marginTop: verticalScale(8) },
+            ]}
+          >
+            Find the perfect place to stay
+          </Text>
+        </View>
       </View>
     );
   }
 
   if (isFetching) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size={48} color={colors.primary} />
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor: colors.background,
+            paddingTop: insets.top + verticalScale(16),
+            paddingHorizontal: scale(16),
+          },
+        ]}
+      >
+        <SearchBar
+          value={searchQuery}
+          onChangeText={handleSearch}
+          onClear={handleClear}
+          placeholder="Search hostels by name or location..."
+        />
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text
+            style={[
+              styles.emptyText,
+              { color: colors.muted, marginTop: verticalScale(12) },
+            ]}
+          >
+            Searching...
+          </Text>
+        </View>
       </View>
     );
   }
 
   if (searchQuery.trim() && !sortedResults.length && !isFetching) {
     return (
-      <View style={styles.centered}>
-        <MaterialCommunityIcons name="magnify" size={48} color={colors.muted} />
-        <Text style={[styles.emptyTitle, { color: colors.primary }]}>
-          No Search Results match "{debouncedSearchQuery}"
-        </Text>
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor: colors.background,
+            paddingTop: insets.top + verticalScale(16),
+            paddingHorizontal: scale(16),
+          },
+        ]}
+      >
+        <SearchBar
+          value={searchQuery}
+          onChangeText={handleSearch}
+          onClear={handleClear}
+          placeholder="Search hostels by name or location..."
+        />
+        <View style={styles.centered}>
+          <MaterialCommunityIcons
+            name="emoticon-sad-outline"
+            size={moderateScale(64)}
+            color={colors.muted}
+          />
+          <Text style={[styles.emptyTitle, { color: colors.text }]}>
+            No results found
+          </Text>
+          <Text
+            style={[
+              styles.emptySubtext,
+              { color: colors.muted, marginTop: verticalScale(8) },
+            ]}
+          >
+            Try searching with different keywords
+          </Text>
+        </View>
       </View>
     );
   }
@@ -145,51 +240,110 @@ const SearchScreen = () => {
   };
 
   return (
-    <>
-      {searchQuery.trim().length > 0 && (
-        <View
-          style={{
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: colors.background,
+        },
+      ]}
+    >
+      {/* Search Bar Header */}
+      <View
+        style={[
+          styles.searchHeader,
+          {
+            paddingTop: insets.top + verticalScale(16),
             paddingHorizontal: scale(16),
-            paddingVertical: verticalScale(8),
-            backgroundColor: "transparent",
-          }}
-        >
+            paddingBottom: verticalScale(12),
+            backgroundColor: colors.background,
+            borderBottomWidth: 1,
+            borderBottomColor: colors.border,
+          },
+        ]}
+      >
+        <SearchBar
+          value={searchQuery}
+          onChangeText={handleSearch}
+          onClear={handleClear}
+          placeholder="Search hostels by name or location..."
+        />
+
+        {/* Results Count */}
+        {searchQuery.trim().length > 0 && !showRecent && (
           <Text
-            style={{
-              fontFamily: Fonts.brandBold,
-              fontSize: moderateScale(14),
-              color: colors.primary,
-            }}
+            style={[
+              styles.resultsCount,
+              {
+                color: colors.muted,
+                marginTop: verticalScale(8),
+              },
+            ]}
           >
-            Found {sortedResults.length}{" "}
-            {sortedResults.length === 1 ? "result" : "results"}
+            {isFetching
+              ? "Searching..."
+              : `${sortedResults.length} ${
+                  sortedResults.length === 1 ? "hostel" : "hostels"
+                } found`}
           </Text>
-        </View>
-      )}
+        )}
+      </View>
+
+      {/* Results List */}
       <FlatList
         data={sortedResults}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{
           paddingHorizontal: scale(16),
           paddingBottom: insets.bottom + verticalScale(80),
-          paddingTop: insets.top,
+          paddingTop: verticalScale(12),
         }}
         ListHeaderComponent={renderHeader}
         renderItem={({ item }) => (
           <HorizontalCard
             hostel={item}
-            onPress={() => handleRecentPress(debouncedSearchQuery)}
+            onPress={() => {
+              if (debouncedSearchQuery.trim()) {
+                addSearch(debouncedSearchQuery.trim());
+              }
+            }}
           />
         )}
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          showRecent ? null : (
+            <View style={styles.emptyList}>
+              <Text style={[styles.emptyText, { color: colors.muted }]}>
+                No hostels found
+              </Text>
+            </View>
+          )
+        }
       />
-    </>
+    </View>
   );
 };
 
 export default SearchScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  searchHeader: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: verticalScale(2),
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: scale(4),
+    elevation: 2,
+  },
+  resultsCount: {
+    fontFamily: Fonts.brand,
+    fontSize: moderateScale(13),
+  },
   centered: {
     flex: 1,
     alignItems: "center",
@@ -197,15 +351,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(20),
   },
   emptyText: {
-    fontFamily: Fonts.brand,
+    fontFamily: Fonts.brandBold,
     fontSize: moderateScale(16),
-    marginTop: verticalScale(12),
+    marginTop: verticalScale(16),
+    textAlign: "center",
+  },
+  emptySubtext: {
+    fontFamily: Fonts.brand,
+    fontSize: moderateScale(14),
+    textAlign: "center",
   },
   emptyTitle: {
     fontFamily: Fonts.brandBold,
-    fontSize: moderateScale(18),
+    fontSize: moderateScale(20),
     textAlign: "center",
-    marginTop: verticalScale(12),
+    marginTop: verticalScale(16),
+  },
+  emptyList: {
+    paddingVertical: verticalScale(40),
+    alignItems: "center",
   },
   sectionHeader: {
     flexDirection: "row",
@@ -219,7 +383,7 @@ const styles = StyleSheet.create({
   },
   clearAllText: {
     fontFamily: Fonts.brand,
-    fontSize: moderateScale(15),
+    fontSize: moderateScale(14),
     color: "red",
   },
   recentContainer: {
@@ -243,8 +407,8 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(16),
   },
   separator: {
-    height: StyleSheet.hairlineWidth,
     marginLeft: scale(48),
+    marginLeft: scale(32),
   },
   columnWrapper: {
     justifyContent: "space-between",

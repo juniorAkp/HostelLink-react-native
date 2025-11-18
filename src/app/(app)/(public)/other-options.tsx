@@ -11,9 +11,11 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 import RegularButton from "../../components/common/RegularButtont";
-import { Colors, Fonts } from "../../constants/theme";
+import { Fonts } from "../../constants/theme";
 import useUserStore from "../../hooks/use-userStore";
+import { useTheme } from "../../hooks/useTheme";
 
 const Page = () => {
   const [email, setEmail] = useState("");
@@ -23,6 +25,7 @@ const Page = () => {
   const [isLoginState, setIsLoginState] = useState(true);
 
   const router = useRouter();
+  const { colors } = useTheme();
   const { isLoading, errorMessage, clearError, login, register, zodErrors } =
     useUserStore();
 
@@ -62,29 +65,38 @@ const Page = () => {
       {!isLoginState && (
         <TextInput
           placeholder="Username"
-          placeholderTextColor="#888"
+          placeholderTextColor={colors.muted}
           value={username}
           onChangeText={setUsername}
           autoCapitalize="none"
-          style={styles.textInput}
+          style={[
+            styles.textInput,
+            { backgroundColor: colors.light, color: colors.text },
+          ]}
         />
       )}
       <TextInput
         placeholder="Email"
-        placeholderTextColor="#888"
+        placeholderTextColor={colors.muted}
         keyboardType="email-address"
         autoCapitalize="none"
         value={email}
         onChangeText={setEmail}
-        style={styles.textInput}
+        style={[
+          styles.textInput,
+          { backgroundColor: colors.light, color: colors.text },
+        ]}
       />
       <TextInput
         placeholder="Password"
-        placeholderTextColor="#888"
+        placeholderTextColor={colors.muted}
         secureTextEntry
         value={password}
         onChangeText={setPassword}
-        style={styles.textInput}
+        style={[
+          styles.textInput,
+          { backgroundColor: colors.light, color: colors.text },
+        ]}
       />
     </>
   );
@@ -95,6 +107,7 @@ const Page = () => {
         styles.container,
         {
           paddingBottom: insets.bottom,
+          backgroundColor: colors.background,
         },
       ]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -105,7 +118,7 @@ const Page = () => {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        <Text style={styles.title}>
+        <Text style={[styles.title, { color: colors.text }]}>
           {isLoginState ? "Welcome Back!" : "Create An Account!"}
         </Text>
 
@@ -114,7 +127,10 @@ const Page = () => {
 
           {zodErrors &&
             zodErrors.map((err, i) => (
-              <Text key={i} style={{ color: "red", fontSize: 14 }}>
+              <Text
+                key={i}
+                style={{ color: colors.error, fontSize: moderateScale(14) }}
+              >
                 {err}
               </Text>
             ))}
@@ -124,16 +140,25 @@ const Page = () => {
             isDisabled={isDisabled}
             title={isLoginState ? "Login" : "Register"}
             onPress={isLoginState ? handleLogin : handleRegister}
-            color="#fff"
-            buttonColor={isDisabled ? Colors.muted : "#4285F4"}
-            style={{ marginTop: 25 }}
+            color={colors.background}
+            buttonColor={isDisabled ? colors.muted : colors.primary}
+            style={{ marginTop: verticalScale(25) }}
           />
 
-          <Text style={{ textAlign: "center", marginTop: 30 }}>
+          <Text
+            style={{
+              textAlign: "center",
+              marginTop: verticalScale(30),
+              color: colors.text,
+            }}
+          >
             {isLoginState
               ? "Don't have an account? "
               : "Already have an account? "}
-            <Text style={styles.privacyLink} onPress={toggleMode}>
+            <Text
+              style={[styles.privacyLink, { color: colors.primary }]}
+              onPress={toggleMode}
+            >
               {isLoginState ? "Create Account" : "Login"}
             </Text>
           </Text>
@@ -146,30 +171,28 @@ const Page = () => {
 export default Page;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
-  scrollContent: { flexGrow: 1, padding: 20 },
+  container: { flex: 1 },
+  scrollContent: { flexGrow: 1, padding: scale(20) },
   closeBtn: {
     alignSelf: "flex-end",
-    backgroundColor: Colors.light,
-    borderRadius: 30,
-    padding: 8,
+    borderRadius: scale(30),
+    padding: scale(8),
   },
   title: {
-    fontSize: 28,
+    fontSize: moderateScale(28),
     fontFamily: Fonts.brandBlack,
-    marginVertical: 30,
+    marginVertical: verticalScale(30),
     textAlign: "center",
   },
-  buttonContainer: { gap: 14, width: "100%" },
+  buttonContainer: { gap: verticalScale(14), width: "100%" },
   textInput: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 15,
-    padding: 18,
-    fontSize: 16,
+    borderRadius: scale(15),
+    padding: scale(18),
+    fontSize: moderateScale(16),
   },
-  privacyLink: { color: "#4285F4", textDecorationLine: "underline" },
+  privacyLink: { textDecorationLine: "underline" },
   keyboardContainer: {
-    gap: 16,
-    padding: 16,
+    gap: verticalScale(16),
+    padding: scale(16),
   },
 });

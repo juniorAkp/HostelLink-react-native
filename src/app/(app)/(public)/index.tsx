@@ -4,6 +4,7 @@ import { Link } from "expo-router";
 import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 import AuthButton from "../../components/auth/AuthButton";
 import RegularButton from "../../components/common/RegularButtont";
 import { blurhash } from "../../constants/blurhash";
@@ -112,13 +113,13 @@ const styles = StyleSheet.create({
   },
   skip: {
     position: "absolute",
-    top: 50,
-    right: 20,
+    top: verticalScale(50),
+    right: scale(20),
     zIndex: 10,
-    padding: 8,
+    padding: scale(8),
   },
   skipText: {
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontWeight: "600",
     color: Colors.light,
   },
@@ -137,47 +138,47 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 150,
+    height: verticalScale(150),
   },
   contentView: {
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingTop: 30,
-    paddingHorizontal: 24,
-    paddingBottom: 20,
+    paddingTop: verticalScale(30),
+    paddingHorizontal: scale(24),
+    paddingBottom: verticalScale(20),
   },
   tagline: {
-    fontSize: 36,
+    fontSize: moderateScale(36),
     fontFamily: Fonts.brandBlack,
     textAlign: "center",
     color: Colors.primary,
-    marginBottom: 8,
+    marginBottom: verticalScale(8),
     letterSpacing: -0.5,
   },
   text: {
-    fontSize: 18,
+    fontSize: moderateScale(18),
     color: Colors.muted,
     fontFamily: Fonts.brandBold,
-    marginBottom: 40,
+    marginBottom: verticalScale(40),
     textAlign: "center",
-    lineHeight: 24,
+    lineHeight: verticalScale(24),
   },
   buttonContainer: {
-    gap: 14,
+    gap: verticalScale(14),
     width: "100%",
-    marginBottom: 20,
+    marginBottom: verticalScale(20),
   },
   privacyContainer: {
-    marginTop: 20,
-    paddingHorizontal: 10,
+    marginTop: verticalScale(4),
+    paddingHorizontal: scale(10),
     width: "100%",
   },
   privacyText: {
-    fontSize: 12,
+    fontSize: moderateScale(12),
     color: "#999",
     textAlign: "center",
-    lineHeight: 18,
+    lineHeight: verticalScale(16),
   },
   privacyLink: {
     color: "#4285F4",
