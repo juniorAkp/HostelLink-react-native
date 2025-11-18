@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
@@ -7,6 +8,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
@@ -23,6 +25,7 @@ const Page = () => {
   const [username, setUsername] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
   const [isLoginState, setIsLoginState] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
   const { colors } = useTheme();
@@ -87,17 +90,31 @@ const Page = () => {
           { backgroundColor: colors.light, color: colors.text },
         ]}
       />
-      <TextInput
-        placeholder="Password"
-        placeholderTextColor={colors.muted}
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-        style={[
-          styles.textInput,
-          { backgroundColor: colors.light, color: colors.text },
-        ]}
-      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          placeholder="Password"
+          placeholderTextColor={colors.muted}
+          secureTextEntry={!showPassword}
+          value={password}
+          onChangeText={setPassword}
+          style={[
+            styles.textInput,
+            styles.passwordInput,
+            { backgroundColor: colors.light, color: colors.text },
+          ]}
+        />
+        <TouchableOpacity
+          onPress={() => setShowPassword(!showPassword)}
+          style={styles.eyeIcon}
+          activeOpacity={0.7}
+        >
+          <Ionicons
+            name={showPassword ? "eye-off" : "eye"}
+            size={moderateScale(22)}
+            color={colors.muted}
+          />
+        </TouchableOpacity>
+      </View>
     </>
   );
 
@@ -134,6 +151,18 @@ const Page = () => {
                 {err}
               </Text>
             ))}
+
+          {isLoginState && (
+            <Text
+              style={[
+                styles.forgotPassword,
+                { color: colors.primary, alignSelf: "flex-end" },
+              ]}
+              onPress={() => router.push}
+            >
+              Forgot Password?
+            </Text>
+          )}
 
           <RegularButton
             isLoading={isLoading}
@@ -182,13 +211,30 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(28),
     fontFamily: Fonts.brandBlack,
     marginVertical: verticalScale(30),
-    textAlign: "center",
   },
   buttonContainer: { gap: verticalScale(14), width: "100%" },
   textInput: {
     borderRadius: scale(15),
     padding: scale(18),
     fontSize: moderateScale(16),
+  },
+  passwordContainer: {
+    position: "relative",
+    width: "100%",
+  },
+  passwordInput: {
+    paddingRight: scale(50),
+  },
+  eyeIcon: {
+    position: "absolute",
+    right: scale(18),
+    top: "50%",
+    transform: [{ translateY: -moderateScale(11) }],
+  },
+  forgotPassword: {
+    fontSize: moderateScale(14),
+    fontFamily: Fonts.brand,
+    textDecorationLine: "underline",
   },
   privacyLink: { textDecorationLine: "underline" },
   keyboardContainer: {
