@@ -40,7 +40,7 @@ const MenuItem = ({
           >
             <Ionicons
               name={icon}
-              size={20}
+              size={scale(15)}
               color={danger ? "#FF3B30" : colors.muted}
             />
           </View>
@@ -63,7 +63,11 @@ const MenuItem = ({
         </View>
       </View>
       {showChevron && onPress && (
-        <Ionicons name="chevron-forward" size={20} color={colors.muted} />
+        <Ionicons
+          name="chevron-forward"
+          size={scale(15)}
+          color={colors.muted}
+        />
       )}
     </TouchableOpacity>
   );

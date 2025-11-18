@@ -3,7 +3,7 @@ import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import useUserStore from "../../../hooks/use-userStore";
+import useUserStore from "../../hooks/use-userStore";
 
 const ResetPasswordScreen = () => {
   const router = useRouter();
@@ -19,7 +19,7 @@ const ResetPasswordScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Reset Password</Text>
+        <Text style={styles.title}>Update Password</Text>
       </View>
       <Text style={styles.label}>New Password</Text>
       <TextInput

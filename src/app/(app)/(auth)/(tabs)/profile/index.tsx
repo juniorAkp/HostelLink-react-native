@@ -103,7 +103,7 @@ const Page = () => {
         style={styles.scrollView}
         contentContainerStyle={[
           styles.content,
-          { paddingBottom: insets.bottom + verticalScale(60) },
+          { paddingBottom: insets.bottom },
         ]}
         showsVerticalScrollIndicator={false}
       >

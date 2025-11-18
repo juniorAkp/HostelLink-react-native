@@ -158,7 +158,7 @@ const Page = () => {
                 styles.forgotPassword,
                 { color: colors.primary, alignSelf: "flex-end" },
               ]}
-              onPress={() => router.push}
+              onPress={() => router.push("/(app)/(security)/reset-password")}
             >
               Forgot Password?
             </Text>

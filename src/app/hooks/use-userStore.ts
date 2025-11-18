@@ -209,7 +209,7 @@ const useUserStore = create<UserStore>()(
         set({ isLoading: true, errorMessage: null });
         try {
           const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: "hostellink://reset-password",
+            redirectTo: "hostellink://(auth)/update-password",
           });
           if (error) throw error;
         } catch (error: any) {
