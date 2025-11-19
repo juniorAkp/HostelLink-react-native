@@ -109,7 +109,7 @@ const Page = () => {
       >
         {/* Header */}
 
-        <View style={[styles.header]}>
+        <View style={[styles.header, { paddingTop: insets.top }]}>
           <Text style={[styles.headerTitle, { color: colors.text }]}>
             Your Profile
           </Text>

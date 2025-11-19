@@ -1,10 +1,13 @@
 import RegularButton from "@/src/app/components/common/RegularButtont";
-import { Colors, Fonts } from "@/src/app/constants/theme";
+import { Fonts } from "@/src/app/constants/theme";
 import useUserStore from "@/src/app/hooks/use-userStore";
+import { useTheme } from "@/src/app/hooks/useTheme";
 import React, { useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 const Page = () => {
+  const { colors } = useTheme();
   const {
     user,
     updateProfile,
@@ -49,33 +52,39 @@ const Page = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Update Profile</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.title, { color: colors.text }]}>Update Profile</Text>
 
       <View style={styles.buttonContainer}>
         <TextInput
           placeholder="Username"
-          placeholderTextColor="#888"
+          placeholderTextColor={colors.muted}
           value={username}
           onChangeText={setUsername}
           autoCapitalize="none"
-          style={styles.textInput}
+          style={[
+            styles.textInput,
+            { backgroundColor: colors.light, color: colors.text },
+          ]}
         />
 
         <TextInput
           placeholder="Phone Number"
-          placeholderTextColor="#888"
+          placeholderTextColor={colors.muted}
           value={phone}
           onChangeText={setPhone}
           keyboardType="phone-pad"
-          style={styles.textInput}
+          style={[
+            styles.textInput,
+            { backgroundColor: colors.light, color: colors.text },
+          ]}
         />
 
         {/* Zod Validation Errors */}
         {zodErrors && (
-          <View style={{ marginTop: 8 }}>
+          <View style={{ marginTop: verticalScale(8) }}>
             {zodErrors.map((err, i) => (
-              <Text key={i} style={styles.errorText}>
+              <Text key={i} style={[styles.errorText, { color: colors.error }]}>
                 {err}
               </Text>
             ))}
@@ -87,9 +96,9 @@ const Page = () => {
           isDisabled={!hasChanges || isLoading}
           isLoading={isLoading}
           onPress={handleProfileUpdate}
-          color="#fff"
-          buttonColor={Colors.primary}
-          style={{ marginTop: 25 }}
+          color={colors.background}
+          buttonColor={colors.primary}
+          style={{ marginTop: verticalScale(25) }}
         />
       </View>
     </View>
@@ -101,26 +110,24 @@ export default Page;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: scale(16),
   },
   title: {
-    fontSize: 28,
+    fontSize: moderateScale(28),
     fontFamily: Fonts.brandBlack,
-    marginVertical: 22,
+    marginVertical: verticalScale(22),
   },
   buttonContainer: {
-    gap: 12,
+    gap: verticalScale(12),
     width: "100%",
   },
   textInput: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 15,
-    padding: 18,
-    fontSize: 16,
+    borderRadius: scale(15),
+    padding: scale(18),
+    fontSize: moderateScale(16),
   },
   errorText: {
-    color: "red",
-    fontSize: 14,
+    fontSize: moderateScale(14),
     fontFamily: Fonts.brand,
   },
   loadingContainer: {
@@ -129,7 +136,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   keyboardContainer: {
-    gap: 16,
-    padding: 16,
+    gap: verticalScale(16),
+    padding: scale(16),
   },
 });

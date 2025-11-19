@@ -33,22 +33,12 @@ const AuthLayout = () => {
       <Stack.Screen
         name="(modal)/favourite"
         options={{
-          title: "Favourites",
           headerShadowVisible: false,
           headerTransparent: true,
           headerShown: true,
-          headerLeft: () => (
-            <Pressable
-              style={{
-                padding: 4,
-                borderRadius: 20,
-                backgroundColor: Colors.light,
-              }}
-              onPress={() => router.dismiss()}
-            >
-              <Ionicons name="arrow-back" size={28} />
-            </Pressable>
-          ),
+          title: "Favorite",
+          headerBackTitle: "Home",
+          headerBackButtonDisplayMode: "minimal",
         }}
       />
 
@@ -57,8 +47,6 @@ const AuthLayout = () => {
         options={{
           title: "",
           headerShadowVisible: false,
-          sheetCornerRadius: 16,
-          sheetGrabberVisible: true,
           contentStyle: {
             backgroundColor: Colors.background,
           },

@@ -1,4 +1,4 @@
-import HorizontalCard from "@/src/app/components/home/smallCard";
+import HorizontalCard from "@/src/app/components/home/HorizontalCard";
 import { Fonts } from "@/src/app/constants/theme";
 import {
   useFavouriteHostels,
@@ -7,6 +7,7 @@ import {
 } from "@/src/app/hooks/useFavourite";
 import { useTheme } from "@/src/app/hooks/useTheme";
 import { FontAwesome6 } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React from "react";
 import { ActivityIndicator, FlatList, StyleSheet, Text } from "react-native";
 import {
@@ -100,6 +101,7 @@ const Favourite = () => {
               hostel={item}
               isLiked={isLiked}
               onLike={() => toggleLike(item.id)}
+              onPress={() => router.push(`/hostel/${item.id}`)}
             />
           );
         }}

@@ -1,5 +1,6 @@
 import { FontAwesome6 } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { router } from "expo-router";
 import { useState } from "react";
 import {
   Pressable,
@@ -153,9 +154,10 @@ const RestaurantHeader = ({
 
         <View style={styles.rightIcons}>
           <TouchableOpacity
-            style={[styles.iconButton, { backgroundColor: colors.card }]}
+            onPress={() => router.push("/favourite")}
+            style={[styles.iconButton]}
           >
-            <Ionicons name="heart" size={20} color="#FF3B30" />
+            <Ionicons name="heart" size={scale(15)} color="#FF3B30" />
           </TouchableOpacity>
         </View>
       </Animated.View>
@@ -177,9 +179,10 @@ const RestaurantHeader = ({
         </View>
         <View style={styles.rightIcons}>
           <TouchableOpacity
-            style={[styles.iconButton, { backgroundColor: colors.card }]}
+            onPress={() => router.push("/favourite")}
+            style={[styles.iconButton]}
           >
-            <Ionicons name="heart" size={20} color="#FF3B30" />
+            <Ionicons name="heart" size={scale(15)} color="#FF3B30" />
           </TouchableOpacity>
         </View>
       </Animated.View>
@@ -236,7 +239,7 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     width: scale(40),
-    height: scale(40),
+    height: verticalScale(40),
     borderRadius: scale(20),
     alignItems: "center",
     justifyContent: "center",

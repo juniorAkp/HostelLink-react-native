@@ -20,6 +20,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 
 const HostelPage = () => {
   const { id } = useLocalSearchParams();
@@ -317,7 +318,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: 40, // Extra space at bottom
+    paddingBottom: verticalScale(40),
   },
   loadingContainer: {
     flex: 1,
@@ -328,28 +329,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 20,
+    padding: scale(20),
   },
   errorText: {
-    fontSize: 16,
+    fontSize: moderateScale(16),
     textAlign: "center",
   },
   imageContainer: {
     width: "100%",
-    height: 280, // Fixed height for consistency
-    borderBottomLeftRadius: 45,
-    borderBottomRightRadius: 45,
+    height: verticalScale(280),
     overflow: "hidden",
   },
   image: {
     width: "100%",
     height: "100%",
-    borderRadius: 16,
   },
   detailsContainer: {
-    paddingHorizontal: 16,
-    paddingTop: 24,
-    gap: 6,
+    paddingHorizontal: scale(16),
+    paddingTop: verticalScale(24),
+    gap: verticalScale(6),
   },
   headerRow: {
     flexDirection: "row",
@@ -358,23 +356,23 @@ const styles = StyleSheet.create({
   },
   hostelName: {
     fontFamily: Fonts.brandBlack,
-    fontSize: 24,
+    fontSize: moderateScale(24),
   },
   hostelAddress: {
     fontFamily: Fonts.brand,
-    fontSize: 15,
-    marginTop: 2,
+    fontSize: moderateScale(15),
+    marginTop: verticalScale(2),
   },
   navigateButton: {
-    padding: 8,
-    borderRadius: 30,
+    padding: scale(8),
+    borderRadius: scale(30),
   },
   separator: {
-    height: 1,
-    marginVertical: 16,
+    height: StyleSheet.hairlineWidth,
+    marginVertical: verticalScale(16),
   },
   section: {
-    gap: 6,
+    gap: verticalScale(6),
   },
   sectionHeader: {
     flexDirection: "row",
@@ -383,63 +381,63 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontFamily: Fonts.brandBold,
-    fontSize: 16,
+    fontSize: moderateScale(16),
   },
   seeAllText: {
     fontFamily: Fonts.brandBold,
-    fontSize: 16,
+    fontSize: moderateScale(16),
   },
   amenitiesRow: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 8,
-    marginTop: 4,
+    gap: scale(8),
+    marginTop: verticalScale(4),
   },
   amenityChip: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
+    paddingHorizontal: scale(12),
+    paddingVertical: verticalScale(6),
+    borderRadius: scale(8),
     justifyContent: "center",
     alignItems: "center",
   },
   amenityText: {
     fontFamily: Fonts.brand,
-    fontSize: 14,
+    fontSize: moderateScale(14),
   },
   galleryImage: {
-    height: 120,
-    width: 120,
-    borderRadius: 16,
-    marginRight: 10,
+    height: scale(120),
+    width: scale(120),
+    borderRadius: scale(16),
+    marginRight: scale(10),
   },
   detailText: {
     fontFamily: Fonts.brand,
-    fontSize: 15,
-    lineHeight: 22,
+    fontSize: moderateScale(15),
+    lineHeight: verticalScale(22),
   },
   linkText: {
     fontFamily: Fonts.brand,
-    fontSize: 15,
-    marginBottom: 2,
+    fontSize: moderateScale(15),
+    marginBottom: verticalScale(2),
   },
   websiteLink: {
     fontFamily: Fonts.brand,
-    fontSize: 15,
+    fontSize: moderateScale(15),
     textDecorationLine: "underline",
   },
   partnerBanner: {
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 12,
-    padding: 16,
-    marginTop: 24,
+    borderRadius: scale(12),
+    padding: scale(16),
+    marginTop: verticalScale(24),
     borderWidth: 1,
-    gap: 12,
+    gap: scale(12),
   },
   partnerBannerIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: scale(48),
+    height: scale(48),
+    borderRadius: scale(24),
     alignItems: "center",
     justifyContent: "center",
   },
@@ -448,11 +446,11 @@ const styles = StyleSheet.create({
   },
   partnerBannerTitle: {
     fontFamily: Fonts.brandBold,
-    fontSize: 15,
-    marginBottom: 2,
+    fontSize: moderateScale(15),
+    marginBottom: verticalScale(2),
   },
   partnerBannerSubtitle: {
     fontFamily: Fonts.brand,
-    fontSize: 13,
+    fontSize: moderateScale(13),
   },
 });

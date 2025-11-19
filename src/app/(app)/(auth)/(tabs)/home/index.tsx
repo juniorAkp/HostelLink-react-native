@@ -1,7 +1,7 @@
 import SearchCard from "@/src/app/components/common/searchCard";
 import RestaurantHeader from "@/src/app/components/home/header";
+import HorizontalCard from "@/src/app/components/home/HorizontalCard";
 import PopularCard from "@/src/app/components/home/popularCard";
-import HorizontalCard from "@/src/app/components/home/smallCard";
 import { Fonts } from "@/src/app/constants/theme";
 import {
   useFavouriteStore,

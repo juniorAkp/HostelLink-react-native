@@ -12,7 +12,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 import { useDebounce } from "use-debounce";
 
-import HorizontalCard from "@/src/app/components/home/smallCard";
+import HorizontalCard from "@/src/app/components/home/HorizontalCard";
 import SearchBar from "@/src/app/components/search/SearchBar";
 import { Fonts } from "@/src/app/constants/theme";
 import { useSearchStore } from "@/src/app/hooks/use-useSearchStore";
