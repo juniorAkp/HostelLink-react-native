@@ -3,9 +3,10 @@ import MenuSection from "@/src/app/components/profile/MenuSection";
 import { Fonts } from "@/src/app/constants/theme";
 import useUserStore from "@/src/app/hooks/use-userStore";
 import { useTheme } from "@/src/app/hooks/useTheme";
+import { transactionService } from "@/src/app/services/transactionService";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { useState } from "react";
 import {
   Alert,
@@ -15,13 +16,16 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { usePaystack } from "react-native-paystack-webview";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 
 const Page = () => {
-  const { colors } = useTheme();
-  const { user, logout, deleteAccount, setIsGuest, isGuest } = useUserStore();
+  const { colors, isDark } = useTheme();
+  const { user, logout, deleteAccount, setIsGuest, isGuest, upgradeProfile } =
+    useUserStore();
   const insets = useSafeAreaInsets();
+  const { popup } = usePaystack();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
@@ -60,7 +64,7 @@ const Page = () => {
           },
         },
       ],
-      { cancelable: true }
+      { cancelable: true, userInterfaceStyle: isDark ? "dark" : "light" }
     );
   };
 
@@ -93,10 +97,55 @@ const Page = () => {
           },
         },
       ],
-      { cancelable: true }
+      { cancelable: true, userInterfaceStyle: isDark ? "dark" : "light" }
     );
   };
 
+  const handlePayment = async () => {
+    if (!user?.email || !user?.id) {
+      Alert.alert("Error", "User details not found. Please log in again.");
+      return;
+    }
+    const amount = Number(process.env.EXPO_PUBLIC_AMOUNT || 0);
+
+    popup.checkout({
+      email: user.email,
+      amount: amount,
+      reference: `HL_TXN_${Date.now()}`,
+      onError(res) {
+        Alert.alert("Payment Error", "Something went wrong. Please try again.");
+        console.log("Paystack Error:", res);
+      },
+      async onSuccess(res) {
+        console.log("Paystack Success:", res);
+
+        try {
+          await transactionService.createTransaction({
+            user_id: user.id,
+            amount: amount,
+            status: "success",
+            reference: res.reference,
+          });
+
+          await upgradeProfile(user.id);
+
+          Alert.alert(
+            "Payment Confirmed",
+            "Payment confirmed! You are now a Partner."
+          );
+        } catch (error) {
+          console.error("Post-payment error:", error);
+          Alert.alert(
+            "Action Required",
+            "Payment was successful, but we couldn't update your profile automatically. Please contact support."
+          );
+        }
+      },
+      onCancel() {
+        Alert.alert("Payment Cancelled", "You cancelled the payment.");
+      },
+    });
+  };
   return (
     <View style={styles.container}>
       <ScrollView
@@ -185,10 +234,7 @@ const Page = () => {
                 icon="business-outline"
                 title="My Hostels"
                 subtitle="Manage your hostel listings"
-                onPress={() => {
-                  // TODO: Navigate to hostel dashboard
-                  Alert.alert("Coming Soon", "Hostel management dashboard");
-                }}
+                onPress={() => router.push("/dashboard")}
               />
             ) : (
               <MenuItem
@@ -196,10 +242,24 @@ const Page = () => {
                 title="Become a Hostel Partner"
                 subtitle="Start earning by listing your hostel"
                 onPress={() => {
-                  // TODO: Navigate to partner onboarding
                   Alert.alert(
                     "Become a Partner",
-                    "Upgrade to a hostel partner account to list and manage your hostels on HostelLink"
+                    "Upgrade to a Partner account to list and manage your hostels. This requires a one-time payment.",
+                    [
+                      {
+                        text: "Cancel",
+                        style: "cancel",
+                      },
+                      {
+                        text: "Pay now",
+                        onPress: () => handlePayment(),
+                        style: "default",
+                      },
+                    ],
+                    {
+                      cancelable: true,
+                      userInterfaceStyle: isDark ? "dark" : "light",
+                    }
                   );
                 }}
               />

@@ -118,10 +118,15 @@ const HostelPage = () => {
           </View>
           <Pressable
             style={[styles.navigateButton, { backgroundColor: colors.light }]}
-            onPress={() => router.dismiss()}
+            onPress={() =>
+              router.push({
+                pathname: "/(app)/(auth)/(tabs)/explore",
+                params: { viewMode: "single", hostelId: hostel.id },
+              })
+            }
           >
             <MaterialCommunityIcons
-              name="navigation-variant"
+              name="map-marker-radius"
               size={24}
               color={colors.text}
             />
@@ -160,7 +165,14 @@ const HostelPage = () => {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <SectionTitle>Gallery</SectionTitle>
-            <Pressable>
+            <Pressable
+              onPress={() =>
+                router.push({
+                  pathname: "/(app)/(auth)/(modal)/hostel/gallery",
+                  params: { images: JSON.stringify(hostel.images) },
+                })
+              }
+            >
               <Text style={[styles.seeAllText, { color: colors.primary }]}>
                 See All
               </Text>

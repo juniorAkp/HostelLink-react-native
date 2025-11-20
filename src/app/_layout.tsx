@@ -16,9 +16,8 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { KeyboardProvider } from "react-native-keyboard-controller";
+import { PaystackProvider } from "react-native-paystack-webview";
 import OfflineScreen from "./components/common/OfflineScreen";
-// Prevent splash from hiding too early
 SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient({
@@ -75,9 +74,12 @@ export default function RootLayout() {
       <ThemeProvider value={theme === "dark" ? DarkTheme : DefaultTheme}>
         <QueryClientProvider client={queryClient}>
           <StatusBar style="auto" animated />
-          <KeyboardProvider>
+          <PaystackProvider
+            debug
+            publicKey="pk_test_a8ff26d24034aaa013d870eeadc01e3bf036a939"
+          >
             <Slot />
-          </KeyboardProvider>
+          </PaystackProvider>
         </QueryClientProvider>
       </ThemeProvider>
     </GestureHandlerRootView>

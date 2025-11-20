@@ -35,6 +35,7 @@ interface UserStore {
     username: string,
     phone: string
   ) => Promise<void>;
+  upgradeProfile: (id: string) => Promise<void>;
   getUser: (userId: string) => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   updatePassword: (newPassword: string) => Promise<void>;
@@ -205,6 +206,26 @@ const useUserStore = create<UserStore>()(
           set({ isLoading: false });
         }
       },
+
+      upgradeProfile: async (id: string) => {
+        set({ isLoading: true, errorMessage: null });
+        try {
+          const { error } = await supabase
+            .from("profiles")
+            .update({ role: "admin" })
+            .eq("id", id);
+          if (error) throw error;
+          get().getUser(id);
+        } catch (error: any) {
+          const msg =
+            error instanceof AuthError ? error.message : "Upgrade failed";
+          set({ errorMessage: msg });
+          throw error;
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
       resetPassword: async (email: string) => {
         set({ isLoading: true, errorMessage: null });
         try {
@@ -223,6 +244,7 @@ const useUserStore = create<UserStore>()(
           set({ isLoading: false });
         }
       },
+
       updatePassword: async (newPassword: string) => {
         set({ isLoading: true, errorMessage: null });
         try {

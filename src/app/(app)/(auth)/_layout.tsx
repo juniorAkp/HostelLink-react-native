@@ -31,6 +31,19 @@ const AuthLayout = () => {
         }}
       />
       <Stack.Screen
+        name="(modal)/hostel/gallery"
+        options={{
+          headerTitle: "Gallery",
+          headerShadowVisible: false,
+          contentStyle: {
+            backgroundColor: Colors.background,
+          },
+          headerShown: true,
+          headerBackTitle: "Home",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
+      <Stack.Screen
         name="(modal)/favourite"
         options={{
           headerShadowVisible: false,
@@ -46,6 +59,46 @@ const AuthLayout = () => {
         name="(modal)/edit-profile"
         options={{
           title: "",
+          headerShadowVisible: false,
+          contentStyle: {
+            backgroundColor: Colors.background,
+          },
+          headerShown: true,
+          headerBackTitle: "Profile",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
+
+      <Stack.Screen
+        name="(modal)/[hostelId]"
+        options={{
+          title: "",
+          headerShadowVisible: false,
+          contentStyle: {
+            backgroundColor: Colors.background,
+          },
+          headerShown: true,
+          headerBackTitle: "Profile",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
+      <Stack.Screen
+        name="(modal)/dashboard"
+        options={{
+          headerTitle: "Dashboard",
+          headerShadowVisible: false,
+          contentStyle: {
+            backgroundColor: Colors.background,
+          },
+          headerShown: true,
+          headerBackTitle: "Profile",
+          headerBackButtonDisplayMode: "minimal",
+        }}
+      />
+      <Stack.Screen
+        name="(modal)/create"
+        options={{
+          headerTitle: "Create Hostel",
           headerShadowVisible: false,
           contentStyle: {
             backgroundColor: Colors.background,
