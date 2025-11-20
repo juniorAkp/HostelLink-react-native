@@ -85,7 +85,7 @@ const AuthLayout = () => {
       <Stack.Screen
         name="(modal)/dashboard"
         options={{
-          headerTitle: "Dashboard",
+          headerTitle: "My Hostels",
           headerShadowVisible: false,
           contentStyle: {
             backgroundColor: Colors.background,

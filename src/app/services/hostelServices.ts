@@ -43,7 +43,7 @@ export const hostelService = {
   },
 
   //create
-  create: async (hostel: Hostels): Promise<void> => {
+  create: async (hostel: Omit<Hostels, "id">): Promise<void> => {
     const { error } = await supabase.from("listings").insert(hostel);
     if (error) throw error;
   },
@@ -69,5 +69,27 @@ export const hostelService = {
       .eq("owner_id", ownerId);
     if (error) throw error;
     return data as Hostels[];
+  },
+
+  //upload hostel image(s)
+  uploadHostelImage: async (uri: string, filename: string): Promise<string> => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    const { data, error } = await supabase.storage
+      .from("listings")
+      .upload(filename, blob, {
+        contentType: "image/jpeg",
+        upsert: false,
+      });
+
+    if (error) throw error;
+
+    // Get public URL
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from("listings").getPublicUrl(data.path);
+
+    return publicUrl;
   },
 };

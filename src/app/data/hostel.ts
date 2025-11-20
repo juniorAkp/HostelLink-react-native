@@ -14,4 +14,5 @@ export interface Hostels {
   website_url: string;
   email_addresses: string[];
   country: string;
+  owner_id: string;
 }

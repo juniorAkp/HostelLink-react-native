@@ -18,7 +18,9 @@ import {
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 import { Fonts } from "../../../constants/theme";
+import useUserStore from "../../../hooks/use-userStore";
 import { useCreateHostelStore } from "../../../hooks/useCreateHostelStore";
+import { useAddHostel } from "../../../hooks/useHostels";
 import { useTheme } from "../../../hooks/useTheme";
 
 const AMENITIES_LIST = [
@@ -39,6 +41,8 @@ export default function CreateHostel() {
   const { colors } = useTheme();
   const router = useRouter();
   const { form, setForm, resetForm } = useCreateHostelStore();
+  const { user } = useUserStore();
+  const { mutate: addHostel, isPending } = useAddHostel();
 
   const toggleAmenity = (amenity: string) => {
     const newAmenities = form.amenities.includes(amenity)
@@ -50,7 +54,10 @@ export default function CreateHostel() {
   const pickImages = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
+      allowsEditing: true,
       allowsMultipleSelection: true,
+      selectionLimit: 15,
+      orderedSelection: true,
       quality: 0.8,
     });
 
@@ -74,10 +81,40 @@ export default function CreateHostel() {
       );
       return;
     }
-    // Submit logic here
-    console.log("Creating hostel:", form);
-    resetForm();
-    router.back();
+
+    if (!user?.id) {
+      Alert.alert("Error", "You must be logged in to create a hostel");
+      return;
+    }
+
+    addHostel(
+      {
+        hostelData: {
+          name: form.name,
+          description: form.description,
+          amenities: form.amenities,
+          phone_numbers: [form.phone],
+          exact_location: form.location,
+          address: form.address,
+          type: form.type,
+          website_url: form.website,
+          email_addresses: [form.email],
+          country: form.country,
+          owner_id: user.id,
+        },
+        imageUris: form.images,
+      },
+      {
+        onSuccess: () => {
+          Alert.alert("Success", "Hostel created successfully!");
+          resetForm();
+          router.back();
+        },
+        onError: (error) => {
+          Alert.alert("Error", error.message || "Failed to create hostel");
+        },
+      }
+    );
   };
 
   const renderInput = (
@@ -166,7 +203,7 @@ export default function CreateHostel() {
               ))}
             </ScrollView>
 
-            {renderInput("Country", form.country, "country", "e.g. Spain")}
+            {renderInput("Country", form.country, "country", "e.g. Ghana")}
             {renderInput(
               "Address",
               form.address,
@@ -388,20 +425,10 @@ export default function CreateHostel() {
             },
           ]}
         >
-          {/* <TouchableOpacity onPress={handleCreate} activeOpacity={0.8}>
-            <LinearGradient
-              colors={[colors.primary, "#4facfe"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.submitButton}
-            >
-              <Text style={styles.submitText}>Create Hostel</Text>
-              <Ionicons name="arrow-forward" size={20} color="#fff" />
-            </LinearGradient>
-          </TouchableOpacity> */}
           <RegularButton
             title="Create Hostel"
-            isDisabled={false}
+            isDisabled={isPending}
+            isLoading={isPending}
             onPress={handleCreate}
             color={colors.background}
             buttonColor={colors.primary}
