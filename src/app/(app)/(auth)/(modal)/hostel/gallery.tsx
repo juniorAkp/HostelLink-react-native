@@ -3,18 +3,36 @@ import { useTheme } from "@/src/app/hooks/useTheme";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useMemo } from "react";
-import { Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  useWindowDimensions,
+} from "react-native";
 import { moderateScale, verticalScale } from "react-native-size-matters";
 
-const { width } = Dimensions.get("window");
 const GAP = moderateScale(12);
-const COLUMN_COUNT = 2;
-const ITEM_WIDTH = (width - GAP * 3) / COLUMN_COUNT; // GAP * 3 for left, middle, right padding
 
 const Gallery = () => {
   const router = useRouter();
+  const { width } = useWindowDimensions();
   const { colors } = useTheme();
   const { images: imagesParam } = useLocalSearchParams();
+
+  // Determine columns based on screen width
+  // Tablet (>768px): 4 columns
+  // Large Phone/Small Tablet (>500px): 3 columns
+  // Phone: 2 columns
+  const numColumns = width > 768 ? 4 : width > 500 ? 3 : 2;
+
+  // Calculate item width dynamically
+  // Available width = Screen Width - (Left Padding + Right Padding)
+  // Total Gap Space = Gap * (Number of Columns - 1)
+  // Item Width = (Available Width - Total Gap Space) / Number of Columns
+  const availableWidth = width - GAP * 2;
+  const totalGapSpace = GAP * (numColumns - 1);
+  const itemWidth = (availableWidth - totalGapSpace) / numColumns;
 
   const images = useMemo(() => {
     try {
@@ -28,7 +46,12 @@ const Gallery = () => {
   const gridImages = images.length > 1 ? images.slice(1) : [];
 
   const renderItem = ({ item }: { item: string }) => (
-    <View style={styles.gridItemContainer}>
+    <View
+      style={[
+        styles.gridItemContainer,
+        { width: itemWidth, height: itemWidth },
+      ]}
+    >
       <Image
         source={{ uri: item }}
         style={styles.gridImage}
@@ -57,10 +80,11 @@ const Gallery = () => {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <FlatList
+        key={numColumns}
         data={gridImages}
         keyExtractor={(_, index) => index.toString()}
         renderItem={renderItem}
-        numColumns={COLUMN_COUNT}
+        numColumns={numColumns}
         ListHeaderComponent={renderHeader}
         contentContainerStyle={styles.listContent}
         columnWrapperStyle={styles.columnWrapper}
@@ -91,7 +115,7 @@ const styles = StyleSheet.create({
     paddingBottom: verticalScale(40),
   },
   columnWrapper: {
-    justifyContent: "space-between",
+    gap: GAP,
     marginBottom: GAP,
   },
   heroContainer: {
@@ -106,8 +130,6 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   gridItemContainer: {
-    width: ITEM_WIDTH,
-    height: verticalScale(150),
     borderRadius: moderateScale(12),
     overflow: "hidden",
   },

@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingHorizontal: moderateScale(20),
-    paddingBottom: verticalScale(80), // Space for FAB
+    paddingBottom: verticalScale(20), // Space for FAB
   },
   cardContainer: {
     marginBottom: verticalScale(15),

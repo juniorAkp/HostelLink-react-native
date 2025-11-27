@@ -54,7 +54,6 @@ export default function CreateHostel() {
   const pickImages = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
-      allowsEditing: true,
       allowsMultipleSelection: true,
       selectionLimit: 15,
       orderedSelection: true,

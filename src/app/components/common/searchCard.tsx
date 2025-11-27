@@ -92,7 +92,7 @@ export default SearchCard;
 
 const styles = StyleSheet.create({
   container: {
-    width: scale(180),
+    width: moderateScale(180),
     borderRadius: scale(16),
     overflow: "hidden",
     marginRight: scale(16),
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: "100%",
-    height: verticalScale(140),
+    height: moderateScale(140),
     position: "relative",
     overflow: "hidden",
   },
@@ -118,10 +118,10 @@ const styles = StyleSheet.create({
   },
   likeButton: {
     position: "absolute",
-    top: scale(8),
-    right: scale(8),
-    width: scale(32),
-    height: scale(32),
+    top: moderateScale(8),
+    right: moderateScale(8),
+    width: moderateScale(32),
+    height: moderateScale(32),
     borderRadius: scale(16),
     alignItems: "center",
     justifyContent: "center",

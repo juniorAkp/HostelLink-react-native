@@ -76,8 +76,8 @@ export default PopularCard;
 
 const styles = StyleSheet.create({
   container: {
-    width: scale(280),
-    height: verticalScale(320),
+    width: moderateScale(280),
+    height: moderateScale(320),
     borderRadius: scale(16),
     backgroundColor: "#fff",
     overflow: "hidden",

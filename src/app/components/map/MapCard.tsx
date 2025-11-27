@@ -99,7 +99,7 @@ export default MapCard;
 
 const styles = StyleSheet.create({
   container: {
-    width: scale(280),
+    width: moderateScale(250),
     borderRadius: scale(12),
     borderWidth: 1,
     overflow: "hidden",
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: "100%",
-    height: verticalScale(140),
+    height: moderateScale(120),
     position: "relative",
   },
   image: {
@@ -124,16 +124,16 @@ const styles = StyleSheet.create({
   },
   likeButton: {
     position: "absolute",
-    top: scale(8),
-    right: scale(8),
-    width: scale(32),
-    height: scale(32),
+    top: moderateScale(8),
+    right: moderateScale(8),
+    width: moderateScale(32),
+    height: moderateScale(32),
     borderRadius: scale(16),
     justifyContent: "center",
     alignItems: "center",
   },
   contentContainer: {
-    padding: scale(12),
+    padding: moderateScale(12),
     gap: verticalScale(4),
   },
   title: {

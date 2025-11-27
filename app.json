@@ -8,6 +8,7 @@
     "scheme": "hostellink",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "platforms": ["android", "ios"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.juniorAkp.hostellink"

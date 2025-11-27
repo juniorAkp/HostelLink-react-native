@@ -11,14 +11,16 @@ import { useHostels } from "@/src/app/hooks/useHostels";
 import { useLocationStore } from "@/src/app/hooks/useLocation";
 import { useTheme } from "@/src/app/hooks/useTheme";
 import { getDistance } from "@/src/app/utils/haversine";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import {
   ActivityIndicator,
-  Button,
   FlatList,
+  RefreshControl,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import Animated, {
@@ -52,7 +54,8 @@ const HostelPage = () => {
     stopWatching,
   } = useLocationStore();
   const {
-    isFetching,
+    isLoading,
+    isRefetching,
     isError,
     error,
     data: hostels = [],
@@ -95,39 +98,66 @@ const HostelPage = () => {
         })
       : hostels;
 
-  if (isFetching) {
+  // 1. Loading State
+  if (isLoading) {
     return (
-      <View style={styles.loadingContainer}>
+      <View
+        style={[
+          styles.loadingContainer,
+          { backgroundColor: colors.background },
+        ]}
+      >
         <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    );
-  }
-
-  if (sortedHostels.length === 0) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={[styles.errorText, { color: colors.error }]}>
-          {error?.message || " Oops! No hostels found in your region"}
+        <Text style={[styles.loadingText, { color: colors.muted }]}>
+          Finding the best hostels for you...
         </Text>
       </View>
     );
   }
 
-  // Error
+  // 2. Error State
   if (isError) {
     return (
-      <View style={styles.errorContainer}>
-        <Text style={[styles.errorText, { color: colors.error }]}>
-          {error?.message || "An error occurred while fetching Hostels"}
+      <View
+        style={[styles.centerContainer, { backgroundColor: colors.background }]}
+      >
+        <Ionicons name="cloud-offline-outline" size={64} color={colors.error} />
+        <Text style={[styles.errorTitle, { color: colors.text }]}>
+          Oops! Something went wrong
         </Text>
-        <Button
-          title="Retry"
-          onPress={() =>
-            refetch({
-              throwOnError: true,
-            })
-          }
-        />
+        <Text style={[styles.errorMessage, { color: colors.muted }]}>
+          {error?.message ||
+            "We couldn't fetch the hostels. Please check your connection and try again."}
+        </Text>
+        <TouchableOpacity
+          style={[styles.retryButton, { backgroundColor: colors.primary }]}
+          onPress={() => refetch()}
+        >
+          <Text style={styles.retryButtonText}>Try Again</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  // 3. Empty State
+  if (!isLoading && !isError && hostels.length === 0) {
+    return (
+      <View
+        style={[styles.centerContainer, { backgroundColor: colors.background }]}
+      >
+        <Ionicons name="search-outline" size={64} color={colors.muted} />
+        <Text style={[styles.errorTitle, { color: colors.text }]}>
+          No Hostels Found
+        </Text>
+        <Text style={[styles.errorMessage, { color: colors.muted }]}>
+          We couldn't find any hostels in this region yet.
+        </Text>
+        <TouchableOpacity
+          style={[styles.retryButton, { backgroundColor: colors.primary }]}
+          onPress={() => refetch()}
+        >
+          <Text style={styles.retryButtonText}>Refresh</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -141,6 +171,14 @@ const HostelPage = () => {
       />
 
       <Animated.ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefetching}
+            onRefresh={refetch}
+            tintColor={colors.primary}
+            colors={[colors.primary]}
+          />
+        }
         onScroll={scrollHandler}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
@@ -250,15 +288,39 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  errorContainer: {
+  centerContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     padding: scale(20),
   },
-  errorText: {
-    fontSize: moderateScale(16),
+  loadingText: {
+    fontFamily: Fonts.brand,
+    fontSize: moderateScale(14),
+    marginTop: verticalScale(10),
+  },
+  errorTitle: {
+    fontFamily: Fonts.brandBold,
+    fontSize: moderateScale(20),
+    marginTop: verticalScale(16),
     textAlign: "center",
+  },
+  errorMessage: {
+    fontFamily: Fonts.brand,
+    fontSize: moderateScale(14),
+    textAlign: "center",
+    marginTop: verticalScale(8),
+    marginBottom: verticalScale(24),
+  },
+  retryButton: {
+    paddingHorizontal: scale(24),
+    paddingVertical: verticalScale(12),
+    borderRadius: scale(8),
+  },
+  retryButtonText: {
+    color: "#fff",
+    fontFamily: Fonts.brandBold,
+    fontSize: moderateScale(16),
   },
 });
 

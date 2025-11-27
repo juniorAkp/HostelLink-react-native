@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { v4 as uuidv4 } from "uuid";
 import type { Hostels } from "../data/hostel";
 import { hostelService } from "../services/hostelServices";
-
 export const useHostels = (country: string) => {
   return useQuery({
     queryKey: ["hostels"],
@@ -46,18 +46,15 @@ export const useAddHostel = () => {
       hostelData: Omit<Hostels, "id" | "images">;
       imageUris: string[];
     }) => {
-      const imageUrls: string[] = [];
+      let imageUrls: string[] = [];
 
       if (imageUris && imageUris.length > 0) {
-        for (let i = 0; i < imageUris.length; i++) {
-          const uri = imageUris[i];
-          const filename = `${Date.now()}_${hostelData.owner_id}_${i}.jpg`;
-          const image_url = await hostelService.uploadHostelImage(
-            uri,
-            filename
-          );
-          imageUrls.push(image_url);
-        }
+        const uploadPromises = imageUris.map((uri, i) => {
+          const filename = `${uuidv4}.jpg`;
+          return hostelService.uploadHostelImage(uri, filename);
+        });
+
+        imageUrls = await Promise.all(uploadPromises);
       }
 
       const newHostel: Omit<Hostels, "id"> = {
@@ -68,7 +65,9 @@ export const useAddHostel = () => {
       return hostelService.create(newHostel);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["hostels"] });
+      queryClient.invalidateQueries({
+        queryKey: ["hostels", ["hostels", "owner"]],
+      });
     },
   });
 };

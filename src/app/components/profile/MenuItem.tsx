@@ -79,9 +79,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: verticalScale(16),
-    paddingHorizontal: scale(16),
-    minHeight: verticalScale(56),
+    paddingVertical: moderateScale(16),
+    paddingHorizontal: moderateScale(16),
+    minHeight: moderateScale(56),
   },
   menuItemDisabled: {
     opacity: 0.5,
@@ -93,8 +93,8 @@ const styles = StyleSheet.create({
   },
 
   menuItemIcon: {
-    width: scale(32),
-    height: scale(32),
+    width: moderateScale(32),
+    height: moderateScale(32),
     borderRadius: scale(8),
     alignItems: "center",
     justifyContent: "center",

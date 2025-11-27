@@ -103,7 +103,7 @@ export default HorizontalCard;
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    minHeight: verticalScale(120),
+    minHeight: moderateScale(120),
     flexDirection: "row",
     borderRadius: scale(16),
     padding: scale(8),
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: scale(120),
-    height: verticalScale(120),
+    height: moderateScale(120),
     position: "relative",
     borderRadius: scale(12),
     overflow: "hidden",
@@ -132,18 +132,18 @@ const styles = StyleSheet.create({
   },
   likeButton: {
     position: "absolute",
-    top: scale(8),
-    right: scale(8),
-    width: scale(32),
-    height: scale(32),
+    top: moderateScale(8),
+    right: moderateScale(8),
+    width: moderateScale(32),
+    height: moderateScale(32),
     borderRadius: scale(16),
     alignItems: "center",
     justifyContent: "center",
   },
   contentContainer: {
     flex: 1,
-    paddingLeft: scale(12),
-    paddingVertical: scale(4),
+    paddingLeft: moderateScale(12),
+    paddingVertical: moderateScale(4),
     justifyContent: "space-between",
   },
   header: {

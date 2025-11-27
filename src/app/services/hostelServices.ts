@@ -74,11 +74,13 @@ export const hostelService = {
   //upload hostel image(s)
   uploadHostelImage: async (uri: string, filename: string): Promise<string> => {
     const response = await fetch(uri);
-    const blob = await response.blob();
+    const arrayBuffer = await response.arrayBuffer();
+
+    console.log("the buffer is", arrayBuffer);
 
     const { data, error } = await supabase.storage
       .from("listings")
-      .upload(filename, blob, {
+      .upload(filename, arrayBuffer, {
         contentType: "image/jpeg",
         upsert: false,
       });

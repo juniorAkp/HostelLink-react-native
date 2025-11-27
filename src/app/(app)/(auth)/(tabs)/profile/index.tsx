@@ -112,26 +112,40 @@ const Page = () => {
       email: user.email,
       amount: amount,
       reference: `HL_TXN_${Date.now()}`,
+      // @ts-ignore
+      metadata: {
+        user_id: user.id,
+        custom_fields: [
+          {
+            display_name: "User ID",
+            variable_name: "user_id",
+            value: user.id,
+          },
+        ],
+      },
       onError(res) {
         Alert.alert("Payment Error", "Something went wrong. Please try again.");
         console.log("Paystack Error:", res);
       },
+
       async onSuccess(res) {
         console.log("Paystack Success:", res);
 
         try {
+          // 3. Process backend updates inside a try-catch
           await transactionService.createTransaction({
             user_id: user.id,
             amount: amount,
-            status: "success",
+            status: "test", //change in prod
             reference: res.reference,
           });
 
+          // 4. Upgrade user
           await upgradeProfile(user.id);
 
           Alert.alert(
-            "Payment Confirmed",
-            "Payment confirmed! You are now a Partner."
+            "Payment Successful",
+            "Your payment has been received! Your account is being upgraded. This may take a few moments."
           );
         } catch (error) {
           console.error("Post-payment error:", error);
@@ -379,7 +393,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    paddingTop: verticalScale(20),
+    paddingTop: moderateScale(20),
   },
   userSection: {
     alignItems: "center",
@@ -392,13 +406,13 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(16),
   },
   avatar: {
-    width: scale(100),
-    height: scale(100),
+    width: moderateScale(100),
+    height: moderateScale(100),
     borderRadius: scale(50),
   },
   avatarPlaceholder: {
-    width: scale(100),
-    height: scale(100),
+    width: moderateScale(100),
+    height: moderateScale(100),
     borderRadius: scale(50),
     alignItems: "center",
     justifyContent: "center",
@@ -413,8 +427,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     right: 0,
-    width: scale(32),
-    height: scale(32),
+    width: moderateScale(32),
+    height: moderateScale(32),
     borderRadius: scale(16),
     alignItems: "center",
     justifyContent: "center",

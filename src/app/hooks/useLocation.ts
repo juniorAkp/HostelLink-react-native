@@ -102,13 +102,18 @@ export const useLocationStore = create<LocationState>()(
                   latitude,
                   longitude,
                 });
-                // console.log(reverse);
-                const address = reverse[0]
-                  ? `${reverse[0].city}, ${reverse[0].country}`
-                  : "Unknown location";
+
+                const address = reverse[0].name?.includes("+")
+                  ? reverse[0].city
+                  : reverse[0]?.name;
 
                 const country = reverse[0].country ?? "";
-                get().setLocation(latitude, longitude, country, address);
+                get().setLocation(
+                  latitude,
+                  longitude,
+                  country,
+                  address ?? undefined
+                );
               } catch (err) {
                 get().setLocation(latitude, longitude); // fallback
               }
