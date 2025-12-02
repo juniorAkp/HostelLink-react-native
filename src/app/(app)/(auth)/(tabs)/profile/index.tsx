@@ -132,7 +132,6 @@ const Page = () => {
         console.log("Paystack Success:", res);
 
         try {
-          // 3. Process backend updates inside a try-catch
           await transactionService.createTransaction({
             user_id: user.id,
             amount: amount,
@@ -140,7 +139,6 @@ const Page = () => {
             reference: res.reference,
           });
 
-          // 4. Upgrade user
           await upgradeProfile(user.id);
 
           Alert.alert(

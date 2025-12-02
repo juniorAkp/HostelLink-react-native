@@ -7,6 +7,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface MapScreenProps {
   mode?: "explore" | "single" | "select";
@@ -39,6 +40,8 @@ const MapScreen = ({
     latitude: initialLocation?.lat || latitude || 37.78825,
     longitude: initialLocation?.lng || longitude || -122.4324,
   });
+
+  const insets = useSafeAreaInsets();
 
   let displayedHostels: Hostels[] = [];
 
@@ -140,7 +143,12 @@ const MapScreen = ({
         <FlatList
           keyExtractor={(item) => item.id}
           data={carouselData}
-          style={{ position: "absolute", bottom: 10, left: 10, right: 0 }}
+          style={{
+            position: "absolute",
+            bottom: insets.bottom + 60,
+            left: insets.left,
+            right: insets.right,
+          }}
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => (
