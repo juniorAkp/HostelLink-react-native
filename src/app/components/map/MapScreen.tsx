@@ -5,9 +5,10 @@ import { useHostel, useHostels } from "@/src/app/hooks/useHostels";
 import { useLocationStore } from "@/src/app/hooks/useLocation";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import { FlatList, Platform, StyleSheet, View } from "react-native";
+import MapView, { Marker } from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTheme } from "../../hooks/useTheme";
 
 interface MapScreenProps {
   mode?: "explore" | "single" | "select";
@@ -25,6 +26,7 @@ const MapScreen = ({
   const router = useRouter();
   const params = useLocalSearchParams();
   const { latitude, longitude, country } = useLocationStore();
+  const { colors } = useTheme();
   const mapRef = useRef<MapView>(null);
 
   const paramHostelId = params.hostelId as string;
@@ -65,13 +67,18 @@ const MapScreen = ({
       mapRef.current
     ) {
       const h = displayedHostels[0];
-      mapRef.current.animateCamera({
-        center: {
-          latitude: h.exact_location.lat,
-          longitude: h.exact_location.lng,
+      mapRef.current.animateCamera(
+        {
+          center: {
+            latitude: h.exact_location.lat,
+            longitude: h.exact_location.lng,
+          },
+          zoom: 15,
         },
-        zoom: 15,
-      });
+        {
+          duration: 500,
+        }
+      );
     }
   }, [effectiveMode, displayedHostels]);
 
@@ -86,7 +93,6 @@ const MapScreen = ({
   return (
     <View style={styles.container}>
       <MapView
-        provider={PROVIDER_GOOGLE}
         ref={mapRef}
         initialCamera={{
           center: {
@@ -100,8 +106,13 @@ const MapScreen = ({
         }}
         style={styles.map}
         showsUserLocation={effectiveMode !== "select"}
+        followsUserLocation={Platform.OS === "ios" ? false : true}
+        mapType="satellite"
+        googleMapId="58c60ab2a5f2b5df779556c6"
+        showsMyLocationButton={false}
         zoomControlEnabled={false}
         showsCompass={false}
+        toolbarEnabled={false}
         onPress={handleMapPress}
       >
         {/* Render Hostels for Explore/Single Mode */}
@@ -109,7 +120,7 @@ const MapScreen = ({
           displayedHostels.map((h) => (
             <Marker
               key={h.id}
-              pinColor={selectedHostelId === h.id ? Colors.primary : "#000"}
+              pinColor={selectedHostelId === h.id ? colors.primary : "#000"}
               coordinate={{
                 latitude: h.exact_location.lat,
                 longitude: h.exact_location.lng,
@@ -126,6 +137,7 @@ const MapScreen = ({
           <Marker
             coordinate={dragLocation}
             draggable
+            isPreselected
             pinColor={Colors.primary}
             onDragEnd={(e) => {
               const { latitude, longitude } = e.nativeEvent.coordinate;
