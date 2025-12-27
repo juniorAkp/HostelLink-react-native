@@ -8,7 +8,10 @@
     "scheme": "hostellink",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "platforms": ["android", "ios"],
+    "platforms": [
+      "android",
+      "ios"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.juniorAkp.hostellink"
@@ -55,7 +58,8 @@
         {
           "photosPermission": "The app accesses your photos to let you create your hostel image."
         }
-      ]
+      ],
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,
